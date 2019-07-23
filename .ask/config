@@ -1,9 +1,33 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "",
+      "skill_id": "amzn1.ask.skill.3cbdced5-0b5a-47e1-810f-3757cd0b64ed",
       "was_cloned": false,
-      "merge": {}
+      "merge": {},
+      "resources": {
+        "manifest": {
+          "eTag": "ef8b6ef7f9f096a1e1882c0fbef39aae"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "27cec0ce75e2f8861f5505075a99718d"
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:679180307287:function:TKOTriviaAlexa",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "TKOTriviaAlexa",
+            "handler": "index.handler",
+            "revisionId": "3bf86184-2e6e-4d01-8d2b-ab7b760aa06f",
+            "runtime": "nodejs8.10"
+          }
+        ]
+      }
     }
   }
 }

@@ -16,24 +16,654 @@
                   "samples": []
               },
               {
-                  "name": "HelloWorldIntent",
-                  "slots": [],
-                  "samples": [
-                      "hello",
-                      "how are you",
-                      "say hi world",
-                      "say hi",
-                      "hi",
-                      "say hello world",
-                      "say hello"
-                  ]
-              },
+                "name": "AMAZON.RepeatIntent",
+                "samples": []
+            },
+              {
+                "name": "AnswerIntent",
+                "slots": [
+                    {
+                        "name": "answer",
+                        "type": "Answer"
+                    },
+                    {
+                        "name": "thisthatthey",
+                        "type": "ThisThatThey"
+                    }
+                ],
+                "samples": [
+                    "I think it is {answer}",
+                    "It is {answer}",
+                    "The answer is {answer}",
+                    "{answer}",
+                    "{thisthatthey} that have {answer}",
+                    "{thisthatthey} are {answer}",
+                    "{thisthatthey} all have {answer}",
+                    "{thisthatthey} all get {answer}",
+                    "all {answer}",
+                    "{thisthatthey} have {answer}",
+                    "{thisthatthey} are all types of {answer}",
+                    "{thisthatthey} are all examples of {answer}",
+                    "{thisthatthey} are all {answer}",
+                    "{thisthatthey} each have a {answer}",
+                    "a {answer}",
+                    "an {answer}",
+                    "{answer} types",
+                    "{thisthatthey} all have a {answer}",
+                    "{thisthatthey} all have an {answer}",
+                    "{thisthatthey} can be {answer}",
+                    "{thisthatthey} can all be {answer}",
+                    "{thisthatthey} all can be {answer}",
+                    "{thisthatthey} all can {answer}",
+                    "what is {answer}"
+                ]
+            },
               {
                   "name": "AMAZON.NavigateHomeIntent",
                   "samples": []
-              }
+              },
+              {
+                "name": "QuestionIntent",
+                "slots": [
+                    {
+                        "name": "category",
+                        "type": "Category"
+                    }
+                ],
+                "samples": [
+                    "ask me a question",
+                    "give me a question",
+                    "{category}",
+                    "Give me a {category} question",
+                    "Give me a question from {category}",
+                    "Ask me a {category} question",
+                    "for a {category} question",
+                    "for a question from {category}",
+                    "give me another question from {category}",
+                    "give me another {category} question",
+                    "give me a question about {category}",
+                    "for a question about {category}",
+                    "ask me a question about {category}"
+                ]
+            },
+            {
+                "name": "BuyCategoryIntent",
+                "slots": [
+                    {
+                        "name": "category",
+                        "type": "Category"
+                    }
+                ],
+                "samples": [
+                    "I want to buy the {category} category",
+                    "purchase {category}",
+                    "buy {category}",
+                    "buy {category} questions",
+                    "unlock {category} questions",
+                    "I want to unlock {category}",
+                    "unlock {category}"
+                ]
+            },
+            {
+                "name": "BuySubscriptionIntent",
+                "samples": [
+                    "I want to buy the subscription",
+                    "purchase the subscription",
+                    "buy the subscription",
+                    "I want to unlock the subscription",
+                    "unlock the subscription",
+                    "I want all of the categories",
+                    "Unlock all of the categories",
+                    "tell me about the subscription"
+                ]
+            },
+            {
+                "name": "CancelProductIntent",
+                "slots": [
+                    {
+                        "name": "category",
+                        "type": "Category"
+                    }
+                ],
+                "samples": [
+                "cancel {category}",
+                "cancel {category} questions",
+                "stop subscription",
+                "end subscription",
+                "cancel subscription",
+                "cancel the subscription",
+                "cancel my subscription",
+                "refund {category}",
+                "stop {category}"
+                ]
+            },
+            {
+                "name": "StartGameIntent",
+                "samples": [
+                    "start today's game",
+                    "start the game",
+                    "start a game",
+                    "start my game",
+                    "restart my game",
+                    "restart the game",
+                    "begin the game",
+                    "start the trivia game",
+                    "play again",
+                    "another game"
+                ]
+            },
+            {
+                "name": "ContinueGameIntent",
+                "samples": [
+                    "continue game",
+                    "continue current game",
+                    "continue my current game"
+                ]
+            },
+            {
+                "name": "GameRulesIntent",
+                "samples": [
+                    "what are the rules",
+                    "tell me the rules",
+                    "tell us the rules",
+                    "give me the rules",
+                    "rules"
+                ]
+            },
+            {
+                "name": "TKOIntent",
+                "samples": [
+                    "TKO",
+                    "tee kay oh",
+                    "knockout",
+                    "kay oh",
+                    "KO"
+                ]
+            },
+            {
+                "name": "PointsIntent",
+                "slots": [
+                    {
+                        "name": "points",
+                        "type": "AMAZON.NUMBER"
+                    }
+                ],
+                "samples": [
+                    "{number}",
+                    "{number} points"
+                ]
+            },
           ],
-          "types": []
-      }
-  }
-}
+          "types": [
+            {
+                "name": "ThisThatThey",
+                "values": [
+                    {
+                        "name": {
+                            "value": "things"
+                        }
+                    },
+                    {
+                        "name": {
+                            "value": "this"
+                        }
+                    },
+                    {
+                        "name": {
+                            "value": "that"
+                        }
+                    },
+                    {
+                        "name": {
+                            "value": "they"
+                        }
+                    },
+                    {
+                        "name": {
+                            "value": "these"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Answer",
+                "values": [  
+                    
+    {"id": "rec0QMFeyV7RTlhEt",  "name": {"value": "2", "synonyms": ["two"]}},
+    {"id": "recxYMWNw6K0Zelpc",  "name": {"value": "three em", "synonyms": ["3M"]}},
+    {"id": "recPpcdmnhzn2a2cp",  "name": {"value": "4 presidents", "synonyms": ["four presidents", "four"]}},
+    {"id": "recuNdO9f2iO3XdWA",  "name": {"value": "4 key", "synonyms": ["four", "the four key"]}},
+    {"id": "reccVoq7EK9psSSfh",  "name": {"value": "4.2", "synonyms": ["3.7", "3.8", "3.9", "4.0", "4", "4.1", "4.3", "4.4", "4.5", "4.6", "4.7"]}},
+    {"id": "reccfEKdopTbJNBxx|reckL9rL5KLd4YVPN", "name": {"value": "5", "synonyms": ["five"]}},
+    {"id": "recjaUArDoBc9DGoS",  "name": {"value": "6", "synonyms": ["five", "six", "seven"]}},
+    {"id": "rectU5iA2puIiNDIk",  "name": {"value": "6 fingers", "synonyms": ["six fingers", "six digits", "six toes", "six fingers on their hand", "six toes on their foot", "six toes on a foot"]}},
+    {"id": "reccOBdcaHmCAmOYk",  "name": {"value": "8", "synonyms": ["eight"]}},
+    {"id": "recSDZI8kKw9EzYdg",  "name": {"value": "9", "synonyms": ["nine"]}},
+    {"id": "recMfujpTKRCHvJDy",  "name": {"value": "10 days", "synonyms": ["ten days"]}},
+    {"id": "rec7vggmpWEn315SI",  "name": {"value": "13", "synonyms": ["thirteen"]}},
+    {"id": "rec1VHDdSz0E6zxO0",  "name": {"value": "16", "synonyms": ["sixteen"]}},
+    {"id": "recUTVFZyLxZzmHt7",  "name": {"value": "17", "synonyms": ["seventeen"]}},
+    {"id": "recZCxH5re4DvEmIR",  "name": {"value": "20", "synonyms": ["twenty"]}},
+    {"id": "recBFY9NrWKwjKxTt",  "name": {"value": "32", "synonyms": ["thirty-two", "thirty two"]}},
+    {"id": "recLiybVDdykXWqg5",  "name": {"value": "40", "synonyms": ["forty"]}},
+    {"id": "rec3HZXaOAB86WXtH",  "name": {"value": "40 percent", "synonyms": ["forty", "forty percent"]}},
+    {"id": "rechPbUl9Yn563QsT",  "name": {"value": "42", "synonyms": ["forty two", "forty-two"]}},
+    {"id": "recytmT5Q6HOFNKeH",  "name": {"value": "50", "synonyms": ["fifty"]}},
+    {"id": "rec0tf9HQEeF4827T",  "name": {"value": "62 pounds", "synonyms": ["sixty-two", "sixty two", "sixty-two pounds", "sixty two pounds"]}},
+    {"id": "recYrD3FtCon93vjH",  "name": {"value": "82", "synonyms": ["eighty-two", "eighty two"]}},
+    {"id": "receJofzZtAl4TyXu",  "name": {"value": "404", "synonyms": ["four oh four", "four O four"]}},
+    {"id": "rec3SGVfTqXp6b2bj",  "name": {"value": "1992", "synonyms": ["nineteen ninety-two"]}},
+    {"id": "rec18oiFH2ibBXAqa",  "name": {"value": "1981", "synonyms": ["nineteen eighty-one"]}},
+    {"id": "recaheoBSOq2FAl20",  "name": {"value": "2007", "synonyms": ["two-thousand six", "two-thousand seven", "two-thousand eight", "two-thousand and six", "two-thousand and seven", "two-thousand and eight", "2006", "2008"]}},
+    
+    {"id": "recFWxL43TiqRolZI",  "name": {"value": "adam's apple", "synonyms": ["adam's apple", "adam apple"]}},
+    {"id": "recsyVG8d7VnXWt43",  "name": {"value": "airman", "synonyms": ["airman"]}},
+    {"id": "recFGncSRNBXl8ESj",  "name": {"value": "ajax", "synonyms": ["ajax"]}},
+    {"id": "recVdrvBUczIZnoTJ",  "name": {"value": "alan rickman", "synonyms": ["alan rickman"]}},
+    {"id": "recZUNRmeg93SbgbA",  "name": {"value": "alex trebek", "synonyms": ["alex trebek"]}},
+    {"id": "recXnHQQ5gBTg3QlH",  "name": {"value": "alfred e neuman", "synonyms": ["alfred neuman"]}},
+    {"id": "recq5QsSDauK3yo3O",  "name": {"value": "amazon", "synonyms": ["amazon", "amazon dot com"]}},
+    {"id": "recJO8Xd8ADeaUMws",  "name": {"value": "american express", "synonyms": ["amex", "american express card"]}},
+    {"id": "recbBGo0EBsBbczd2",  "name": {"value": "american gothic", "synonyms": ["american gothic"]}},
+    {"id": "rec5yiiV8TnVmZPcu",  "name": {"value": "anchor", "synonyms": ["an anchor"]}},
+    {"id": "rec0YXXEvtZIIo1ZV",  "name": {"value": "andrew lloyd weber", "synonyms": ["andrew weber"]}},
+    {"id": "recnIOHVk6blhZXYj",  "name": {"value": "angles", "synonyms": ["angle"]}},
+    {"id": "reces4EtiyXJhD0P6",  "name": {"value": "annapolis, maryland", "synonyms": ["annapolis"]}},
+    {"id": "recwuNrH8caCQwyHP",  "name": {"value": "anne hathaway", "synonyms": ["hathaway"]}},
+    {"id": "reckNkBIWAVvgolig",  "name": {"value": "appalachian trail", "synonyms": ["the appalachian trail"]}},
+    {"id": "recH8SW6jOBxjGZfT",  "name": {"value": "apple", "synonyms": ["an apple"]}},
+    {"id": "rechnSrssdoXP1ZhT",  "name": {"value": "apple trees", "synonyms": ["apple", "apple tree"]}},
+    {"id": "recbfCqSIZf4vwMZg",  "name": {"value": "arches", "synonyms": ["arch"]}},
+    {"id": "recD2y6UqklLYApIo",  "name": {"value": "arkansas", "synonyms": ["arkansas"]}},
+    {"id": "recugeM2UriiqrgYi",  "name": {"value": "armadillo", "synonyms": ["armadillo"]}},
+    {"id": "recppVbMdkvc3mH1R",  "name": {"value": "atlantic city, new jersey", "synonyms": ["atlantic city"]}},
+    
+    {"id": "recqyTDk5vA8TJLy5",  "name": {"value": "baker street", "synonyms": ["baker"]}},
+    {"id": "recxMYPhzbs7gn5EV",  "name": {"value": "balls", "synonyms": ["ball"]}},
+    {"id": "recsumqMgU3LPH1RX",  "name": {"value": "baltimore ravens", "synonyms": ["ravens", "baltimore"]}},
+    {"id": "reccZnSLKBHicrbpZ",  "name": {"value": "banned books", "synonyms": ["censored books", "books that have been banned", "books that have been censored"]}},
+    {"id": "recwGxqHRIPTTuAwc",  "name": {"value": "betelgeuse", "synonyms": ["beetlejuice"]}},
+    {"id": "recB531g6WBzQ0u2I",  "name": {"value": "biggest of their kind", "synonyms": ["largest", "largest of their kind", "largest of their type", "biggest"]}},
+    {"id": "recYJk8ENDUuecUET",  "name": {"value": "bills", "synonyms": ["bill"]}},
+    {"id": "reciix0SgulA30mxM",  "name": {"value": "birth of venus", "synonyms": ["the birth of venus"]}},
+    {"id": "rech7iLd0zGt3I2kc",  "name": {"value": "blade", "synonyms": ["blades"]}},
+    {"id": "recMmk25uI7U2sME9",  "name": {"value": "blood pressure", "synonyms": ["blood pressure"]}},
+    {"id": "recuyjZRqXdcNxCRB",  "name": {"value": "blue", "synonyms": ["blue"]}},
+    {"id": "recJFxggql1hgIL1W",  "name": {"value": "blue yellow black green red", "synonyms": ["blue yellow black green and red"]}},
+    {"id": "recKF06VOcZpBcWfU",  "name": {"value": "bob barker", "synonyms": ["barker", "bob barker", "robert barker"]}},
+    {"id": "recn1JcUMvnIgxEzx",  "name": {"value": "boeing", "synonyms": ["bowing"]}},
+    {"id": "recTJzLm3PK9Pij9L",  "name": {"value": "boston, massachusetts", "synonyms": ["boston"]}},
+    {"id": "rec4CyBWulcyjk8KE",  "name": {"value": "boxing day", "synonyms": ["boxing day"]}},
+    {"id": "rec4Qw7W8D4hQ0AMQ",  "name": {"value": "boy george", "synonyms": ["boy george"]}},
+    {"id": "recGPuZkqA6V8i4QZ",  "name": {"value": "breaking bad", "synonyms": ["breaking bad"]}},
+    {"id": "rechvXlsXc5hR3ZxF",  "name": {"value": "brigham young", "synonyms": ["brigham young"]}},
+    {"id": "reccCpBVT0oCI5Gdh",  "name": {"value": "bronx", "synonyms": ["the bronx"]}},
+    {"id": "recl1aPnC5tkjzcZX",  "name": {"value": "brussels sprouts", "synonyms": ["brussel sprouts"]}},
+    {"id": "rec27eDeHLSLZBouG",  "name": {"value": "bugs bunny", "synonyms": ["bugs bunny"]}},
+    {"id": "recBH4drk8rExnuCd",  "name": {"value": "burning man", "synonyms": ["burning man"]}},
+    
+    {"id": "recbaHdE6owalCQmg",  "name": {"value": "california", "synonyms": ["california"]}},
+    {"id": "rec1MvNgQjRo4w8TS|recxrUnKaKzM9GLKk",  "name": {"value": "calvin and hobbes", "synonyms": ["calvin and hobbes"]}},
+    {"id": "recbj4sUnrduOfXsH",  "name": {"value": "cardinal", "synonyms": ["cardinal"]}},
+    {"id": "rec1Nn8TicKHMqkvU",  "name": {"value": "capital punishment", "synonyms": ["capital punishment", "death penalty", "the death penalty"]}},
+    {"id": "reclgoIsQ4QWA6TBb",  "name": {"value": "catch", "synonyms": ["catch", "caught"]}},
+    {"id": "rec5YIc0Mq4IyD5W5",  "name": {"value": "cats", "synonyms": ["cat"]}},
+    {"id": "recnEJyShnW3cqQ4Z",  "name": {"value": "charges", "synonyms": ["charged", "charging"]}},
+    {"id": "recz0aJa17qCucWRO",  "name": {"value": "charles manson", "synonyms": ["manson"]}},
+    {"id": "recajeskkjCSbUObZ",  "name": {"value": "charlie sheen", "synonyms": ["charlie sheen"]}},
+    {"id": "rec5NtIRm7okFRFjD",  "name": {"value": "charts", "synonyms": ["chart", "kinds of charts", "types of charts", "kinds of chart", "charting", "types of chart"]}},
+    {"id": "recFd5gpkrZyXRbMm",  "name": {"value": "clay", "synonyms": ["clay"]}},
+    {"id": "recT11JE0ZPkm6xfl",  "name": {"value": "cleveland, ohio", "synonyms": ["cleveland"]}},
+    {"id": "recC5E7Sl7VyJDYn8",  "name": {"value": "clownfish", "synonyms": ["clown fish"]}},
+    {"id": "rec00uXjnmYbMUpZC",  "name": {"value": "clue", "synonyms": ["clue characters", "characters from clue", "characters from the board game clue", "characters from the clue board game", "clue character"]}},
+    {"id": "rec4ShUq6vQaoiwq5",  "name": {"value": "coca cola", "synonyms": ["coke", "coca-cola"]}},
+    {"id": "recZICY1goETRBLfi",  "name": {"value": "comedies", "synonyms": ["comedies"]}},
+    {"id": "recKXui6KxaJZLN97",  "name": {"value": "congress", "synonyms": ["congress"]}},
+    {"id": "recmsrwmvT4PxqWLw",  "name": {"value": "contractions", "synonyms": ["contraction"]}},
+    {"id": "recS1zXjkWNR8KJaY",  "name": {"value": "corinthian", "synonyms": ["corinthian"]}},
+    {"id": "recTTpKnpGXcebL3e",  "name": {"value": "cork", "synonyms": ["corks"]}},
+    {"id": "recw8FRjdjQ9u7Sxz",  "name": {"value": "corn", "synonyms": ["varieties of corn", "types of corn", "corn types", "corn varieties"]}},
+    {"id": "recGJsJYSFUlaITkj",  "name": {"value": "cosmo", "synonyms": ["cosmo kramer"]}},
+    {"id": "recaWRk1Kormg6ljs",  "name": {"value": "crayola", "synonyms": ["crayola crayons", "crayons"]}},
+    {"id": "recL6rxm08cRm7of0",  "name": {"value": "curds and whey", "synonyms": ["curds and whey"]}},
+    
+    {"id": "recLVut7Epq4OsKxX",  "name": {"value": "deion sanders", "synonyms": ["deion sanders"]}},
+    {"id": "recoUEFqN4M36QT5g",  "name": {"value": "denmark", "synonyms": ["denmark"]}},
+    {"id": "recWcoR3umxqAhSxA",  "name": {"value": "deliver", "synonyms": ["delivers", "delivery", "do deliveries", "do delivery"]}},
+    {"id": "recCnBm3Emc3zgrPq",  "name": {"value": "diaper", "synonyms": ["diaper", "cloth diaper", "disposable diaper"]}},
+    {"id": "recsinHT8AtW7qXqE",  "name": {"value": "dog", "synonyms": ["the dog", "the little dog"]}},
+    {"id": "rec8KUP7b04lJeAf8",  "name": {"value": "donatello", "synonyms": ["donatello"]}},
+    {"id": "recggqrRh1c6MPPVx",  "name": {"value": "donkey kong", "synonyms": ["donkey kong junior"]}},
+    {"id": "recdonHlDd8seHhxD",  "name": {"value": "dora the explorer", "synonyms": ["dora", "dora the explorer"]}},
+    {"id": "receeNU2Y5kJIIDOz",  "name": {"value": "dreamworks", "synonyms": ["dreamworks SKG", "dreamworks animation", "dreamworks studio", "dreamworks studios"]}},
+    {"id": "rec7g76JY1sLWfgDi",  "name": {"value": "driven", "synonyms": ["drive"]}},
+    {"id": "recMrP2gIy7F6FE0s",  "name": {"value": "dunder mifflin", "synonyms": ["dunder-mifflin"]}},
+    
+    {"id": "recC8T7ioVTHytANu",  "name": {"value": "ear wax", "synonyms": ["earwax", "cerumen"]}},
+    {"id": "rec3uhHq3Zxlvgygt",  "name": {"value": "elephant and donkey", "synonyms": ["donkey and elephant"]}},
+    {"id": "recOob0XG7yNudSy5",  "name": {"value": "E", "synonyms": ["e"]}},
+    {"id": "rec3qYMzrWId8Xa5B",  "name": {"value": "eagle and lion", "synonyms": ["lion and eagle"]}},
+    {"id": "recVsE26AlmEIdbXh",  "name": {"value": "earth", "synonyms": ["earth"]}},
+    {"id": "recS6HM8YckImsSzr",  "name": {"value": "eyes", "synonyms": ["eye"]}},
+    {"id": "recMzcRNEZF2dZoGL",  "name": {"value": "eddie van halen", "synonyms": ["eddie van halen", "van halen"]}},
+    {"id": "recUMgqHVekJw7L6a",  "name": {"value": "egg white", "synonyms": ["white", "the white", "white part", "the white part"]}},
+    {"id": "recruFrsXtK0gp4zE",  "name": {"value": "eiffel tower", "synonyms": ["the eiffel tower"]}},
+    {"id": "recPCVSddVIm4TirE",  "name": {"value": "elmer fudd", "synonyms": ["elmer fudd"]}},
+    {"id": "recSzTM86xGWOKkfO",  "name": {"value": "el salvador", "synonyms": ["el salvador"]}},
+    {"id": "recRvHAITCt2V5lgr",  "name": {"value": "elves", "synonyms": ["elves"]}},
+    {"id": "rec6tflGPstjatNTd",  "name": {"value": "equinox", "synonyms": ["chevy equinox", "chevrolet equinox"]}},
+    
+    {"id": "recs0BHMjqiIo83bB",  "name": {"value": "feet", "synonyms": ["the feet", "their feet", "foot"]}},
+    {"id": "recs3kPNZk7zShdEb",  "name": {"value": "fermentation", "synonyms": ["ferment"]}},
+    {"id": "recn2YWfEHcwKDjyX",  "name": {"value": "ferris bueller", "synonyms": ["ferris bueller", "bueller"]}},
+    {"id": "recQ3sTAwnBdCS4IJ",  "name": {"value": "fez", "synonyms": ["fez"]}},
+    {"id": "recDxioYTmZ1cSqPg",  "name": {"value": "feathers", "synonyms": ["feathers"]}},
+    {"id": "recrNRRAQ2HH2RuB3",  "name": {"value": "fighters", "synonyms": ["fighter"]}},
+    {"id": "recO4UcIBNeV0LRRf",  "name": {"value": "filled", "synonyms": ["fills"]}},
+    {"id": "recunklSSoLx1Hww9",  "name": {"value": "florence", "synonyms": ["florence"]}},
+    {"id": "recSc8FfyDzuonGTP",  "name": {"value": "firefly", "synonyms": ["firefly"]}},
+    {"id": "recbNVMR76HWMuAk0",  "name": {"value": "firefox", "synonyms": ["fire fox"]}},
+    {"id": "recq3NneTItOepfUs",  "name": {"value": "first patent", "synonyms": ["first patent", "first US patent", "first united states patent"]}},
+    {"id": "rechLsvPHcMXUV0Bc",  "name": {"value": "foghorn leghorn", "synonyms": ["foghorn leghorn"]}},
+    {"id": "recXmd02HF2UGwCEP",  "name": {"value": "ford's theater", "synonyms": ["ford theater", "ford"]}},
+    {"id": "recwLJJPzN3uN38iR",  "name": {"value": "for what it is worth", "synonyms": ["for what it's worth"]}},
+    {"id": "recZWMme5xxplE7sQ",  "name": {"value": "foxes", "synonyms": ["fox"]}},
+    {"id": "rec2cJ7XM8v7vprMz",  "name": {"value": "france", "synonyms": ["france"]}},
+    {"id": "rec90xqVEcHYbZC8S",  "name": {"value": "franco harris", "synonyms": ["franco harris"]}},
+    {"id": "recNYwjMOR2bdbziS",  "name": {"value": "frankfort", "synonyms": ["none of these", "none", "it is frankfort"]}},
+    {"id": "recoqx16wOGElxZpB",  "name": {"value": "frank lloyd wright", "synonyms": ["frank lloyd wright", "wright"]}},
+    {"id": "recajuNjHYJqNpi8e",  "name": {"value": "freddie mercury", "synonyms": ["freddy mercury"]}},
+    {"id": "recH7wOnEWtcTCgNF",  "name": {"value": "frequency modulation", "synonyms": ["frequency modulation"]}},
+    {"id": "recpqfqs6QP7GAr4K",  "name": {"value": "fruity pebbles", "synonyms": ["fruity pebbles"]}},
+    {"id": "recV6Y8jbrrKHOoxl",  "name": {"value": "funnels", "synonyms": ["funnel"]}},
+    
+    {"id": "rec3ujSCIWraEDun2",  "name": {"value": "gamma", "synonyms": ["gamma"]}},
+    {"id": "recHODX1iGZtqGLct",  "name": {"value": "genesis", "synonyms": ["genesis"]}},
+    {"id": "recE630vd4amguibl",  "name": {"value": "general electric", "synonyms": ["G E"]}},
+    {"id": "recME3X9kiW1xnA9J",  "name": {"value": "gerald ford", "synonyms": ["ford"]}},
+    {"id": "rec8kz9h2MuOXORWf",  "name": {"value": "georges seurat", "synonyms": ["seurat", "george serrah"]}},
+    {"id": "recytWrEUtNku3xl6",  "name": {"value": "gin", "synonyms": ["gin"]}},
+    {"id": "recbUGn5lRMDqWBDB",  "name": {"value": "global positioning system", "synonyms": ["global positioning system"]}},
+    {"id": "rec58UB6KT6R6gyOw",  "name": {"value": "glock", "synonyms": ["glock"]}},
+    {"id": "recJfETDqv2azYd2K",  "name": {"value": "the globe", "synonyms": ["globe", "globe theater"]}},
+    {"id": "recfDrlA2QaB8AVRf",  "name": {"value": "god", "synonyms": ["god"]}},
+    {"id": "recUmF7zcFBfV3Zh3",  "name": {"value": "gold", "synonyms": ["gold"]}},
+    {"id": "recQMelvFRE8qGPat",  "name": {"value": "golden gate bridge", "synonyms": ["golden gate"]}},
+    {"id": "recj7bXl3xAyTEt6f",  "name": {"value": "goulash", "synonyms": ["goulash"]}},
+    {"id": "rec3vCpxdhT8zThOd",  "name": {"value": "grapes of wrath", "synonyms": ["the grapes of wrath"]}},
+    {"id": "reczbJRTy4FFkJDSI",  "name": {"value": "grease", "synonyms": ["grease"]}},
+    {"id": "recks262l43YrfJF3",  "name": {"value": "green day", "synonyms": ["green day"]}},
+    {"id": "recuuGc1d70acgY2r",  "name": {"value": "green lantern", "synonyms": ["green lantern"]}},
+    {"id": "reciVY3iryXwOv8iO",  "name": {"value": "great pumpkin", "synonyms": ["the great pumpkin"]}},
+    {"id": "recAN9nxR8W07L5Ta",  "name": {"value": "grumpy", "synonyms": ["grumpy dwarf"]}},
+    
+    {"id": "recfgNNQET2o7DXXj",  "name": {"value": "hagar the horrible", "synonyms": ["hagar the horrible"]}},
+    {"id": "receedbstoEWYyUEL",  "name": {"value": "hajj", "synonyms": ["hajj"]}},
+    {"id": "recw1EwW9ad5mwDS9",  "name": {"value": "hamilton and franklin", "synonyms": ["hamilton and franklin", "franklin and hamilton", "ben franklin and alexander hamilton", "alexander hamilton and ben franklin", "benjamin franklin and alexander hamilton", "alexander hamilton and benjamin franklin", "ben franklin and hamilton", "hamilton and ben franklin", "franklin and alexander hamilton", "alexander hamilton and franklin", "hamilton and benjamin franklin", "benjamin franklin and hamilton"]}},
+    {"id": "rec2w3M0FfvJQIbUo",  "name": {"value": "hands", "synonyms": ["his hands"]}},
+    {"id": "recm1la5lcs0trCLR|recwXK2xaynGBXPSP",  "name": {"value": "Hawaii", "synonyms": ["hawaii"]}},
+    {"id": "recJb0oao2EQ2l1f4",  "name": {"value": "Hippocrates", "synonyms": ["Hippocrates"]}},
+    {"id": "recOK2ipM0Pvyq04d",  "name": {"value": "hits", "synonyms": ["hit"]}},
+    {"id": "recnCxN1Mcg1sgx0x",  "name": {"value": "hog", "synonyms": ["h o g"]}},
+    {"id": "recS9zeLce6XOXgUH",  "name": {"value": "holden caufield", "synonyms": ["holden caufield"]}},
+    {"id": "recXbdBh7UvgWAb1A",  "name": {"value": "home depot", "synonyms": ["the home depot"]}},
+    {"id": "recAFG7ic1HjgD4Ez",  "name": {"value": "honey boo boo", "synonyms": ["honey boo boo"]}},
+    {"id": "recsWbjEtss7qiSQr",  "name": {"value": "hulk hogan", "synonyms": ["hulk hogan"]}},
+    {"id": "recFnSaD5fIO2Pcdn",  "name": {"value": "hydrogen", "synonyms": ["hydrogen"]}},
+    
+    {"id": "recFhVBqle0BcTpeM",  "name": {"value": "identical twins", "synonyms": ["identical"]}},
+    {"id": "recP8b26Vvf19cO7f",  "name": {"value": "i heard it through the grapevine", "synonyms": ["heard it through the grapevine"]}},
+    {"id": "recogudkS4zGJAENw",  "name": {"value": "indiana jones and the kingdom of the crystal skull", "synonyms": ["kingdom of the crystal skull", "crystal skull"]}},
+    {"id": "rechoTGlHIsBO3jzy",  "name": {"value": "industrial light and magic", "synonyms": ["ILM"]}},
+    {"id": "recNipMdaSL2wlrEL",  "name": {"value": "inertia", "synonyms": ["inertia"]}},
+    {"id": "recpImSXCI4Ia7In1",  "name": {"value": "initial public offering", "synonyms": ["initial public offering"]}},
+    {"id": "recccyhM8yMrF3gcj",  "name": {"value": "iowa", "synonyms": ["I A"]}},
+    {"id": "recpWcHZe0qjnH4gv",  "name": {"value": "islands", "synonyms": ["island"]}},
+    
+    {"id": "recuk0EUm2nif38ZN",  "name": {"value": "jacob", "synonyms": ["jacob", "israel"]}},
+    {"id": "recEpC8r0a4RKcBnH",  "name": {"value": "jackson pollock", "synonyms": ["jackson pollock", "pollock"]}},
+    {"id": "recarwYJBNYyEV0KI",  "name": {"value": "james buchanan", "synonyms": ["buchanan"]}},
+    {"id": "recY1BOkBRGAR76pD",  "name": {"value": "jeans", "synonyms": ["denim", "brands of jeans", "denim brands"]}},
+    {"id": "rec8tIkC3kutZuwV7",  "name": {"value": "jelly beans", "synonyms": ["jelly belly", "jelly bellies", "jelly belly jelly beans"]}},
+    {"id": "reczET5OvUKZ9z5MN",  "name": {"value": "jerry lee lewis", "synonyms": ["jerry lee lewis"]}},
+    {"id": "recJzp4Aq9uIPcMEb",  "name": {"value": "jif", "synonyms": ["jif"]}},
+    {"id": "recbq7dCmCNZFWTuQ",  "name": {"value": "john f kennedy", "synonyms": ["john kennedy"]}},
+    {"id": "recxFuaB8qd08QJFw",  "name": {"value": "jones", "synonyms": ["joneses"]}},
+    {"id": "recou4aqWvrfQ6N9F",  "name": {"value": "joust", "synonyms": ["joust"]}},
+    {"id": "recVbwtwvAqJFEs8L",  "name": {"value": "judges", "synonyms": ["judge"]}},
+    {"id": "recMTWFNivdGEElZW",  "name": {"value": "july 4", "synonyms": ["fourth of july", "july 4th"]}},
+    {"id": "reckkAB8ls8hbWkdq",  "name": {"value": "july and august", "synonyms": ["august and july", "july august", "august july"]}},
+    {"id": "recqO6oDCJPKB0ecc",  "name": {"value": "june", "synonyms": ["june"]}},
+    
+    {"id": "recbkSEd6sBu00UwR",  "name": {"value": "katy perry", "synonyms": ["katie parry"]}},
+    {"id": "recY2ySnZu1A5KbmM",  "name": {"value": "kernels", "synonyms": ["colonels", "kernel", "colonel"]}},
+    {"id": "receNrnFBlm8xba2f",  "name": {"value": "kentucky derby", "synonyms": ["the kentucky derby"]}},
+    {"id": "recAN9Igr2vbdeGno",  "name": {"value": "kerning", "synonyms": ["kerning"]}},
+    {"id": "recsTRg6t3QGQIad8",  "name": {"value": "keys", "synonyms": ["key"]}},
+    {"id": "recUXv7yosRHM3oE6",  "name": {"value": "killers", "synonyms": ["killers from horror films", "horror killers", "murderers from movies", "horror movie murderers", "villains"]}},
+    {"id": "recxh0y0DS2LS3OMD",  "name": {"value": "kimberly clark", "synonyms": ["kimberly clark", "kimberly clark corporation", "kimberly clark corp"]}},
+    {"id": "recEcWJsY10H0ypI3",  "name": {"value": "king of diamonds", "synonyms": ["king of diamonds"]}},
+    {"id": "recAORy34Db5pZDmG",  "name": {"value": "knots", "synonyms": ["knot"]}},
+    
+    {"id": "recMJ8oZRJhRLkPkr",  "name": {"value": "L ron hubbard", "synonyms": ["ron hubbard"]}},
+    {"id": "recR7pArfhXqUSGva",  "name": {"value": "lake michigan", "synonyms": ["michigan"]}},
+    {"id": "rec415pRMWoagpyh6",  "name": {"value": "lake ontario", "synonyms": ["ontario"]}},
+    {"id": "recgjZrBRzz3GZwEV",  "name": {"value": "lamborghini", "synonyms": ["lamborghini"]}},
+    {"id": "rec2VghLBcqBlYK06",  "name": {"value": "las vegas miami new york", "synonyms": ["las vegas miami new york", "las vegas new york miami", "miami new york las vegas", "miami las vegas new york", "new york miami las vegas", "new york las vegas miami", "las vegas miami and new york", "las vegas new york and miami", "miami new york and las vegas", "miami las vegas and new york", "new york miami and las vegas", "new york las vegas and miami"]}},
+    {"id": "rechlUGXGcBzWSTvW",  "name": {"value": "leeward", "synonyms": ["lee", "leeward"]}},
+    {"id": "recEZ3mAD1k3CT92Y",  "name": {"value": "left", "synonyms": ["the left", "left"]}},
+    {"id": "recE7vmnLjmgwMKYH",  "name": {"value": "les misérables", "synonyms": ["lay mis", "les misérables", "les miserables"]}},
+    {"id": "recpW7Ih9dumgy1wT",  "name": {"value": "liberty island", "synonyms": ["liberty"]}},
+    {"id": "recIB49H2NMD2IHQA",  "name": {"value": "lids", "synonyms": ["lid"]}},
+    {"id": "recz7Cb0QVZ3vDSje",  "name": {"value": "lobes", "synonyms": ["lobe"]}},
+    {"id": "recp9kG4fEJyE1el3",  "name": {"value": "locks", "synonyms": ["lox"]}},
+    {"id": "recInVQOPyW4vyoU3",  "name": {"value": "lola", "synonyms": ["lola"]}},
+    {"id": "recscsAcBgbUiaZIx",  "name": {"value": "london", "synonyms": ["london, england", "london, united kingdom"]}},
+    {"id": "recQThcojCCkqkoCz",  "name": {"value": "lord of the rings three", "synonyms": ["lord of the rings three", "return of the king", "lord of the rings return of the king", "titanic", "ben her", "ben hur"]}},
+    {"id": "rec2WCRR7CgDvR8lU",  "name": {"value": "los angeles", "synonyms": ["los angeles"]}},
+    {"id": "recTX8GEsbli4roqu",  "name": {"value": "luxembourg", "synonyms": ["luxembourg"]}},
+    
+    {"id": "recQ33fxJEz4yM6Bw",  "name": {"value": "manes", "synonyms": ["Maine", "main", "mane"]}},
+    {"id": "recP3yOmi5K4dUxGq",  "name": {"value": "mandarin", "synonyms": ["mandarin", "chinese"]}},
+    {"id": "reco6cQTY7ZgTxDCO",  "name": {"value": "marie curie", "synonyms": ["marie curie"]}},
+    {"id": "recCS4qvyKSIi5VDy",  "name": {"value": "marlboro", "synonyms": ["marlboro"]}},
+    {"id": "recKgyWzWzvCK7ZoA",  "name": {"value": "martha stewart", "synonyms": ["martha stewart", "stewart"]}},
+    {"id": "recGdX2Pgp6Qm8Z2Q",  "name": {"value": "martin short", "synonyms": ["martin short"]}},
+    {"id": "recHo7C0YCWoH9wIG",  "name": {"value": "martina navratilova", "synonyms": ["navratilova"]}},
+    {"id": "rechZ1C6IM78D1Hdp",  "name": {"value": "mary poppins", "synonyms": ["mary poppins"]}},
+    {"id": "recw5gihEgUvC8w0I",  "name": {"value": "masters", "synonyms": ["the masters"]}},
+    {"id": "reccBDmSSzZhkqIwt",  "name": {"value": "matt groening", "synonyms": ["matt groening", "groening"]}},
+    {"id": "recI6zuyxnuJ8z9do",  "name": {"value": "may 4th", "synonyms": ["may 4", "may fourth", "the fourth of may", "may the fourth"]}},
+    {"id": "recfja4QwP6D0aHGY",  "name": {"value": "mel gibson", "synonyms": ["mel gibson"]}},
+    {"id": "recNZkIsdTOrBLuJ6",  "name": {"value": "mercury", "synonyms": ["mercury"]}},
+    {"id": "recSlTYmt8Gk5w22a",  "name": {"value": "miami dolphins", "synonyms": ["miami", "dolphins"]}},
+    {"id": "recqSejqM0AZ5f8qR",  "name": {"value": "michael j fox", "synonyms": ["michael j fox"]}},
+    {"id": "rechqNbIBGrAc23Lb",  "name": {"value": "microsoft", "synonyms": ["microsoft"]}},
+    {"id": "recPJUSDyaEKAQLcn",  "name": {"value": "microwave", "synonyms": ["microwave oven", "radarange"]}},
+    {"id": "recczrm7pYYqfvTVj",  "name": {"value": "minneapolis", "synonyms": ["minneapolis"]}},
+    {"id": "recu74B1jdFx9MgGB",  "name": {"value": "mom's spaghetti", "synonyms": ["moms spaghetti"]}},
+    {"id": "recMJLYRVAVxh6KNX",  "name": {"value": "monday", "synonyms": ["monday"]}},
+    {"id": "recEu0X1vU9NC24yx",  "name": {"value": "mountain dew", "synonyms": ["mountain dew"]}},
+    {"id": "reck4TqLLByhsnMrE",  "name": {"value": "muggle", "synonyms": ["muggle"]}},
+    
+    {"id": "rec6jKnnrPGxxZwFW",  "name": {"value": "natalie portman", "synonyms": ["natalie portman", "portman"]}},
+    {"id": "recyvrqXSQvaTzBCf",  "name": {"value": "natural born killers", "synonyms": ["natural born killers"]}},
+    {"id": "recTbVGC2rz5agnyf",  "name": {"value": "NBC", "synonyms": ["national broadcasting company"]}},
+    {"id": "recFBP9N1TNywKHaJ",  "name": {"value": "nestle", "synonyms": ["nestlé"]}},
+    {"id": "recgoECUzwuFT0SY6",  "name": {"value": "netflix", "synonyms": ["netflix"]}},
+    {"id": "reculzUQjr31FSaM9",  "name": {"value": "new york and new jersey", "synonyms": ["new jersey and new york"]}},
+    {"id": "rechY5obp9lzqmFuO",  "name": {"value": "new york and philadelphia", "synonyms": ["new york and philadelphia", "philadelphia and new york", "new york city and philadelphia", "philadelphia and new york city"]}},
+    {"id": "rech12sEMHsurMjPk",  "name": {"value": "nokia and ikea", "synonyms": ["ikea and nokia"]}},
+    {"id": "recz5V1dyPmT8aeYZ",  "name": {"value": "norman rockwell", "synonyms": ["rockwell"]}},
+    {"id": "recrrUIZ6YXdT42t2",  "name": {"value": "note to follow so", "synonyms": ["a note to follow sew", "a note to follow so"]}},
+    
+    {"id": "reck8WUL41NvvbPYV",  "name": {"value": "odie", "synonyms": ["odie"]}},
+    {"id": "recw8ppniTBxKB0vB",  "name": {"value": "ohio", "synonyms": ["ohio"]}},
+    {"id": "recFMQp8Eb9ob0OhC",  "name": {"value": "oil", "synonyms": ["oil", "gas", "oil and gas", "gas and oil", "petroleum", "gasoline"]}},
+    {"id": "recdMuOnApmnjIrau",  "name": {"value": "oliver twist", "synonyms": ["oliver twist"]}},
+    {"id": "recoxBxRHfZ8lEwYT",  "name": {"value": "once", "synonyms": ["once"]}},
+    {"id": "recIGxfaMFolUZCKh",  "name": {"value": "one dollar bill", "synonyms": ["the one", "one dollar", "one", "the one dollar bill"]}},
+    {"id": "recxfScqB6s4jdnkf",  "name": {"value": "one eye", "synonyms": ["one eye"]}},
+    {"id": "recLkI4SE0UbToVPP",  "name": {"value": "oscars", "synonyms": ["oscar"]}},
+    {"id": "recQdTIl3w7AdfDkM",  "name": {"value": "ostrich", "synonyms": ["ostrich"]}},
+    
+    {"id": "reciCLnrJTi5an1f8",  "name": {"value": "P", "synonyms": ["pea"]}},
+    {"id": "recHg6YI7DjKR0QJw",  "name": {"value": "paleozoic mesozoic cenozoic", "synonyms": ["paleozoic mesozoic and cenozoic"]}},
+    {"id": "recZmGULl5bg0QbCu",  "name": {"value": "palm trees", "synonyms": ["palms"]}},
+    {"id": "recWBfVa6VpQjJUvT",  "name": {"value": "paul revere", "synonyms": ["paul revere"]}},
+    {"id": "recXhu0uMSInnyWpy",  "name": {"value": "penny", "synonyms": ["the penny", "one cent"]}},
+    {"id": "rec8mq8jbVu7mW2V2",  "name": {"value": "persistence of memory", "synonyms": ["the persistence of memory", "persistence of memory"]}},
+    {"id": "rec2BXiGFgN73Yzql",  "name": {"value": "peter parker", "synonyms": ["peter parker"]}},
+    {"id": "recYaRKVT5Dm8HiSq",  "name": {"value": "petroleum", "synonyms": ["petroleum"]}},
+    {"id": "recTfjbveM6H9VssZ|reclqYmwFpolBxJvU",  "name": {"value": "phantom of the opera", "synonyms": ["the phantom of the opera", "phantom"]}},
+    {"id": "recoeqLQD9Swgn70q",  "name": {"value": "piccolo", "synonyms": ["piccolo"]}},
+    {"id": "rects7oWkIR9gxN3R",  "name": {"value": "piston honda", "synonyms": ["piston honda"]}},
+    {"id": "rec4B8GG6b3I2c390",  "name": {"value": "pizza", "synonyms": ["pizza"]}},
+    {"id": "recq1ZzWf9LDlubEL",  "name": {"value": "pizza hut", "synonyms": ["pizza hut"]}},
+    {"id": "recfVv9cAfpNkXHfZ",  "name": {"value": "plasma", "synonyms": ["plasma"]}},
+    {"id": "rec9rFiv7VaKdLhal",  "name": {"value": "plots", "synonyms": ["plot"]}},
+    {"id": "rec5gpCiEaWON7GKc",  "name": {"value": "pony express", "synonyms": ["the pony express"]}},
+    {"id": "recljj2Aucl9EAsIu",  "name": {"value": "pop", "synonyms": ["popped"]}},
+    {"id": "recO7EAmmvu6IPtoJ",  "name": {"value": "porter", "synonyms": ["porter"]}},
+    {"id": "recISt0WQOLL9NRdF",  "name": {"value": "portuguese", "synonyms": ["portuguese"]}},
+    {"id": "recr7ulb1zQogipQ7|recsQ922bNksZzLSh",  "name": {"value": "price is right", "synonyms": ["the price is right"]}},
+    {"id": "recpZNz3RzpFXI3xc",  "name": {"value": "pumpernickel", "synonyms": ["pumpernickel"]}},
+    
+    {"id": "recA1THCjtLKw1a5X",  "name": {"value": "question mark", "synonyms": ["question mark"]}},
+    
+    {"id": "reckEAdHhytdh9nQM",  "name": {"value": "radiation", "synonyms": ["radiation", "radioactivity", "radioactive"]}},
+    {"id": "recZuYQV3WprlYwEx",  "name": {"value": "railroads", "synonyms": ["railroads", "steamships", "trains"]}},
+    {"id": "recsS41H9JI5K8thZ",  "name": {"value": "reader's digest", "synonyms": ["reader's digest", "readers digest"]}},
+    {"id": "recWoaXfi66HVVkKq",  "name": {"value": "real estate novelist", "synonyms": ["paul is a real estate novelist"]}},
+    {"id": "recKKX2qTAdVJkA6A",  "name": {"value": "red", "synonyms": ["red"]}},
+    {"id": "recVCi5Ysw2ihkQnD",  "name": {"value": "red m and m's", "synonyms": ["red ones", "red"]}},
+    {"id": "recxJTecbzdZn5NPC",  "name": {"value": "red yellow green and blue", "synonyms": ["red yellow green blue"]}},
+    {"id": "recd5woaWrUicq8lI",  "name": {"value": "regal beagle", "synonyms": ["the regal beagle"]}},
+    {"id": "recO5C3O0nlr8NZE9",  "name": {"value": "rhode island", "synonyms": ["rhode island"]}},
+    {"id": "recyKCaBLvAx5z58n",  "name": {"value": "roald dahl", "synonyms": ["dahl", "doll", "roald doll"]}},
+    {"id": "recWif6C48iK6AqnR",  "name": {"value": "robert smith", "synonyms": ["robert smith"]}},
+    {"id": "rec2k8TLThwYvtcCT",  "name": {"value": "robin wright", "synonyms": ["robin wright penn"]}},
+    {"id": "recuuuwtDtRkNAXBJ",  "name": {"value": "romulus", "synonyms": ["romulus"]}},
+    {"id": "rec7np3ZTEi1LeTJC",  "name": {"value": "roots", "synonyms": ["root"]}},
+    {"id": "recZq8jqEJ0f6qNTv",  "name": {"value": "rosh hashanah", "synonyms": ["rosha shana"]}},
+    {"id": "recm7dSM5J1KgrLYu",  "name": {"value": "run", "synonyms": ["runs"]}},
+    
+    {"id": "rechbz6OkHpjeaUWO",  "name": {"value": "saint patrick", "synonyms": ["patrick"]}},
+    {"id": "recvva0YKp7MFU9fY",  "name": {"value": "Sacha Baron Cohen", "synonyms": ["Sacha Cohen"]}},
+    {"id": "recrMFk5ansrBS8TO",  "name": {"value": "Saturday", "synonyms": ["saturday"]}},
+    {"id": "reciY0hjKDnWJ0WW7",  "name": {"value": "saws", "synonyms": ["saw"]}},
+    {"id": "recZv8sazsQFSQF8p",  "name": {"value": "saxophone", "synonyms": ["saxophone", "sax"]}},
+    {"id": "rece6gvpii1k5S439",  "name": {"value": "sears tower", "synonyms": ["sears"]}},
+    {"id": "recMZ1biU9nwFJdEt|rec8KtwCoZJOhlcRm",  "name": {"value": "september", "synonyms": ["september"]}},
+    {"id": "recVxSsgmBbm7COmo",  "name": {"value": "sergey brin", "synonyms": ["brin"]}},
+    {"id": "recV7UDhl6kEe2Gsq",  "name": {"value": "serve", "synonyms": ["serves", "served"]}},
+    {"id": "recKyL3Ky311t4Vc3",  "name": {"value": "sherlock holmes", "synonyms": ["sherlock holmes"]}},
+    {"id": "recFPDFkGuyBH9RVg",  "name": {"value": "sherwin williams", "synonyms": ["sherwin williams"]}},
+    {"id": "recU24uc9lFzL4D6Y",  "name": {"value": "silence of the lambs", "synonyms": ["the silence of the lambs"]}},
+    {"id": "recNdPmLmBXo3Ex0s",  "name": {"value": "silicon valley", "synonyms": ["silicon valley"]}},
+    {"id": "recK9rJVWAw5eQgoN",  "name": {"value": "silver", "synonyms": ["silver"]}},
+    {"id": "rectT6bwfz2ey0eO5",  "name": {"value": "sirius", "synonyms": ["sirius"]}},
+    {"id": "recnx3fLOvPYfrP8C",  "name": {"value": "sliced bread", "synonyms": ["sliced bread"]}},
+    {"id": "recNmeyc5hliHJ0tu",  "name": {"value": "soap", "synonyms": ["soap"]}},
+    {"id": "recOQTNNTpMWuR6Db",  "name": {"value": "sole", "synonyms": ["soul", "Seoul", "soles", "souls"]}},
+    {"id": "rec2X7bdd1nvIXbev",  "name": {"value": "solitaire", "synonyms": ["solitaire"]}},
+    {"id": "recCQm2PZyvxSKlwZ",  "name": {"value": "spiked", "synonyms": ["spike", "spikes"]}},
+    {"id": "reccwnp9jRSpmXsDw",  "name": {"value": "south carolina", "synonyms": ["south carolina"]}},
+    {"id": "reck28IiAfPS1KrKg",  "name": {"value": "sports are born", "synonyms": ["birthplace", "sports invented", "birthplace of sports", "sports originated"]}},
+    {"id": "recZi3cpvcXvoqQpE",  "name": {"value": "stabbing", "synonyms": ["stab", "knife"]}},
+    {"id": "recSk9yr4z8aRzVTu",  "name": {"value": "stamps", "synonyms": ["stamps are sold", "types of stamps"]}},
+    {"id": "rec0ZPtGzz6fusagG",  "name": {"value": "steel", "synonyms": ["steel", "steal"]}},
+    {"id": "recWBhbfDbpkQaQiZ",  "name": {"value": "strom thurmond", "synonyms": ["thurmond"]}},
+    {"id": "recsjDpLZi6eUW14D",  "name": {"value": "stuffed", "synonyms": ["stuffing"]}},
+    {"id": "recg3ivxQkc7QlStH",  "name": {"value": "suffragettes", "synonyms": ["suffragette"]}},
+    {"id": "recbMwnsjaRsO41BY",  "name": {"value": "sugar plums", "synonyms": ["sugarplums", "visions of sugar plums"]}},
+    {"id": "recLmsAgrJOLsvdZP",  "name": {"value": "super bowl shuffle", "synonyms": ["the super bowl shuffle", "superbowl shuffle"]}},
+    {"id": "rechyBUebq2WdVQe1",  "name": {"value": "super ego", "synonyms": ["the super-ego", "super-ego", "the super ego"]}},
+    {"id": "recNBoVkIBBFVZnVY",  "name": {"value": "swiss army knife", "synonyms": ["swiss army knives"]}},
+    {"id": "recKWRRacTpl7Rgrb",  "name": {"value": "switzerland", "synonyms": ["switzerland"]}},
+    {"id": "rec8Hl1wcTeGyTM11",  "name": {"value": "swoosh", "synonyms": ["nike swoosh", "nike"]}},
+    
+    {"id": "rec4SFhMz0KQsx8Gg",  "name": {"value": "tap dancing", "synonyms": ["tap dancing", "tap", "tap dance"]}},
+    {"id": "recWQc0x1yzUXxUxy",  "name": {"value": "tea", "synonyms": ["teas"]}},
+    {"id": "recwU8gNruTpmrEbv",  "name": {"value": "telephone", "synonyms": ["phone"]}},
+    {"id": "recBrma10DSNkgOlE",  "name": {"value": "temperature", "synonyms": ["temperature"]}},
+    {"id": "recNxG2yEtecM7d8Y",  "name": {"value": "testosterone", "synonyms": ["testosterone"]}},
+    {"id": "recEEEoa5hauHsD1E",  "name": {"value": "thane", "synonyms": ["thane"]}},
+    {"id": "recqshUFLRYatCn6A",  "name": {"value": "theodore roosevelt", "synonyms": ["teddy roosevelt", "roosevelt"]}},
+    {"id": "recPZBDs9GTtWJroS",  "name": {"value": "three blind mice", "synonyms": ["three blind mice"]}},
+    {"id": "recAzb1PIXDmdkmLX",  "name": {"value": "tips", "synonyms": ["tip"]}},
+    {"id": "recKA60uSGvJZfpJt",  "name": {"value": "tom hanks", "synonyms": ["hanks", "characters by tom hanks"]}},
+    {"id": "recH8IEudtYzC8VH1",  "name": {"value": "tongue", "synonyms": ["the tongue"]}},
+    {"id": "reczlOiWMFVzPI7he",  "name": {"value": "tony award", "synonyms": ["tony", "the tonys"]}},
+    {"id": "recXajgvGlLRBf4O9",  "name": {"value": "trains", "synonyms": ["public transportation"]}},
+    {"id": "recUjFSqEOpE4MeXC",  "name": {"value": "trunks", "synonyms": ["trunk"]}},
+    {"id": "rec7ppgP1SWAgeFou",  "name": {"value": "true detective", "synonyms": ["true detective"]}},
+    {"id": "recL3Ewoa0LLYoM91",  "name": {"value": "truth", "synonyms": ["truth"]}},
+    
+    {"id": "recTmN2ur0e8yCsIR",  "name": {"value": "united kingdom", "synonyms": ["britain", "great britain", "england", "UK"]}},
+    {"id": "recFwBgPOYLsVyj8q",  "name": {"value": "united way", "synonyms": ["united way"]}},
+    {"id": "recJzMXNGo4fXkebg",  "name": {"value": "umbrella", "synonyms": ["umbrellas"]}},
+    {"id": "rec0OlQbcrB6CIweN",  "name": {"value": "up", "synonyms": ["up"]}},
+    
+    {"id": "recEXcPUK6LxNjWBO",  "name": {"value": "valhalla", "synonyms": ["valhalla"]}},
+    {"id": "recjDAUA0EwlTAart",  "name": {"value": "venti", "synonyms": ["venti"]}},
+    {"id": "rec5VkrcEv93Bazrz",  "name": {"value": "venus", "synonyms": ["venus"]}},
+    {"id": "recLBYde4Pb2PsFLk",  "name": {"value": "veterans of foreign wars", "synonyms": ["veterans of foreign wars"]}},
+    {"id": "recvS2zvjXclKHlMQ",  "name": {"value": "vixen", "synonyms": ["vixen"]}},
+    {"id": "recSpyD6drVhqOtOx",  "name": {"value": "volcanoes", "synonyms": ["volcano"]}},
+    {"id": "recJbQ9e8fopFdeSI",  "name": {"value": "volkswagen", "synonyms": ["VW"]}},
+    
+    {"id": "recQs5mKojZaYK1kL",  "name": {"value": "W", "synonyms": ["double you", "w"]}},
+    {"id": "recNTVPytOdeEtn53",  "name": {"value": "walking dead", "synonyms": ["the walking dead"]}},
+    {"id": "recSDHewLWG1jrdaa",  "name": {"value": "warren buffett", "synonyms": ["buffett"]}},
+    {"id": "recFmUDOJd84B9jzl",  "name": {"value": "warren g harding", "synonyms": ["president harding", "harding", "warren harding"]}},
+    {"id": "recFxkjr6A72AvCx8",  "name": {"value": "wayne's world", "synonyms": ["waynes world"]}},
+    {"id": "recPVSKiSsJL8QwJp",  "name": {"value": "weightlifting", "synonyms": ["lifts", "weightlifting lifts", "weight lifting", "weight lift"]}},
+    {"id": "recrypikHX69Ei43u",  "name": {"value": "wendy's", "synonyms": ["windys", "wendys"]}},
+    {"id": "recVJcKcpHvJe6pG7",  "name": {"value": "will rogers", "synonyms": ["will rogers", "rogers"]}},
+    {"id": "recMx6ReHtQvU8m3w",  "name": {"value": "wilt chamberlain", "synonyms": ["wilt chamberlain"]}},
+    {"id": "rece4UHv6yMEYtEbZ",  "name": {"value": "wimbledon", "synonyms": ["wimbledon championships"]}},
+    {"id": "recxYB1SENePpbh0T",  "name": {"value": "whale oil", "synonyms": ["whale", "whale oil", "train oil", "whale blubber"]}},
+    {"id": "recTpnvs4xcTwVP6P",  "name": {"value": "what about bob", "synonyms": ["what about bob"]}},
+    {"id": "recd42tyzukE4QCp3",  "name": {"value": "white", "synonyms": ["white"]}},
+    {"id": "recKdMMLYxtzH8XTi",  "name": {"value": "whip", "synonyms": ["use a whip", "use whips"]}},
+    {"id": "recIuAolnUnyJposZ",  "name": {"value": "who framed roger rabbit", "synonyms": ["who framed roger rabbit"]}},
+    {"id": "recUhD5etBPoMwYGc",  "name": {"value": "wishbone", "synonyms": ["the wishbone"]}},
+    {"id": "rec3e2EIFNXcLNYnR",  "name": {"value": "woodrow wilson", "synonyms": ["wilson", "president wilson"]}},
+    
+    {"id": "rec9l21vkalYGoK92|rec3EngZnOeATENKY|recvvWCYptHqHiGp2",  "name": {"value": "yellow", "synonyms": ["gold"]}},
+    {"id": "rec5B5F6Mk9NpacZq",  "name": {"value": "yemen", "synonyms": ["yemen"]}},
+    {"id": "recUAOJzLQ96yokLZ",  "name": {"value": "you've got mail", "synonyms": ["joe versus the volcano"]}},
+    
+    {"id": "recNNJAcCjYJz7T4E",  "name": {"value": "zero", "synonyms": ["none", "zilch"]}},
+    {"id": "recqMIpCaYBzLc9go",  "name": {"value": "zone improvement plan", "synonyms": ["zone improvement plan"]}}
+                ]
+            },
+            {
+                "name": "Category",
+                "values": [
+                    {"id": "appjXwKBdhg6gSq2Q",  "name": {"value": "Art and Stage", "synonyms": ["art", "stage", "plays", "theater"]}},
+                    {"id": "appjydvshyrKDVgwN",  "name": {"value": "Business World", "synonyms": ["business"]}},
+                    {"id": "appUTzv1ubrWbCsXu",  "name": {"value": "Design", "synonyms": ["design"]}},
+                    {"id": "appIHTZTBumAnQNim",  "name": {"value": "Film", "synonyms": ["movies", "movie"]}},
+                    {"id": "appnTyJk77hv0vOLJ",  "name": {"value": "Food and Drink", "synonyms": ["food", "drink"]}},
+                    {"id": "appg9faZcHbnn76Iv",  "name": {"value": "Geography", "synonyms": ["geography"]}},
+                    {"id": "appH3DoRDJgPxYk8a",  "name": {"value": "History", "synonyms": ["history", "historical"]}},
+                    {"id": "app7vXT4eGx1iI1yW",  "name": {"value": "Language", "synonyms": ["languages", "foreign language"]}},
+                    {"id": "appzoPPmjmnYeGLey",  "name": {"value": "Literature", "synonyms": ["books", "novels"]}},
+                    {"id": "appajXgGSZFpNPDPY",  "name": {"value": "Miscellaneous", "synonyms": ["miscellaneous"]}},
+                    {"id": "appmVcIcYlvLctTMJ",  "name": {"value": "Music", "synonyms": ["songs", "singers"]}},
+                    {"id": "appTTV5wqPRHOSy4f",  "name": {"value": "Nature", "synonyms": ["nature"]}},
+                    {"id": "appQVArCwDjxx70mP",  "name": {"value": "People", "synonyms": ["people"]}},
+                    {"id": "appIfG9BfdoHEBWAs",  "name": {"value": "Politics", "synonyms": ["government"]}},
+                    {"id": "appEUIVTf3Tc2zP50",  "name": {"value": "Science", "synonyms": ["science"]}},
+                    {"id": "appaZCRygYPUaBq1h",  "name": {"value": "Sports and Games", "synonyms": ["sports", "games"]}},
+                    {"id": "app4yg7Zw1Afa62on",  "name": {"value": "Technology", "synonyms": ["tech", "computers"]}},
+                    {"id": "appKDggQyp2mjJGhY",  "name": {"value": "United States", "synonyms": ["u s a", "USA", "united states of america"]}},
+                    {"id": "appPWU4YN8Bv7IcGy",  "name": {"value": "Tradition and Beliefs", "synonyms": ["tradition", "beliefs", "religion"]}},
+                    {"id": "appKFSEh4JN1SQI3z",  "name": {"value": "Television and Radio", "synonyms": ["television", "tv", "radio", "entertainment"]}},
+                    {"id": "appYQDuh0pl37nSy2",  "name": {"value": "Halftime", "synonyms": ["three clues", "half-time"]}}
+                ]}]
+            }
+        }
+    }

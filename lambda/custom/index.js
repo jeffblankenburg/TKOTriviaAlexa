@@ -1,33 +1,134 @@
-// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
-// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-// session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const https = require('https');
+const Airtable = require('airtable');
+const dashbot = require('dashbot')(process.env.dashbot_key).alexa;
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
+        //TODO: IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
+
+        //TODO: IF THEY HAVE USED THE SKILL BEFORE, ASK THEM WHAT THEY WANT TO DO.
+
+        //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
+        
+        const speakOutput = 'This is the Launch Request.';
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
             .getResponse();
     }
 };
-const HelloWorldIntentHandler = {
+
+const AnswerIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AnswerIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'Hello World!';
+        //TODO: DID WE ASK THE USER A QUESTION?
+        
+            //TODO: IF THE USER GOT THE ANSWER CORRECT.
+
+            //TODO: WAS IT A SOLO QUESTION?
+
+            //TODO: WAS IT PART OF A GAME?
+
+            //TODO: IF THE USER GOT THE ANSWER INCORRECT.
+
+            //TODO: WAS IT A SOLO QUESTION?
+
+            //TODO: WAS IT PART OF A GAME?
+
+        //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
+
+        const speakOutput = 'This is the Answer Intent.';
+
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .reprompt(speakOutput)
             .getResponse();
     }
 };
+
+const PointsIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'PointsIntent';
+    },
+    handle(handlerInput) {
+        //TODO: IS THE USER IN A GAME?
+
+            //TODO: HAS THE USER ALREADY USED THIS VALUE IN THE CURRENT ROUND OF THE GAME?
+
+            //TODO: IS THIS VALUE BETWEEN 1 AND 5?  IF NOT, IT'S AN INVALID RESPONSE.
+
+            //TODO: IF THIS POINT VALUE IS VALID, RECORD THEIR CHOICE AND GIVE THEM A QUESTION.
+
+        //TODO: IF THE USER ISN'T IN A GAME, TREAT THEIR RESPONSE AS A WEIRD THING TO DO.
+
+        const speakOutput = 'This is the Points Intent.';
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+};
+
+const StartGameIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'StartGameIntent';
+    },
+    handle(handlerInput) {
+        //TODO: IS THE USER IN A GAME?
+
+        const speakOutput = 'This is the Start Game Intent.';
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+};
+
+const ContinueGameIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ContinueGameIntent';
+    },
+    handle(handlerInput) {
+        //TODO: IS THE USER IN A GAME?
+
+        const speakOutput = 'This is the Continue Game Intent.';
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+};
+
+const QuestionIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'QuestionIntent';
+    },
+    handle(handlerInput) {
+        //TODO: IS THE USER IN A GAME?
+
+        const speakOutput = 'This is the Question Intent.';
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(speakOutput)
+            .getResponse();
+    }
+};
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -42,6 +143,7 @@ const HelpIntentHandler = {
             .getResponse();
     }
 };
+
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -108,7 +210,11 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
+        AnswerIntentHandler,
+        PointsIntentHandler,
+        StartGameIntentHandler,
+        ContinueGameIntentHandler,
+        QuestionIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
