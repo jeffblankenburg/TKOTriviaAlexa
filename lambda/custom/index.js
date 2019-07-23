@@ -204,6 +204,51 @@ const ErrorHandler = {
     }
 };
 
+async function GetUserRecord(userId)
+{
+  console.log("GETTING USER RECORD")
+  var filter = "&filterByFormula=%7BUserId%7D%3D%22" + encodeURIComponent(userId) + "%22";
+  const userRecord = await httpGet(process.env.airtable_base_data, filter, "User");
+  //IF THERE ISN'T A USER RECORD, CREATE ONE.
+  if (userRecord.records.length === 0){
+    console.log("CREATING NEW USER RECORD");
+    var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+    return new Promise((resolve, reject) => {
+    airtable('User').create({"UserId": userId}, 
+                    function(err, record) {
+                            console.log("NEW USER RECORD = " + JSON.stringify(record));
+                            if (err) { console.error(err); return; }
+                            resolve(record);
+                        });
+                    });
+  }
+  else{
+    console.log("RETURNING FOUND USER RECORD = " + JSON.stringify(userRecord.records[0]));
+    return await userRecord.records[0];
+  }
+}
+
+const RequestLog = {
+    async process(handlerInput) {
+      console.log("REQUEST ENVELOPE = " + JSON.stringify(handlerInput.requestEnvelope));
+      var userRecord = await GetUserRecord(handlerInput.requestEnvelope.session.user.userId);
+      await console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
+      UserRecord = userRecord.fields;
+      if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
+        await IncrementInteractionCount();
+        await IncrementSessionCount(handlerInput);
+        CheckForAchievements(handlerInput);
+      }
+      return;
+    }
+  };
+  
+  const ResponseLog = {
+    process(handlerInput) {
+      console.log("RESPONSE BUILDER = " + JSON.stringify(handlerInput.responseBuilder.getResponse()));   
+    }
+  };
+
 // The SkillBuilder acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
@@ -220,7 +265,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         SessionEndedRequestHandler,
         IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
         ) 
-    .addErrorHandlers(
-        ErrorHandler,
-        )
+    .addErrorHandlers(ErrorHandler)
+    .addRequestInterceptors(RequestLog)
+    .addResponseInterceptors(ResponseLog)
+    .withApiClient(new Alexa.DefaultApiClient())
     .lambda();
