@@ -1,7 +1,7 @@
 {
   "interactionModel": {
       "languageModel": {
-          "invocationName": "hello world",
+          "invocationName": "tko trivia",
           "intents": [
               {
                   "name": "AMAZON.CancelIntent",
@@ -189,10 +189,10 @@
                     }
                 ],
                 "samples": [
-                    "{number}",
-                    "{number} points"
+                    "{points}",
+                    "{points} points"
                 ]
-            },
+            }
           ],
           "types": [
             {

@@ -3,21 +3,34 @@ const https = require('https');
 const Airtable = require('airtable');
 const dashbot = require('dashbot')(process.env.dashbot_key).alexa;
 
+var IsFirstVisit = true;
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
-    handle(handlerInput) {
-        //TODO: IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
+    async handle(handlerInput) {
+        var speechText = "";
+
+        //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
+        if (IsFirstVisit) {
+            console.log("THIS IS THE USER'S FIRST VISIT TO THE SKILL.  EVER.")
+            var category = getRandomCategory();
+            var question = await getRandomQuestion(category);
+            //TODO: WE NEED TO SAVE THE QUESTION TO THE SESSION VARIABLES SO THAT WE REMEMBER WHICH QUESTION WAS ASKED WHEN THEY ANSWER.
+            
+            console.log("SELECTED QUESTION = " + JSON.stringify(question));
+            speechText = "Welcome to TKO Trivia.  The trivia game show where you answer difficult questions and win nothing!  Here's your first question, from the " + category.name + " category: " + question.fields.VoiceQuestion;
+        }
+        
 
         //TODO: IF THEY HAVE USED THE SKILL BEFORE, ASK THEM WHAT THEY WANT TO DO.
 
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
         
-        const speakOutput = 'This is the Launch Request.';
         return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
+            .speak(speechText)
+            .reprompt(speechText)
             .getResponse();
     }
 };
@@ -204,6 +217,48 @@ const ErrorHandler = {
     }
 };
 
+async function getRandomQuestion(category)
+{
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22)", "Question");
+    const question = getRandomItem(response.records);
+    console.log("RANDOM QUESTION = " + JSON.stringify(question));
+    return question;
+}
+
+const categories = [{"name": "Art & Stage", "id": "recl0vhIOs1iSyXAu"},
+                    {"name": "Business World", "id": "recAJm9yEqDRGmjRr"},
+                    {"name": "Film", "id": "recdMJliTRpWYcj41"},
+                    {"name": "Food & Drink", "id": "reclySZR1cRRl08jz"},
+                    {"name": "Geography", "id": "recXXedb9nOqy1Fkk"},
+                    {"name": "History", "id": "rec6fDO7E7lXC2xe3"},
+                    {"name": "Language", "id": "recnhcldrp4o6QwFr"},
+                    {"name": "Literature", "id": "recsy6jdhmIig1YSB"},
+                    {"name": "Miscellaneous", "id": "recTeqmLykygSz9gF"},
+                    {"name": "Music", "id": "recdZhe6oq5wn1ksw"},
+                    {"name": "Nature", "id": "recSKFke58Sfd9vWi"},
+                    {"name": "People", "id": "recto6ILGOAYkOl8a"},
+                    {"name": "Politics", "id": "rechKWhUV28LSeiRW"},
+                    {"name": "Sports & Games", "id": "recr8BC0GYJVwjt1k"},
+                    {"name": "Science", "id": "recKqrOdwpk5hezpL"},
+                    {"name": "Technology", "id": "recG6oDVjpFNGrnO2"},
+                    {"name": "United States", "id": "recRiC3PAYQHmMEvC"},
+                    {"name": "Tradition & Beliefs", "id": "recKh6vjk2KQLGEm7"},
+                    {"name": "TV & Radio", "id": "recab6u8fMDf63S3k"}];
+
+function getRandomCategory()
+{
+	return getRandomItem(categories);
+}
+
+function getRandomItem(items) {
+    var random = getRandom(0, items.length-1);
+    return items[random];
+}
+
+function getRandom(min, max){
+    return Math.floor(Math.random() * (max-min+1)+min);
+}
+
 async function GetUserRecord(userId)
 {
   console.log("GETTING USER RECORD")
@@ -214,7 +269,7 @@ async function GetUserRecord(userId)
     console.log("CREATING NEW USER RECORD");
     var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
     return new Promise((resolve, reject) => {
-    airtable('User').create({"UserId": userId}, 
+        airtable('User').create({"UserId": userId}, 
                     function(err, record) {
                             console.log("NEW USER RECORD = " + JSON.stringify(record));
                             if (err) { console.error(err); return; }
@@ -224,9 +279,49 @@ async function GetUserRecord(userId)
   }
   else{
     console.log("RETURNING FOUND USER RECORD = " + JSON.stringify(userRecord.records[0]));
+    IsFirstVisit = false;
     return await userRecord.records[0];
   }
 }
+
+function httpGet(base, filter, table = "Data"){
+    //console.log("IN HTTP GET");
+    //console.log("BASE = " + base);
+    //console.log("FILTER = " + filter);
+    
+    var options = {
+        host: "api.airtable.com",
+        port: 443,
+        path: "/v0/" + base + "/" + table + "?api_key=" + process.env.airtable_key + filter,
+        method: 'GET',
+    };
+    
+    return new Promise(((resolve, reject) => {
+      const request = https.request(options, (response) => {
+        response.setEncoding('utf8');
+        let returnData = '';
+  
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          return reject(new Error(`${response.statusCode}: ${response.req.getHeader('host')} ${response.req.path}`));
+        }
+        console.log("FULL PATH = http://" + options.host + options.path);
+        //console.log("HTTPS REQUEST OPTIONS = " + JSON.stringify(options));
+  
+        response.on('data', (chunk) => {
+          returnData += chunk;
+        });
+  
+        response.on('end', () => {
+          resolve(JSON.parse(returnData));
+        });
+  
+        response.on('error', (error) => {
+          reject(error);
+        });
+      });
+      request.end();
+    }));
+  }
 
 const RequestLog = {
     async process(handlerInput) {
@@ -235,9 +330,9 @@ const RequestLog = {
       await console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
       UserRecord = userRecord.fields;
       if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
-        await IncrementInteractionCount();
-        await IncrementSessionCount(handlerInput);
-        CheckForAchievements(handlerInput);
+        //await IncrementInteractionCount();
+        //await IncrementSessionCount(handlerInput);
+        //CheckForAchievements(handlerInput);
       }
       return;
     }
