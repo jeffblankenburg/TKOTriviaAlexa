@@ -1,3 +1,6 @@
+//TODO: MAKE SURE EVERY SPEECH OBJECT IS SAVED TO THE SESSION.
+//MAKE SURE TO CONSOLE.LOG EVERY INTENT HANDLER FUNCTION.
+
 const Alexa = require('ask-sdk-core');
 const https = require('https');
 const Airtable = require('airtable');
@@ -7,9 +10,13 @@ var IsFirstVisit = true;
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - LaunchRequestHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     async handle(handlerInput) {
+        console.log("HANDLED - LaunchRequestHandler");
+        console.log("IS FIRST VISIT = " + IsFirstVisit);
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var speechText = "";
 
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
@@ -17,16 +24,19 @@ const LaunchRequestHandler = {
             console.log("THIS IS THE USER'S FIRST VISIT TO THE SKILL.  EVER.")
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
+            sessionAttributes.currentQuestion = question.fields;
             //TODO: WE NEED TO SAVE THE QUESTION TO THE SESSION VARIABLES SO THAT WE REMEMBER WHICH QUESTION WAS ASKED WHEN THEY ANSWER.
             
             console.log("SELECTED QUESTION = " + JSON.stringify(question));
             speechText = "Welcome to TKO Trivia.  The trivia game show where you answer difficult questions and win nothing!  Here's your first question, from the " + category.name + " category: " + question.fields.VoiceQuestion;
         }
         
-
         //TODO: IF THEY HAVE USED THE SKILL BEFORE, ASK THEM WHAT THEY WANT TO DO.
 
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
+
+        sessionAttributes.currentSpeak = speechText;
+        sessionAttributes.currentReprompt = speechText;
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -37,10 +47,12 @@ const LaunchRequestHandler = {
 
 const AnswerIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - AnswerIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AnswerIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - AnswerIntentHandler");
         //TODO: DID WE ASK THE USER A QUESTION?
         
             //TODO: IF THE USER GOT THE ANSWER CORRECT.
@@ -68,10 +80,12 @@ const AnswerIntentHandler = {
 
 const PointsIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - PointsIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'PointsIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - PointsIntentHandler");
         //TODO: IS THE USER IN A GAME?
 
             //TODO: HAS THE USER ALREADY USED THIS VALUE IN THE CURRENT ROUND OF THE GAME?
@@ -93,10 +107,12 @@ const PointsIntentHandler = {
 
 const StartGameIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - StartGameIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'StartGameIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - StartGameIntentHandler");
         //TODO: IS THE USER IN A GAME?
 
         const speakOutput = 'This is the Start Game Intent.';
@@ -110,10 +126,12 @@ const StartGameIntentHandler = {
 
 const ContinueGameIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - ContinueGameIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'ContinueGameIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - ContinueGameIntentHandler");
         //TODO: IS THE USER IN A GAME?
 
         const speakOutput = 'This is the Continue Game Intent.';
@@ -127,10 +145,12 @@ const ContinueGameIntentHandler = {
 
 const QuestionIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - QuestionIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'QuestionIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - QuestionIntentHandler");
         //TODO: IS THE USER IN A GAME?
 
         const speakOutput = 'This is the Question Intent.';
@@ -144,10 +164,12 @@ const QuestionIntentHandler = {
 
 const HelpIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - HelpIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
+        console.log("HANDLED - HelpIntentHandler");
         const speakOutput = 'You can say hello to me! How can I help?';
 
         return handlerInput.responseBuilder
@@ -159,22 +181,49 @@ const HelpIntentHandler = {
 
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - CancelAndStopIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
                 || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
+        console.log("HANDLED - CancelAndStopIntentHandler");
         const speakOutput = 'Goodbye!';
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .getResponse();
     }
 };
+
+//TODO: IF A USER IS ASKING TO REPEAT A QUESTION MORE THAN ONCE DURING A GAME, WE REFUSE.
+const RepeatIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - RepeatIntentHandler");
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+               handlerInput.requestEnvelope.request.intent.name === 'AMAZON.RepeatIntent';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - RepeatIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        var speechText = "";
+        if (sessionAttributes.currentSpeak != undefined) { speechText = sessionAttributes.currentSpeak; }
+        else speechText = "I haven't said anything yet. I can't repeat myself, silly. What do you want to do next?";
+
+        return handlerInput.responseBuilder
+               .speak(speechText)
+               .reprompt(speechText)
+               .getResponse();
+    },
+};
+
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
+        console.log("CANHANDLE - SessionEndedRequestHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
     },
     handle(handlerInput) {
+        console.log("HANDLED - SessionEndedRequestHandler");
         // Any cleanup logic goes here.
         return handlerInput.responseBuilder.getResponse();
     }
@@ -267,6 +316,7 @@ async function GetUserRecord(userId)
   //IF THERE ISN'T A USER RECORD, CREATE ONE.
   if (userRecord.records.length === 0){
     console.log("CREATING NEW USER RECORD");
+    IsFirstVisit = true;
     var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
     return new Promise((resolve, reject) => {
         airtable('User').create({"UserId": userId}, 
@@ -347,7 +397,10 @@ const RequestLog = {
 // The SkillBuilder acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
-exports.handler = Alexa.SkillBuilders.custom()
+
+const skillBuilder = Alexa.SkillBuilders.custom();
+
+exports.handler = dashbot.handler(skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
         AnswerIntentHandler,
@@ -357,6 +410,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         QuestionIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
+        RepeatIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
         ) 
@@ -364,4 +418,4 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestInterceptors(RequestLog)
     .addResponseInterceptors(ResponseLog)
     .withApiClient(new Alexa.DefaultApiClient())
-    .lambda();
+    .lambda());
