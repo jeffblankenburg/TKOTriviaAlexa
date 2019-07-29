@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "d8cfedcd654a6eb91dd79186566b8871"
+            "eTag": "dd33e8427f3a1dd48a48415d210a9f4e"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "25034e7e-b8d7-4989-bd2b-e9db38d16bef",
+            "revisionId": "62d6d9bd-b16c-453f-8cbd-250fd39685bf",
             "runtime": "nodejs8.10"
           }
         ]

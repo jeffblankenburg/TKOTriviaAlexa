@@ -8,6 +8,26 @@ const dashbot = require("dashbot")(process.env.dashbot_key).alexa;
 
 var IsFirstVisit = true;
 
+const categories = [{"name": "Art & Stage", "id": "recl0vhIOs1iSyXAu", "speechName": "art and stage", "referenceName": "art_and_stage"},
+                    {"name": "Business World", "id": "recAJm9yEqDRGmjRr", "speechName": "business world", "referenceName": "business_world"},
+                    {"name": "Film", "id": "recdMJliTRpWYcj41", "speechName": "film", "referenceName": "film"},
+                    {"name": "Food & Drink", "id": "reclySZR1cRRl08jz", "speechName": "food and drink", "referenceName": "food_and_drink"},
+                    {"name": "Geography", "id": "recXXedb9nOqy1Fkk", "speechName": "geography", "referenceName": "geography"},
+                    {"name": "History", "id": "rec6fDO7E7lXC2xe3", "speechName": "history", "referenceName": "history"},
+                    {"name": "Language", "id": "recnhcldrp4o6QwFr", "speechName": "language", "referenceName": "language"},
+                    {"name": "Literature", "id": "recsy6jdhmIig1YSB", "speechName": "literature", "referenceName": "literature"},
+                    {"name": "Miscellaneous", "id": "recTeqmLykygSz9gF", "speechName": "miscellaneous", "referenceName": "miscellaneous"},
+                    {"name": "Music", "id": "recdZhe6oq5wn1ksw", "speechName": "music", "referenceName": "music"},
+                    {"name": "Nature", "id": "recSKFke58Sfd9vWi", "speechName": "nature", "referenceName": "nature"},
+                    {"name": "People", "id": "recto6ILGOAYkOl8a", "speechName": "people", "referenceName": "people"},
+                    {"name": "Politics", "id": "rechKWhUV28LSeiRW", "speechName": "politics", "referenceName": "politics"},
+                    {"name": "Sports & Games", "id": "recr8BC0GYJVwjt1k", "speechName": "sports and games", "referenceName": "sports_and_games"},
+                    {"name": "Science", "id": "recKqrOdwpk5hezpL", "speechName": "science", "referenceName": "science"},
+                    {"name": "Technology", "id": "recG6oDVjpFNGrnO2", "speechName": "technology", "referenceName": "technology"},
+                    {"name": "United States", "id": "recRiC3PAYQHmMEvC", "speechName": "united states", "referenceName": "united_states"},
+                    {"name": "Tradition & Beliefs", "id": "recKh6vjk2KQLGEm7", "speechName": "tradition and beliefs", "referenceName": "tradition_and_beliefs"},
+                    {"name": "TV & Radio", "id": "recab6u8fMDf63S3k", "speechName": "tv and radio", "referenceName": "tv_and_radio"}];
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - LaunchRequestHandler");
@@ -19,17 +39,20 @@ const LaunchRequestHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var speechText = "";
 
+        const locale = handlerInput.requestEnvelope.request.locale;
+        var welcome = await getRandomResponse("Welcome", locale);
+
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
         if (IsFirstVisit) {
             console.log("THIS IS THE USER'S FIRST VISIT TO THE SKILL.  EVER.")
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
-            speechText = "Welcome to TKO Trivia.  The trivia game show where you answer difficult questions and win nothing!  Here's your first question, from the " + category.name + " category: " + question.fields.VoiceQuestion;
+            return await askTriviaQuestion(handlerInput, category, question, 1, welcome.fields.VoiceResponse);
         }
         else
         {
-            speechText = "You've been here before.";
+            speechText = welcome.fields.VoiceResponse + "<break time='.5s'/>You've been here before.";
         }
         
         //TODO: IF THEY HAVE USED THE SKILL BEFORE, ASK THEM WHAT THEY WANT TO DO.
@@ -61,59 +84,29 @@ const AnswerIntentHandler = {
         //TODO: DID WE ASK THE USER A QUESTION?
         if (sessionAttributes.currentQuestion != undefined) {
 
+            //TODO: IF THE USER GOT THE ANSWER CORRECT.
+            if (isAnswerCorrect(handlerInput)) {
+                speechText = "You got that one right!  Woo hoo!";
+            }
+            else{
+                speechText = "You got that wrong.  You're not a good person.";
+            }
+
+                //TODO: WAS IT A SOLO QUESTION?
+
+                //TODO: WAS IT PART OF A GAME?
+
+            //TODO: IF THE USER GOT THE ANSWER INCORRECT.
+
+                //TODO: WAS IT A SOLO QUESTION?
+
+                //TODO: WAS IT PART OF A GAME?
         }
         //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
         else {
             speechText = "You just said " + handlerInput.requestEnvelope.request.intent.slots.answer.value + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
         }
         
-            //TODO: IF THE USER GOT THE ANSWER CORRECT.
-
-            //TODO: WAS IT A SOLO QUESTION?
-
-            //TODO: WAS IT PART OF A GAME?
-
-            //TODO: IF THE USER GOT THE ANSWER INCORRECT.
-
-            //TODO: WAS IT A SOLO QUESTION?
-
-            //TODO: WAS IT PART OF A GAME?
-
-        
-
-        
-
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
-            .getResponse();
-    }
-};
-
-const PointsIntentHandler = {
-    canHandle(handlerInput) {
-        console.log("CANHANDLE - PointsIntentHandler");
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === "PointsIntent";
-    },
-    handle(handlerInput) {
-        console.log("HANDLED - PointsIntentHandler");
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        //TODO: IS THE USER IN A GAME?
-
-            //TODO: HAS THE USER ALREADY USED THIS VALUE IN THE CURRENT ROUND OF THE GAME?
-
-            //TODO: IS THIS VALUE BETWEEN 1 AND 5?  IF NOT, IT'S AN INVALID RESPONSE.
-
-            //TODO: IF THIS POINT VALUE IS VALID, RECORD THEIR CHOICE AND GIVE THEM A QUESTION.
-
-        //TODO: IF THE USER ISN'T IN A GAME, TREAT THEIR RESPONSE AS A WEIRD THING TO DO.
-
-        var speechText = "This is the Points Intent.";
-
         sessionAttributes.currentSpeak = speechText;
         sessionAttributes.currentReprompt = speechText;
 
@@ -176,20 +169,16 @@ const QuestionIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
             && Alexa.getIntentName(handlerInput.requestEnvelope) === "QuestionIntent";
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - QuestionIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         //TODO: IS THE USER IN A GAME?
-
-        var speechText = "This is the Question Intent.";
-
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
-            .getResponse();
+        //TODO: DETERMINE IF THE USER INDICATED A SPECIFIC CATEGORY TO USE.
+        var category = getRandomCategory();
+        //var question = await getRandomQuestion(category);
+        var question = await getSpecificQuestion("recEBGY7blzeW0UAp");
+        sessionAttributes.currentQuestion = question.fields;
+        return await askTriviaQuestion(handlerInput, category, question);
     }
 };
 
@@ -222,18 +211,18 @@ const CancelAndStopIntentHandler = {
             && (Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.CancelIntent"
                 || Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.StopIntent");
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - CancelAndStopIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
         
-        var speechText = "This is the Cancel and Stop Intent.";
+        var goodbye = await getRandomResponse("Goodbye", locale);
+        var speechText = goodbye.fields.VoiceResponse;
 
         sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt(speechText)
             .getResponse();
     }
 };
@@ -304,47 +293,86 @@ const ErrorHandler = {
     canHandle() {
         return true;
     },
-    handle(handlerInput, error) {
+    async handle(handlerInput, error) {
         console.log(`~~~~ Error handled: ${error.stack}`);
-        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+        const locale = handlerInput.requestEnvelope.request.locale;
+        
+        var error = await getRandomResponse("Error", locale);
+        var speechText = error.fields.VoiceResponse;
 
         return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
+            .speak(speechText)
+            .reprompt(speechText)
             .getResponse();
     }
 };
 
-async function getRandomQuestion(category)
-{
+
+async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, speech = "") {
+    console.log("ASKING TRIVIA QUESTION.")
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    const locale = handlerInput.requestEnvelope.request.locale;
+    var ordinalSpeech = "";
+    if (ordinal > 0) ordinalSpeech = "<say-as interpret-as='ordinal'>" + ordinal + "</say-as> ";
+
+    var speechText = speech + "<break time='.5s'/>Here's your " + ordinalSpeech + "question, from the " + category.speechName + " category.<audio src='https://s3.amazonaws.com/tko-trivia/audio/" + category.referenceName + ".mp3' /><break time='.25s'/>" + question.fields.VoiceQuestion;
+
+    sessionAttributes.currentSpeak = speechText;
+    sessionAttributes.currentReprompt = speechText;
+
+    var synonyms = question.fields.Synonyms.split(", ");
+
+    let entityDirective = {
+        type: "Dialog.UpdateDynamicEntities",
+        updateBehavior: "REPLACE",
+        types: [
+          {
+            name: "Answer",
+            values: [
+              {
+                id: question.fields.RecordId,
+                name: {
+                  value: question.fields.ScreenAnswer,
+                  synonyms: synonyms
+                }
+              }
+            ]
+          }
+        ]
+      };
+        
+    //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS
+    return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(speechText)
+        .withStandardCard(category.name, question.fields.CardQuestion, "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_108.png", "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_512.png")
+        .addDirective(entityDirective)
+        .getResponse();
+}
+
+async function getRandomQuestion(category) {
     const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22)", "Question");
     const question = getRandomItem(response.records);
     console.log("RANDOM QUESTION = " + JSON.stringify(question));
     return question;
 }
 
-const categories = [{"name": "Art & Stage", "id": "recl0vhIOs1iSyXAu"},
-                    {"name": "Business World", "id": "recAJm9yEqDRGmjRr"},
-                    {"name": "Film", "id": "recdMJliTRpWYcj41"},
-                    {"name": "Food & Drink", "id": "reclySZR1cRRl08jz"},
-                    {"name": "Geography", "id": "recXXedb9nOqy1Fkk"},
-                    {"name": "History", "id": "rec6fDO7E7lXC2xe3"},
-                    {"name": "Language", "id": "recnhcldrp4o6QwFr"},
-                    {"name": "Literature", "id": "recsy6jdhmIig1YSB"},
-                    {"name": "Miscellaneous", "id": "recTeqmLykygSz9gF"},
-                    {"name": "Music", "id": "recdZhe6oq5wn1ksw"},
-                    {"name": "Nature", "id": "recSKFke58Sfd9vWi"},
-                    {"name": "People", "id": "recto6ILGOAYkOl8a"},
-                    {"name": "Politics", "id": "rechKWhUV28LSeiRW"},
-                    {"name": "Sports & Games", "id": "recr8BC0GYJVwjt1k"},
-                    {"name": "Science", "id": "recKqrOdwpk5hezpL"},
-                    {"name": "Technology", "id": "recG6oDVjpFNGrnO2"},
-                    {"name": "United States", "id": "recRiC3PAYQHmMEvC"},
-                    {"name": "Tradition & Beliefs", "id": "recKh6vjk2KQLGEm7"},
-                    {"name": "TV & Radio", "id": "recab6u8fMDf63S3k"}];
+async function getSpecificQuestion(recordId) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),RecordId%3D%22" + encodeURIComponent(recordId) + "%22)", "Question");
+    const question = getRandomItem(response.records);
+    console.log("SPECIFIC QUESTION = " + JSON.stringify(question));
+    return question;
+}
 
-function getRandomCategory()
-{
+async function getRandomResponse(type, locale) {
+    console.log("GETTING RANDOM RESPONSE TYPE = " + type);
+    const result = await httpGet(process.env.airtable_base_speech, "&filterByFormula=AND(IsDisabled%3DFALSE(),Locale%3D%22" + encodeURIComponent(locale) + "%22)", type);
+    const response = getRandomItem(result.records);
+    console.log("RANDOM RESPONSE (" + type + ") = " + JSON.stringify(response));
+    return response;
+}
+
+function getRandomCategory() {
 	return getRandomItem(categories);
 }
 
@@ -357,8 +385,15 @@ function getRandom(min, max){
     return Math.floor(Math.random() * (max-min+1)+min);
 }
 
-async function GetUserRecord(userId)
-{
+function isAnswerCorrect(handlerInput){
+    if (((handlerInput.requestEnvelope) && (handlerInput.requestEnvelope.session) && (handlerInput.requestEnvelope.session.attributes) && (handlerInput.requestEnvelope.session.attributes.currentQuestion) && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId))
+    && ((handlerInput.requestEnvelope.request) && (handlerInput.requestEnvelope.request.intent) && (handlerInput.requestEnvelope.request.intent.slots) && (handlerInput.requestEnvelope.request.intent.slots.answer) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0]) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0]) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.id))
+    && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId ===  handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.id)) return true;
+
+    return false;
+}
+
+async function GetUserRecord(userId) {
   console.log("GETTING USER RECORD")
   var filter = "&filterByFormula=%7BUserId%7D%3D%22" + encodeURIComponent(userId) + "%22";
   const userRecord = await httpGet(process.env.airtable_base_data, filter, "User");
@@ -453,7 +488,6 @@ exports.handler = dashbot.handler(skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
         AnswerIntentHandler,
-        PointsIntentHandler,
         StartGameIntentHandler,
         ContinueGameIntentHandler,
         QuestionIntentHandler,
