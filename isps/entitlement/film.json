@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "type": "ENTITLEMENT",
+  "referenceName": "film",
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "Film Questions",
+        "summary": "This is the summary.",
+        "description": "This is the description.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a8e9/db9b71d36f4849f7a65d97909e455b9c/APP_ICON?versionId=6lHbzh4F0vTsX9qEwRCIHKiq0.k2jnF7&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193739Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a671605bf35e222192cd1195332cd1a7e82074049da62abaedb0f65828606756",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/bad4/cbaef699455146c881314ddb11572574/APP_ICON_LARGE?versionId=coAxwak_LFPZ1q3JgKq8X9fbcn03rR_I&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193739Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=c2b2f5b24a326fd452040266f39520992ac1ea0301e05fbf956250f69a269781",
+        "examplePhrases": [
+          "This is an example phrase."
+        ],
+        "keywords": [
+          "This is the keywords."
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This is the purchase prompt description.",
+          "boughtCardDescription": "This is the bought card description."
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-07-01T00:00Z",
+        "defaultPriceListing": {
+          "price": 1,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://jeffblankenburg.com/privacy"
+      }
+    }
+  },
+  "testingInstructions": "TODO: REPLACE THIS WITH TESTING INSTRUCTIONS FOR THE CERTIFICATION TEAM SO THEY KNOW HOW TO PURCHASE AND USE THIS PRODUCT",
+  "purchasableState": "PURCHASABLE"
+}

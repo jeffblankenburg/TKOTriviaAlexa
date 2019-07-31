@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "type": "ENTITLEMENT",
+  "referenceName": "business_world",
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "Business World Questions",
+        "summary": "This is the summary.",
+        "description": "This is the description.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e090/3f008a98692e43babed8cd628ba7a0c5/APP_ICON?versionId=UzLO4xtXJfKf20IYYuUQ39wGIEp0xw3F&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193737Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2c1341ed70bb0256724e3339fd826afc7bb4e9b44b9c43d5c9e35be78931ace2",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/7f6c/e0eb3c354376413eaab9182bd42bf12d/APP_ICON_LARGE?versionId=olu3F0bFM9Cmx6SYoHVM7TKJlIPmydsm&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193737Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=c3547757c4e2b151972d36a47b230558c609cf6ab0279667f22dc1635e68398f",
+        "examplePhrases": [
+          "This is an example phrase."
+        ],
+        "keywords": [
+          "This is the keywords."
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This is the purchase prompt description.",
+          "boughtCardDescription": "This is the bought card description."
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-07-01T00:00Z",
+        "defaultPriceListing": {
+          "price": 1,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://jeffblankenburg.com/privacy"
+      }
+    }
+  },
+  "testingInstructions": "TODO: REPLACE THIS WITH TESTING INSTRUCTIONS FOR THE CERTIFICATION TEAM SO THEY KNOW HOW TO PURCHASE AND USE THIS PRODUCT",
+  "purchasableState": "PURCHASABLE"
+}

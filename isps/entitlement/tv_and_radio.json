@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "type": "ENTITLEMENT",
+  "referenceName": "tv_and_radio",
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "TV and Radio Questions",
+        "summary": "This is the summary.",
+        "description": "This is the description.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f1c9/dea7aa0177cb404587e8b918574bd658/APP_ICON?versionId=omRJbW1TFQrO2aPWWuFzk3YUXK.NefY9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193759Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=739153d446020146500d135630f4deb70fcefae9f2fa9097679ca8533faa0e03",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/71ba/f36b38bbab72448eb5b8f7d99ed31343/APP_ICON_LARGE?versionId=OeKy1HTAKiGl9G8W40XPzVNC2u6G4kcO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193759Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=f2f26d6c153073a6f00e87920336ccfe6086f33c73e348357fa180a973298c20",
+        "examplePhrases": [
+          "This is an example phrase."
+        ],
+        "keywords": [
+          "This is the keywords."
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This is the purchase prompt description.",
+          "boughtCardDescription": "This is the bought card description."
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-07-01T00:00Z",
+        "defaultPriceListing": {
+          "price": 1,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://jeffblankenburg.com/privacy"
+      }
+    }
+  },
+  "testingInstructions": "TODO: REPLACE THIS WITH TESTING INSTRUCTIONS FOR THE CERTIFICATION TEAM SO THEY KNOW HOW TO PURCHASE AND USE THIS PRODUCT",
+  "purchasableState": "PURCHASABLE"
+}

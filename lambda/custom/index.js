@@ -10,6 +10,7 @@ var IsFirstVisit = true;
 
 const categories = [{"name": "Art & Stage", "id": "recl0vhIOs1iSyXAu", "speechName": "art and stage", "referenceName": "art_and_stage"},
                     {"name": "Business World", "id": "recAJm9yEqDRGmjRr", "speechName": "business world", "referenceName": "business_world"},
+                    {"name": "Design", "id": "recYsOA65RT5dQPlb", "speechName": "design", "referenceName": "design"},
                     {"name": "Film", "id": "recdMJliTRpWYcj41", "speechName": "film", "referenceName": "film"},
                     {"name": "Food & Drink", "id": "reclySZR1cRRl08jz", "speechName": "food and drink", "referenceName": "food_and_drink"},
                     {"name": "Geography", "id": "recXXedb9nOqy1Fkk", "speechName": "geography", "referenceName": "geography"},
@@ -52,11 +53,10 @@ const LaunchRequestHandler = {
         }
         else
         {
-            speechText = welcome.fields.VoiceResponse + "<break time='.5s'/>You've been here before.";
+            var query = await getRandomResponse("ActionQuery", locale);
+            speechText = welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
         }
         
-        //TODO: IF THEY HAVE USED THE SKILL BEFORE, ASK THEM WHAT THEY WANT TO DO.
-
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
 
         sessionAttributes.currentSpeak = speechText;
@@ -86,10 +86,10 @@ const AnswerIntentHandler = {
 
             //TODO: IF THE USER GOT THE ANSWER CORRECT.
             if (isAnswerCorrect(handlerInput)) {
-                speechText = "You got that one right!  Woo hoo!";
+                speechText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo!";
             }
             else{
-                speechText = "You got that wrong.  You're not a good person.";
+                speechText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  You're not a good person.";
             }
 
                 //TODO: WAS IT A SOLO QUESTION?
@@ -173,10 +173,14 @@ const QuestionIntentHandler = {
         console.log("HANDLED - QuestionIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         //TODO: IS THE USER IN A GAME?
-        //TODO: DETERMINE IF THE USER INDICATED A SPECIFIC CATEGORY TO USE.
-        var category = getRandomCategory();
-        //var question = await getRandomQuestion(category);
-        var question = await getSpecificQuestion("recEBGY7blzeW0UAp");
+        var category = getSpecificCategory(handlerInput);
+        //TODO: DOES THE USER HAVE ENTITLEMENT TO THIS CATEGORY?
+        if (category === undefined) {
+            category = getRandomCategory();
+        }
+        
+        var question = await getRandomQuestion(category);
+        //var question = await getSpecificQuestion("recEBGY7blzeW0UAp");
         sessionAttributes.currentQuestion = question.fields;
         return await askTriviaQuestion(handlerInput, category, question);
     }
@@ -320,7 +324,12 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
     sessionAttributes.currentSpeak = speechText;
     sessionAttributes.currentReprompt = speechText;
 
-    var synonyms = question.fields.Synonyms.split(", ");
+    var synonyms;
+    if (question.fields.Synonyms != undefined) {
+        synonyms = question.fields.Synonyms.split(", ");
+    }
+    else synonyms = [question.fields.VoiceAnswer.toLowerCase()];
+    
 
     let entityDirective = {
         type: "Dialog.UpdateDynamicEntities",
@@ -332,7 +341,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
               {
                 id: question.fields.RecordId,
                 name: {
-                  value: question.fields.ScreenAnswer,
+                  value: question.fields.VoiceAnswer,
                   synonyms: synonyms
                 }
               }
@@ -344,7 +353,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
     //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS
     return handlerInput.responseBuilder
         .speak(speechText)
-        .reprompt(speechText)
+        .reprompt(question.fields.VoiceQuestion)
         .withStandardCard(category.name, question.fields.CardQuestion, "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_108.png", "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_512.png")
         .addDirective(entityDirective)
         .getResponse();
@@ -370,6 +379,29 @@ async function getRandomResponse(type, locale) {
     const response = getRandomItem(result.records);
     console.log("RANDOM RESPONSE (" + type + ") = " + JSON.stringify(response));
     return response;
+}
+
+function getSpecificCategory(handlerInput)
+{
+    console.log("GETTING SPECIFIC CATEGORY")
+    if (handlerInput.requestEnvelope
+    &&  handlerInput.requestEnvelope.request
+    &&  handlerInput.requestEnvelope.request.intent
+    &&  handlerInput.requestEnvelope.request.intent.slots
+    &&  handlerInput.requestEnvelope.request.intent.slots.category
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0]
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0].values
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0].values[0]
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0].values[0].value
+    &&  handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0].values[0].value.id) {
+        let category = categories.find(o => o.id === handlerInput.requestEnvelope.request.intent.slots.category.resolutions.resolutionsPerAuthority[0].values[0].value.id);
+        console.log("FOUND SPECIFIC CATEGORY. " + JSON.stringify(category));
+        return category;
+    }
+    console.log("DID NOT FIND SPECIFIC CATEGORY.");
+    return undefined;
 }
 
 function getRandomCategory() {

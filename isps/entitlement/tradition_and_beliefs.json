@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "type": "ENTITLEMENT",
+  "referenceName": "tradition_and_beliefs",
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "Tradition and Beliefs Questions",
+        "summary": "This is the summary.",
+        "description": "This is the description.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/6634/b46b5082900745d489415e1a8f359605/APP_ICON?versionId=hjBBa.OprjNZRIQS0a2Tj9NLOAvKwcR9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193758Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dd61764280fde10d29e694d59d122371d6d8db366260dd6976afc405d1ff1466",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4c10/7be332e12fe54e8ab8ae878ffb1a9e96/APP_ICON_LARGE?versionId=Qu4aJc31O3XuUFU8vsU3Wo6mcFgeHICy&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193758Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7ccf5450fa06bff1e892a371039d08ea63a54a79929ffce2915b3b950aa74f98",
+        "examplePhrases": [
+          "This is an example phrase."
+        ],
+        "keywords": [
+          "This is the keywords."
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This is the purchase prompt description.",
+          "boughtCardDescription": "This is the bought card description."
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-07-01T00:00Z",
+        "defaultPriceListing": {
+          "price": 1,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://jeffblankenburg.com/privacy"
+      }
+    }
+  },
+  "testingInstructions": "TODO: REPLACE THIS WITH TESTING INSTRUCTIONS FOR THE CERTIFICATION TEAM SO THEY KNOW HOW TO PURCHASE AND USE THIS PRODUCT",
+  "purchasableState": "PURCHASABLE"
+}

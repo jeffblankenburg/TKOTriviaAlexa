@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "type": "SUBSCRIPTION",
+  "referenceName": "all_categories",
+  "subscriptionInformation": {
+    "subscriptionPaymentFrequency": "MONTHLY",
+    "subscriptionTrialPeriodDays": 1
+  },
+  "publishingInformation": {
+    "locales": {
+      "en-US": {
+        "name": "All Questions Subscription",
+        "summary": "This is the summary.",
+        "description": "This is the description.",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1c84/25223da3af7442cbbcb2119130f28c0b/APP_ICON?versionId=wlxlQ1zsqpuYXQdhLBmtmq7poPOcVWm8&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193734Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dcd123e0f89a85a6bd6ad4e3f302520c947ceb92a3910a9e75b1b3a5a63cb13f",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/9ac1/1e3c56ab8ff8443da432c2fba42d6912/APP_ICON_LARGE?versionId=xS7pu8IRaG5phkvJDlt6DfXTMnhjEFGD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193734Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2d57c1586b70811c66cb747981171cef122475064a3ab03a4fa4fc36e2620fd9",
+        "examplePhrases": [
+          "This is the example phrases."
+        ],
+        "keywords": [
+          "This is the keywords."
+        ],
+        "customProductPrompts": {
+          "purchasePromptDescription": "This is the purchase prompt description.",
+          "boughtCardDescription": "This is the bought card description."
+        }
+      }
+    },
+    "distributionCountries": [
+      "US"
+    ],
+    "pricing": {
+      "amazon.com": {
+        "releaseDate": "2019-07-01T00:00Z",
+        "defaultPriceListing": {
+          "price": 4.99,
+          "currency": "USD"
+        }
+      }
+    },
+    "taxInformation": {
+      "category": "SOFTWARE"
+    }
+  },
+  "privacyAndCompliance": {
+    "locales": {
+      "en-US": {
+        "privacyPolicyUrl": "http://jeffblankenburg.com/privacy"
+      }
+    }
+  },
+  "testingInstructions": "TODO: REPLACE THIS WITH TESTING INSTRUCTIONS FOR THE CERTIFICATION TEAM SO THEY KNOW HOW TO PURCHASE AND USE THIS PRODUCT",
+  "purchasableState": "PURCHASABLE"
+}

@@ -73,7 +73,6 @@
                 "samples": [
                     "ask me a question",
                     "give me a question",
-                    "{category}",
                     "Give me a {category} question",
                     "Give me a question from {category}",
                     "Ask me a {category} question",
@@ -169,16 +168,6 @@
                     "give me the rules",
                     "rules"
                 ]
-            },
-            {
-                "name": "TKOIntent",
-                "samples": [
-                    "TKO",
-                    "tee kay oh",
-                    "knockout",
-                    "kay oh",
-                    "KO"
-                ]
             }
           ],
           "types": [
@@ -221,27 +210,26 @@
             {
                 "name": "Category",
                 "values": [
-                    {"id": "appjXwKBdhg6gSq2Q",  "name": {"value": "Art and Stage", "synonyms": ["art", "stage", "plays", "theater"]}},
-                    {"id": "appjydvshyrKDVgwN",  "name": {"value": "Business World", "synonyms": ["business"]}},
-                    {"id": "appUTzv1ubrWbCsXu",  "name": {"value": "Design", "synonyms": ["design"]}},
-                    {"id": "appIHTZTBumAnQNim",  "name": {"value": "Film", "synonyms": ["movies", "movie"]}},
-                    {"id": "appnTyJk77hv0vOLJ",  "name": {"value": "Food and Drink", "synonyms": ["food", "drink"]}},
-                    {"id": "appg9faZcHbnn76Iv",  "name": {"value": "Geography", "synonyms": ["geography"]}},
-                    {"id": "appH3DoRDJgPxYk8a",  "name": {"value": "History", "synonyms": ["history", "historical"]}},
-                    {"id": "app7vXT4eGx1iI1yW",  "name": {"value": "Language", "synonyms": ["languages", "foreign language"]}},
-                    {"id": "appzoPPmjmnYeGLey",  "name": {"value": "Literature", "synonyms": ["books", "novels"]}},
-                    {"id": "appajXgGSZFpNPDPY",  "name": {"value": "Miscellaneous", "synonyms": ["miscellaneous"]}},
-                    {"id": "appmVcIcYlvLctTMJ",  "name": {"value": "Music", "synonyms": ["songs", "singers"]}},
-                    {"id": "appTTV5wqPRHOSy4f",  "name": {"value": "Nature", "synonyms": ["nature"]}},
-                    {"id": "appQVArCwDjxx70mP",  "name": {"value": "People", "synonyms": ["people"]}},
-                    {"id": "appIfG9BfdoHEBWAs",  "name": {"value": "Politics", "synonyms": ["government"]}},
-                    {"id": "appEUIVTf3Tc2zP50",  "name": {"value": "Science", "synonyms": ["science"]}},
-                    {"id": "appaZCRygYPUaBq1h",  "name": {"value": "Sports and Games", "synonyms": ["sports", "games"]}},
-                    {"id": "app4yg7Zw1Afa62on",  "name": {"value": "Technology", "synonyms": ["tech", "computers"]}},
-                    {"id": "appKDggQyp2mjJGhY",  "name": {"value": "United States", "synonyms": ["u s a", "USA", "united states of america"]}},
-                    {"id": "appPWU4YN8Bv7IcGy",  "name": {"value": "Tradition and Beliefs", "synonyms": ["tradition", "beliefs", "religion"]}},
-                    {"id": "appKFSEh4JN1SQI3z",  "name": {"value": "Television and Radio", "synonyms": ["television", "tv", "radio", "entertainment"]}},
-                    {"id": "appYQDuh0pl37nSy2",  "name": {"value": "Halftime", "synonyms": ["three clues", "half-time"]}}
+                    {"id": "recl0vhIOs1iSyXAu",  "name": {"value": "Art and Stage", "synonyms": ["art", "stage", "plays", "theater"]}},
+                    {"id": "recAJm9yEqDRGmjRr",  "name": {"value": "Business World", "synonyms": ["business"]}},
+                    {"id": "recYsOA65RT5dQPlb",  "name": {"value": "Design", "synonyms": ["design"]}},
+                    {"id": "recdMJliTRpWYcj41",  "name": {"value": "Film", "synonyms": ["movies", "movie"]}},
+                    {"id": "reclySZR1cRRl08jz",  "name": {"value": "Food and Drink", "synonyms": ["food", "drink"]}},
+                    {"id": "recXXedb9nOqy1Fkk",  "name": {"value": "Geography", "synonyms": ["geography"]}},
+                    {"id": "rec6fDO7E7lXC2xe3",  "name": {"value": "History", "synonyms": ["history", "historical"]}},
+                    {"id": "recnhcldrp4o6QwFr",  "name": {"value": "Language", "synonyms": ["languages", "foreign language"]}},
+                    {"id": "recsy6jdhmIig1YSB",  "name": {"value": "Literature", "synonyms": ["books", "novels"]}},
+                    {"id": "recTeqmLykygSz9gF",  "name": {"value": "Miscellaneous", "synonyms": ["miscellaneous"]}},
+                    {"id": "recdZhe6oq5wn1ksw",  "name": {"value": "Music", "synonyms": ["songs", "singers"]}},
+                    {"id": "recSKFke58Sfd9vWi",  "name": {"value": "Nature", "synonyms": ["nature"]}},
+                    {"id": "recto6ILGOAYkOl8a",  "name": {"value": "People", "synonyms": ["people"]}},
+                    {"id": "rechKWhUV28LSeiRW",  "name": {"value": "Politics", "synonyms": ["government"]}},
+                    {"id": "recKqrOdwpk5hezpL",  "name": {"value": "Science", "synonyms": ["science"]}},
+                    {"id": "recr8BC0GYJVwjt1k",  "name": {"value": "Sports and Games", "synonyms": ["sports", "games"]}},
+                    {"id": "recG6oDVjpFNGrnO2",  "name": {"value": "Technology", "synonyms": ["tech", "computers"]}},
+                    {"id": "recRiC3PAYQHmMEvC",  "name": {"value": "United States", "synonyms": ["u s a", "USA", "united states of america"]}},
+                    {"id": "recKh6vjk2KQLGEm7",  "name": {"value": "Tradition and Beliefs", "synonyms": ["tradition", "beliefs", "religion"]}},
+                    {"id": "recab6u8fMDf63S3k",  "name": {"value": "Television and Radio", "synonyms": ["television", "tv", "radio", "entertainment"]}}
                 ]}]
             }
         }
