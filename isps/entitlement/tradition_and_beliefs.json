@@ -8,8 +8,8 @@
         "name": "Tradition and Beliefs Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/6634/b46b5082900745d489415e1a8f359605/APP_ICON?versionId=hjBBa.OprjNZRIQS0a2Tj9NLOAvKwcR9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193758Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dd61764280fde10d29e694d59d122371d6d8db366260dd6976afc405d1ff1466",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4c10/7be332e12fe54e8ab8ae878ffb1a9e96/APP_ICON_LARGE?versionId=Qu4aJc31O3XuUFU8vsU3Wo6mcFgeHICy&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193758Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7ccf5450fa06bff1e892a371039d08ea63a54a79929ffce2915b3b950aa74f98",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/6634/b46b5082900745d489415e1a8f359605/APP_ICON?versionId=hjBBa.OprjNZRIQS0a2Tj9NLOAvKwcR9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171224Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a55c76e05e8b91bb144ddd0f47ef79b197a722ed867666686aefd193c584f21b",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4c10/7be332e12fe54e8ab8ae878ffb1a9e96/APP_ICON_LARGE?versionId=Qu4aJc31O3XuUFU8vsU3Wo6mcFgeHICy&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171224Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a239c6ced40a2ed7a8fd4af2f719f419f2a8ab050c2984f5e877c7520037ea08",
         "examplePhrases": [
           "This is an example phrase."
         ],

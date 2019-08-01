@@ -8,8 +8,8 @@
         "name": "Nature Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/18bc/880b64edd47f4ab7b2c931da0eb48f25/APP_ICON?versionId=KK5q_NdvB35K0m3CQd0t1CYFjekPEfrK&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193749Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=6a508b4cb6b594f962875b24e237c5a4194cf4ec77a1c6545e2301514be0b946",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/5560/934b432c635149c7925e268cbe8db9e0/APP_ICON_LARGE?versionId=azG9qrnpKR0V5cWmfbgEWwyKt4LqXdn7&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193749Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=027a1ccccb46bbe7b4ca79775de5f8824969b09313f8e38305afdcd35ffd810e",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/18bc/880b64edd47f4ab7b2c931da0eb48f25/APP_ICON?versionId=KK5q_NdvB35K0m3CQd0t1CYFjekPEfrK&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171216Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=326bcfc1b19c0273a804afe9d23223705a5e24d7f66b7c2fd0f9f92b92fcc727",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/5560/934b432c635149c7925e268cbe8db9e0/APP_ICON_LARGE?versionId=azG9qrnpKR0V5cWmfbgEWwyKt4LqXdn7&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171216Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=98ef9ba76dab60ef9d75b560a33cbdd0e11e4b8529aebd6a0136e6cbaeb2a93a",
         "examplePhrases": [
           "This is an example phrase."
         ],

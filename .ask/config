@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "b77fa98347f6b9bb4aae1db4bf3b2ada"
+            "eTag": "2a7c6775179950bfecb94cb1cd21d252"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "e7c56077-345d-42d7-ae88-9918f6fb60c4",
+            "revisionId": "158fe130-9d92-4f87-8869-bbd6b7374fd6",
             "runtime": "nodejs8.10"
           }
         ]
@@ -33,7 +33,7 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/art_and_stage.json",
           "productId": "amzn1.adg.product.4d4d4968-1e9f-40a3-a371-fcf2c92332f2",
-          "eTag": "4efaf4410834a87798bbabe4e9b251ff"
+          "eTag": "9b41bc9934213e99e88ae36176e07d8c"
         },
         {
           "deploy_status": "Update",
@@ -45,7 +45,7 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/design.json",
           "productId": "amzn1.adg.product.47c9a153-bb17-4534-870a-bf9b3ad76057",
-          "eTag": "b5ecd8f164112b41e54d5b760ed2c7bd"
+          "eTag": "bdf920afdaf3218b152d4381fb05712e"
         },
         {
           "deploy_status": "Update",
@@ -99,7 +99,7 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/nature.json",
           "productId": "amzn1.adg.product.f458868c-9fdb-428b-8820-4ce09367d375",
-          "eTag": "45f63b8606f04187f9b479aaf6ea6ca2"
+          "eTag": "36d6cc364a98aa6ec3c4d641a16ccfd6"
         },
         {
           "deploy_status": "Update",

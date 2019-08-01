@@ -38,16 +38,15 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         console.log("HANDLED - LaunchRequestHandler");
-        console.log("IS FIRST VISIT = " + IsFirstVisit);
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        var speechText = "";
+        var speakText = "";
 
         const locale = handlerInput.requestEnvelope.request.locale;
         var welcome = await getRandomResponse("Welcome", locale);
 
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
         if (IsFirstVisit) {
-            console.log("THIS IS THE USER'S FIRST VISIT TO THE SKILL.  EVER.")
+            sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
@@ -55,18 +54,25 @@ const LaunchRequestHandler = {
         }
         else
         {
+            sessionAttributes.currentState = "LAUNCHREQUEST - SUBSEQUENTVISIT";
             var query = await getRandomResponse("ActionQuery", locale);
-            speechText = welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
+            speakText = welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
         }
         
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
 
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
+
+        const { deviceId } = handlerInput.requestEnvelope.context.System.device;
+        const deviceAddressServiceClient = handlerInput.serviceClientFactory.getDeviceAddressServiceClient();
+        const address = await deviceAddressServiceClient.getFullAddress(deviceId);
+        console.log("ADDRESS:" + JSON.stringify(address));
         
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
+            .withAskForPermissionsConsentCard(["read::alexa:device:all:address"])
             .getResponse();
     }
 };
@@ -77,10 +83,10 @@ const AnswerIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
             && Alexa.getIntentName(handlerInput.requestEnvelope) === "AnswerIntent";
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - AnswerIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        var speechText = "This is the Answer Intent.";
+        var speakText = "This is the Answer Intent.";
 
 
         //TODO: DID WE ASK THE USER A QUESTION?
@@ -88,10 +94,12 @@ const AnswerIntentHandler = {
 
             //TODO: IF THE USER GOT THE ANSWER CORRECT.
             if (isAnswerCorrect(handlerInput)) {
-                speechText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo!";
+                sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo!";
             }
             else{
-                speechText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  You're not a good person.";
+                sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  You're not a good person.";
             }
 
                 //TODO: WAS IT A SOLO QUESTION?
@@ -106,15 +114,16 @@ const AnswerIntentHandler = {
         }
         //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
         else {
-            speechText = "You just said " + handlerInput.requestEnvelope.request.intent.slots.answer.value + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
+            sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
+            speakText = "You just said " + handlerInput.requestEnvelope.request.intent.slots.answer.value + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
         }
         
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -125,19 +134,19 @@ const StartGameIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
             && Alexa.getIntentName(handlerInput.requestEnvelope) === "StartGameIntent";
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - StartGameIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         //TODO: IS THE USER IN A GAME?
 
-        var speechText = "This is the Start Game Intent.";
+        var speakText = "This is the Start Game Intent.";
 
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -148,19 +157,19 @@ const ContinueGameIntentHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
             && Alexa.getIntentName(handlerInput.requestEnvelope) === "ContinueGameIntent";
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - ContinueGameIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         //TODO: IS THE USER IN A GAME?
 
-        var speechText = "This is the Continue Game Intent.";
+        var speakText = "This is the Continue Game Intent.";
 
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -203,6 +212,7 @@ const QuestionIntentHandler = {
                         .getResponse();
                 }
                 else {
+                    sessionAttributes.currentState = "QUESTIONINTENT - CATEGORY - ENTITLED";
                     var question = await getRandomQuestion(category);
                     sessionAttributes.currentQuestion = question.fields;
                     return await askTriviaQuestion(handlerInput, category, question);
@@ -210,6 +220,7 @@ const QuestionIntentHandler = {
             });
         }
         else {
+            sessionAttributes.currentState = "QUESTIONINTENT - RANDOM";
             category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
@@ -218,24 +229,256 @@ const QuestionIntentHandler = {
     }
 };
 
+//THIS HANDLES A USER'S REQUEST TO BUY THE SUBSCRIPTION.
+const BuySubscriptionHandler = {
+    canHandle(handlerInput) {
+        console.log("CAN HANDLE - BuySubscriptionHandler");
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+               handlerInput.requestEnvelope.request.intent.name === 'BuySubscriptionIntent';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - BuySubscriptionHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+ 
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            var product = res.inSkillProducts.find(record => record.referenceName == "all_categories");
+
+            if (product != undefined) {
+                sessionAttributes.currentState = "BUYSUBSCRIPTIONINTENT";
+                return handlerInput.responseBuilder
+                    .addDirective({
+                        'type': 'Connections.SendRequest',
+                        'name': 'Buy',
+                        'payload': {
+                            'InSkillProduct': {
+                                'productId': product.productId
+                            }
+                        },
+                        'token': 'correlationToken'
+                    })
+                    .getResponse();
+            }
+            else {
+                sessionAttributes.currentState = "BUYSUBSCRIPTIONINTENT - PRODUCTNOTFOUND";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var speakText = "I'm sorry. The TKO Trivia subscription doesn't appear to be available at this time." + repromptText;
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                    .speak(speakText)
+                    .reprompt(repromptText)
+                    .getResponse();
+            }
+        });
+    }
+}; 
+
+//THIS HANDLES A USER'S REQUEST TO CANCEL OR RETURN A PRODUCT.
+const BuyProductHandler = {
+    canHandle(handlerInput) {
+        console.log("CAN HANDLE - BuyProductHandler");
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+               handlerInput.requestEnvelope.request.intent.name === 'BuyProductIntent';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - BuyProductHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+ 
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            var category = getSpecificCategory(handlerInput);
+
+            if (category != undefined) {
+                var product = res.inSkillProducts.find(record => record.referenceName == category.referenceName);
+
+                if (product != undefined) {
+                    sessionAttributes.currentState = "BUYPRODUCTINTENT - CATEGORY";
+                    return handlerInput.responseBuilder
+                        .addDirective({
+                            'type': 'Connections.SendRequest',
+                            'name': 'Buy',
+                            'payload': {
+                                'InSkillProduct': {
+                                    'productId': category.productId
+                                }
+                            },
+                            'token': 'correlationToken'
+                        })
+                        .getResponse();
+                }
+                else {
+                    sessionAttributes.currentState = "CANCELPRODUCTINTENT - PRODUCTNOTFOUND";
+                    var actionQuery = await getRandomResponse("ActionQuery", locale);
+                    var repromptText = actionQuery.fields.VoiceResponse;
+                    var speakText = "I'm sorry.  TKO Trivia doesn't offer the " + getSpokenValue(handlerInput, "category") + " category." + repromptText;
+
+                    sessionAttributes.currentSpeak = speakText;
+                    sessionAttributes.currentReprompt = repromptText;
+
+                    return handlerInput.responseBuilder
+                        .speak(speakText)
+                        .reprompt(repromptText)
+                        .getResponse();
+                    }
+            }
+            else {
+                sessionAttributes.currentState = "BUYPRODUCTINTENT - SLOTVALUEEMPTY";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var speakText = "I'm sorry.  I didn't hear which category you were trying to purchase.  Can you try again?";
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                    .speak(speakText)
+                    .reprompt(repromptText)
+                    .getResponse();
+            }
+        });
+    }
+}; 
+
+//THIS HANDLES A USER'S REQUEST TO CANCEL OR RETURN A PRODUCT.
+const CancelProductHandler = {
+    canHandle(handlerInput) {
+        console.log("CAN HANDLE - CancelProductHandler");
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+               handlerInput.requestEnvelope.request.intent.name === 'CancelProductIntent';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - CancelProductHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+ 
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            var category = getSpecificCategory(handlerInput);
+
+            if (category != undefined) {
+                var product = res.inSkillProducts.find(record => record.referenceName == category.referenceName);
+
+                if (product != undefined) {
+                    sessionAttributes.currentState = "CANCELPRODUCTINTENT - CATEGORY";
+                    return handlerInput.responseBuilder
+                        .addDirective({
+                                "type": "Connections.SendRequest",
+                                "name": "Cancel",
+                                "payload": {
+                                    "InSkillProduct": {
+                                        "productId": product.productId
+                                    }
+                                },
+                                "token": "correlationToken"
+                            })
+                            .getResponse();
+                }
+                else {
+                    sessionAttributes.currentState = "CANCELPRODUCTINTENT - PRODUCTNOTFOUND";
+                    var actionQuery = await getRandomResponse("ActionQuery", locale);
+                    var repromptText = actionQuery.fields.VoiceResponse;
+                    var speakText = "I'm sorry.  TKO Trivia doesn't offer the " + getSpokenValue(handlerInput, "category") + " category." + repromptText;
+
+                    sessionAttributes.currentSpeak = speakText;
+                    sessionAttributes.currentReprompt = repromptText;
+
+                    return handlerInput.responseBuilder
+                        .speak(speakText)
+                        .reprompt(repromptText)
+                        .getResponse();
+                    }
+            }
+            else {
+                sessionAttributes.currentState = "CANCELPRODUCTINTENT - SLOTVALUEEMPTY";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var speakText = "I'm sorry.  TKO Trivia doesn't offer the " + getSpokenValue(handlerInput, "category") + " category." + repromptText;
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                    .speak(speakText)
+                    .reprompt(repromptText)
+                    .getResponse();
+            }
+        });
+    }
+};
+
+//THIS HANDLES A USER'S REQUEST TO CANCEL OR RETURN A PRODUCT.
+const CancelSubscriptionHandler = {
+    canHandle(handlerInput) {
+        console.log("CAN HANDLE - CancelSubscriptionHandler");
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+               handlerInput.requestEnvelope.request.intent.name === 'CancelSubscriptionIntent';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - CancelSubscriptionHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+ 
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            var product = res.inSkillProducts.find(record => record.referenceName == "all_categories");
+
+            if (product != undefined) {
+                sessionAttributes.currentState = "CANCELSUBSCRIPTIONINTENT";
+                return handlerInput.responseBuilder
+                    .addDirective({
+                            "type": "Connections.SendRequest",
+                            "name": "Cancel",
+                            "payload": {
+                                "InSkillProduct": {
+                                    "productId": product.productId
+                                }
+                            },
+                            "token": "correlationToken"
+                        })
+                        .getResponse();
+            }
+            else {
+                sessionAttributes.currentState = "CANCELSUBSCRIPTIONINTENT - NOTFOUND";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var speakText = "I'm sorry.  The TKO Trivia subscription isn't currently available." + repromptText;
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                    .speak(speakText)
+                    .reprompt(repromptText)
+                    .getResponse();
+            }
+        });
+    }
+}; 
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - HelpIntentHandler");
         return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
             && Alexa.getIntentName(handlerInput.requestEnvelope) === "AMAZON.HelpIntent";
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         console.log("HANDLED - HelpIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
-        var speechText = "This is the Help Intent.";
+        var speakText = "This is the Help Intent.";
 
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -253,12 +496,12 @@ const CancelAndStopIntentHandler = {
         const locale = handlerInput.requestEnvelope.request.locale;
         
         var goodbye = await getRandomResponse("Goodbye", locale);
-        var speechText = goodbye.fields.VoiceResponse;
+        var speakText = goodbye.fields.VoiceResponse;
 
-        sessionAttributes.currentSpeak = speechText;
+        sessionAttributes.currentSpeak = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
+            .speak(speakText)
             .getResponse();
     }
 };
@@ -267,20 +510,20 @@ const CancelAndStopIntentHandler = {
 const RepeatIntentHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - RepeatIntentHandler");
-        return handlerInput.requestEnvelope.request.type === "IntentRequest" &&
-               handlerInput.requestEnvelope.request.intent.name === "AMAZON.RepeatIntent";
+        return handlerInput.requestEnvelope.request.type === "IntentRequest"
+            && handlerInput.requestEnvelope.request.intent.name === "AMAZON.RepeatIntent";
     },
     async handle(handlerInput) {
         console.log("HANDLED - RepeatIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
-        var speechText = "";
-        if (sessionAttributes.currentSpeak != undefined) { speechText = sessionAttributes.currentSpeak; }
-        else speechText = "I haven't said anything yet. I can't repeat myself, silly. What do you want to do next?";
+        var speakText = "";
+        if (sessionAttributes.currentSpeak != undefined) { speakText = sessionAttributes.currentSpeak; }
+        else speakText = "I haven't said anything yet. I can't repeat myself, silly. What do you want to do next?";
 
         return handlerInput.responseBuilder
-               .speak(speechText)
-               .reprompt(speechText)
+               .speak(speakText)
+               .reprompt(speakText)
                .getResponse();
     },
 };
@@ -310,14 +553,14 @@ const IntentReflectorHandler = {
 
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
 
-        var speechText = "This is the Intent Reflector.  You just triggered " + intentName;
+        var speakText = "This is the Intent Reflector.  You just triggered " + intentName;
 
-        sessionAttributes.currentSpeak = speechText;
-        sessionAttributes.currentReprompt = speechText;
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -332,88 +575,195 @@ const ErrorHandler = {
     async handle(handlerInput, error) {
         console.log(`~~~~ Error handled: ${error.stack}`);
         const locale = handlerInput.requestEnvelope.request.locale;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         
         var error = await getRandomResponse("Error", locale);
-        var speechText = error.fields.VoiceResponse;
+        var speakText = error.fields.VoiceResponse;
+
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
 
         return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt(speechText)
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
 
-//THIS HANDLES THE CONNECTIONS.RESPONSE EVENT AFTER AN UPSELL OCCURS.
-const UpsellResponseHandler = {
+const SuccessfulPurchaseResponseHandler = {
     canHandle(handlerInput) {
-        console.log("CAN HANDLE - UPSELL RESPONSE HANDLER");
-        return handlerInput.requestEnvelope.request.type === "Connections.Response" &&
-               handlerInput.requestEnvelope.request.name === "Upsell";
+        console.log("CANHANDLE - SuccessfulPurchaseResponseHandler");
+        return handlerInput.requestEnvelope.request.type === "Connections.Response"
+            && (handlerInput.requestEnvelope.request.name === "Buy" || handlerInput.requestEnvelope.request.name === "Upsell")
+            && handlerInput.requestEnvelope.request.payload.purchaseResult == 'ACCEPTED';
     },
     async handle(handlerInput) {
-        console.log("HANDLE - UPSELL RESPONSE HANDLER");
+        console.log("HANDLE - SuccessfulPurchaseResponseHandler");
+
         const locale = handlerInput.requestEnvelope.request.locale;
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
         const productId = handlerInput.requestEnvelope.request.payload.productId;
-        var actionQuery = await getRandomResponse("ActionQuery", locale);
-        actionQuery = actionQuery.fields.VoiceResponse;
 
         return ms.getInSkillProducts(locale).then(async function(res) {
             let product = res.inSkillProducts.find(record => record.productId == productId);
-            var category = categories.find(o => o.productId === productId)
 
-            if (handlerInput.requestEnvelope.request.status.code == 200) {
-                if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'DECLINED') {
-                    var speakText = "";
-                    //IF SUBSCRIPTION
-                    if (productId === "amzn1.adg.product.f6a25e4f-de02-403e-b848-642ab5ce66a4") {
-                        speakText = "If you change your mind, just ask me about the subscription! " + actionQuery;
-                    }
-                    //ELSE CATEGORY
-                    else {
-                        speakText = "You can always ask for a random question, but to get questions from a specific category, you need to purchase that category or the TKO subscription. " + actionQuery;
-                    }
+            if (product != undefined) {
+                if (product.referenceName === "all_categories") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - SUBSCRIPTION - ACCEPTED";
+                    var actionQuery = await getRandomResponse("ActionQuery", locale);
+                    var repromptText = actionQuery.fields.VoiceResponse;
+                    var speakText = "You have successfully unlocked the TKO Trivia subscription!  You can now ask for questions from any of the categories, and the correct answers will be shown after every question, even if you get it wrong!" + repromptText;
 
-                    const repromptText = actionQuery;
+                    sessionAttributes.currentSpeak = speakText;
+                    sessionAttributes.currentReprompt = repromptText;
+
                     return handlerInput.responseBuilder
                         .speak(speakText)
                         .reprompt(repromptText)
                         .getResponse();
                 }
-                else if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'ACCEPTED') {
-                    var speakText = "";
-                    //IF SUBSCRIPTION
-                    if (productId === "amzn1.adg.product.f6a25e4f-de02-403e-b848-642ab5ce66a4") {
-                        speakText = "You have successfully unlocked the TKO Trivia subscription!  You can now ask for questions from any of the categories, and the correct answers will be shown after every question, even if you get it wrong!";
-                    }
-                    //ELSE CATEGORY
-                    else {
-                        speakText = "You can now say things like, ask me a " + category.speechName + " question, any time!";
-                    }
-
+                else {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - CATEGORY - ACCEPTED";
+                    var category = categories.find(o => o.productId === productId);
+                    var speakText = "You can now say things like, ask me a " + category.speechName + " question, any time!";
                     var question = await getRandomQuestion(category);
                     sessionAttributes.currentQuestion = question.fields;
                     return await askTriviaQuestion(handlerInput, category, question, 0, speakText);
                 }
-                else if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'ERROR') {
-                    const speakText = actionQuery;
-                    const repromptText = actionQuery;
-                    return handlerInput.responseBuilder
-                        .speak(speakText)
-                        .reprompt(repromptText)
-                        .getResponse();
-                }
             }
-            else    {
-                // Something failed.
-                console.log('Connections.Response indicated failure. error:' + handlerInput.requestEnvelope.request.status.message);
-                return handlerInput.responseBuilder
-                    .speak("There was an error handling your purchase request. Please try again or contact us for help.")
-                    .getResponse();
-            }
+            //TODO: DOES THERE NEED TO BE AN ELSE CASE HERE?  IS THIS POSSIBLE?
         });
-   }
+    }
+};
+
+const UnsuccessfulPurchaseResponseHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - UnsuccessfulPurchaseResponseHandler");
+        return handlerInput.requestEnvelope.request.type === "Connections.Response"
+            && (handlerInput.requestEnvelope.request.name === "Buy" || handlerInput.requestEnvelope.request.name === "Upsell")
+            && handlerInput.requestEnvelope.request.payload.purchaseResult == 'DECLINED';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - UnsuccessfulPurchaseResponseHandler");
+
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+        const productId = handlerInput.requestEnvelope.request.payload.productId;
+
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            let product = res.inSkillProducts.find(record => record.productId == productId);
+
+            if (product != undefined) {
+                var speakText = "";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var category = categories.find(o => o.productId === productId);
+
+                if (product.referenceName === "all_categories") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - SUBSCRIPTION - DECLINED";
+                    speakText = repromptText;
+                }
+                else {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - CATEGORY - DECLINED";
+                    speakText = "You can always ask for a random question, but to get questions from a specific category like " + category.speechName + ", you need to purchase that category or the TKO subscription. " + repromptText;
+                }
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt(repromptText)
+                .getResponse();
+            }
+            //TODO: DOES THERE NEED TO BE AN ELSE CASE HERE?  IS THIS POSSIBLE?
+        });
+    }
+};
+
+const CancelPurchaseResponseHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - CancelPurchaseResponseHandler");
+        return handlerInput.requestEnvelope.request.type === "Connections.Response"
+            && handlerInput.requestEnvelope.request.name === "Cancel";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - CancelPurchaseResponseHandler");
+
+        const locale = handlerInput.requestEnvelope.request.locale;
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+        const productId = handlerInput.requestEnvelope.request.payload.productId;
+
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            let product = res.inSkillProducts.find(record => record.productId == productId);
+
+            if (product != undefined) {
+                var speakText = "";
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                var repromptText = actionQuery.fields.VoiceResponse;
+                var category = categories.find(o => o.productId === productId);
+/*
+                if (product.referenceName === "all_categories" && handlerInput.requestEnvelope.request.payload.purchaseResult == "ACCEPTED") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - CANCEL - SUBSCRIPTION - ACCEPTED";
+                    speakText = repromptText;
+                }
+                else if (product.referenceName === "all_categories" && handlerInput.requestEnvelope.request.payload.purchaseResult == "NOT_ENTITLED") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - CANCEL - SUBSCRIPTION - NOT_ENTITLED";
+                    speakText = repromptText;
+                }
+                else if(handlerInput.requestEnvelope.request.payload.purchaseResult == "ACCEPTED") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - CANCEL - CATEGORY - ACCEPTED";
+                    speakText = repromptText;
+                }
+                else if(handlerInput.requestEnvelope.request.payload.purchaseResult == "NOT_ENTITLED") {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - CANCEL - CATEGORY - NOT_ENTITLED";
+                    speakText = repromptText;
+                }
+                else {
+                    sessionAttributes.currentState = "CONNECTIONS.RESPONSE - CANCEL - CATEGORY - JEFFISWEIRD";
+                    speakText = repromptText;
+                }
+*/
+                speakText = repromptText;
+
+                sessionAttributes.currentSpeak = speakText;
+                sessionAttributes.currentReprompt = repromptText;
+
+                return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt(repromptText)
+                .getResponse();
+            }
+            //TODO: DOES THERE NEED TO BE AN ELSE CASE HERE?  IS THIS POSSIBLE?
+        });
+    }
+};
+
+const ErrorPurchaseResponseHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - ErrorPurchaseResponseHandler");
+        return handlerInput.requestEnvelope.request.type === "Connections.Response"
+            && (handlerInput.requestEnvelope.request.name === "Buy" || handlerInput.requestEnvelope.request.name === "Upsell")
+            && handlerInput.requestEnvelope.request.payload.purchaseResult == 'ERROR';
+    },
+    async handle(handlerInput) {
+        console.log("HANDLE - ErrorPurchaseResponseHandler");
+        var actionQuery = await getRandomResponse("ActionQuery", locale);
+        var repromptText = actionQuery.fields.VoiceResponse;
+        var speakText = "Something went wrong with your purchase request.  You might want to try using a different device." + repromptText;
+
+        sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - ERROR";
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = repromptText;
+
+        return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt(repromptText)
+                .getResponse();
+    }
 };
 
 async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, speech = "") {
@@ -423,10 +773,10 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
     var ordinalSpeech = "";
     if (ordinal > 0) ordinalSpeech = "<say-as interpret-as='ordinal'>" + ordinal + "</say-as> ";
 
-    var speechText = speech + "<break time='.5s'/>Here's your " + ordinalSpeech + "question, from the " + category.speechName + " category.<audio src='https://s3.amazonaws.com/tko-trivia/audio/" + category.referenceName + ".mp3' /><break time='.25s'/>" + question.fields.VoiceQuestion;
+    var speakText = speech + "<break time='.5s'/>Here's your " + ordinalSpeech + "question, from the " + category.speechName + " category.<audio src='https://s3.amazonaws.com/tko-trivia/audio/" + category.referenceName + ".mp3' /><break time='.25s'/>" + question.fields.VoiceQuestion;
 
-    sessionAttributes.currentSpeak = speechText;
-    sessionAttributes.currentReprompt = speechText;
+    sessionAttributes.currentSpeak = speakText;
+    sessionAttributes.currentReprompt = question.fields.VoiceQuestion;
 
     var synonyms;
     if (question.fields.Synonyms != undefined) {
@@ -456,7 +806,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
         
     //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS
     return handlerInput.responseBuilder
-        .speak(speechText)
+        .speak(speakText)
         .reprompt(question.fields.VoiceQuestion)
         .withStandardCard(category.name, question.fields.CardQuestion, "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_108.png", "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_512.png")
         .addDirective(entityDirective)
@@ -535,6 +885,29 @@ function isAnswerCorrect(handlerInput){
     && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId ===  handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.id)) return true;
 
     return false;
+}
+
+function getSpokenValue(handlerInput, slotName) {
+    if ((handlerInput.requestEnvelope) &&
+        (handlerInput.requestEnvelope.request) &&
+        (handlerInput.requestEnvelope.request.intent) &&
+        (handlerInput.requestEnvelope.request.intent.slots) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName]) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName].value)) return handlerInput.requestEnvelope.request.intent.slots[slotName].value;
+    return undefined;
+}
+
+function getResolvedValues(handlerInput, slotName) {
+    if ((handlerInput.requestEnvelope) &&
+        (handlerInput.requestEnvelope.request) &&
+        (handlerInput.requestEnvelope.request.intent) &&
+        (handlerInput.requestEnvelope.request.intent.slots) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName]) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0]) &&
+        (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0].values)) return handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0].values;
+    return undefined;
 }
 
 async function GetUserRecord(userId) {
@@ -638,7 +1011,14 @@ exports.handler = dashbot.handler(skillBuilder
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         RepeatIntentHandler,
-        UpsellResponseHandler,
+        BuyProductHandler,
+        BuySubscriptionHandler,
+        CancelProductHandler,
+        CancelSubscriptionHandler,
+        SuccessfulPurchaseResponseHandler,
+        UnsuccessfulPurchaseResponseHandler,
+        CancelPurchaseResponseHandler,
+        ErrorPurchaseResponseHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
         ) 

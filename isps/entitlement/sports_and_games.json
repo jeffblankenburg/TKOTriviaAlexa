@@ -8,8 +8,8 @@
         "name": "Sports and Games Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/72a9/c1654863b3554e2ca4f2d9463dd6b0fa/APP_ICON?versionId=xUJZBC6SjJ8FxtgEUZp0Qe3TFIoFmiER&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193753Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1c51e994c31a14dfce08503cd7c550bdd7927488f693b67320ff6ca7ee597325",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1263/eed6e63d6694459e8056db8d139e23bf/APP_ICON_LARGE?versionId=Et5RWXz33sGbSHIKKXKg4.NfjSVrM7BA&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193753Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=042a22f2d43bacf800081ecafe8d11c66502b24194cb7b3dea410f77d7f42209",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/72a9/c1654863b3554e2ca4f2d9463dd6b0fa/APP_ICON?versionId=xUJZBC6SjJ8FxtgEUZp0Qe3TFIoFmiER&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171219Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=ff3f37aa4edb9a88f7018827846f9b499e5460a990df9ef234b519b94424999f",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1263/eed6e63d6694459e8056db8d139e23bf/APP_ICON_LARGE?versionId=Et5RWXz33sGbSHIKKXKg4.NfjSVrM7BA&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171219Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2f9f0b0dcb42fba7d7475db5b53fc21b1a393f2850485772015b45d681e2a64b",
         "examplePhrases": [
           "This is an example phrase."
         ],

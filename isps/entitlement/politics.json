@@ -8,8 +8,8 @@
         "name": "Politics Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a980/0271da00920c408cbd1b4ce8d1602753/APP_ICON?versionId=8eYeYS3JkATxWQ2OyshU8872Cym_zC6Q&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193752Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=0997915525a6383f25f2540e5a715dec212f36b39ca41cb652126c5bacd08718",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1c08/ce43df87b735482aab68172dc706c60a/APP_ICON_LARGE?versionId=WGXmGE7AsHS5GoZhnrTceNMYrILK.F1g&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193752Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=bdfe67e59ebfde7dab0e6ab509ec74c41c64cbdfafdbda3537381b575dc95aa4",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a980/0271da00920c408cbd1b4ce8d1602753/APP_ICON?versionId=8eYeYS3JkATxWQ2OyshU8872Cym_zC6Q&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171218Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9a9c38d5b03f62ec1e755b8e125e4624ac05abf1ea1e739128b3ca03d7dae054",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1c08/ce43df87b735482aab68172dc706c60a/APP_ICON_LARGE?versionId=WGXmGE7AsHS5GoZhnrTceNMYrILK.F1g&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171218Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=cafa0beefd6e4761dbefc4b414eb02a37c7295592de292b9522a38de1731c858",
         "examplePhrases": [
           "This is an example phrase."
         ],

@@ -8,8 +8,8 @@
         "name": "Literature Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1250/1da2e7af250b4234973ed6b067f5ce24/APP_ICON?versionId=ltmHg5tIypFfo.z1nZJZZws8ApKNuVlu&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193745Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=eb9166f01def5258d46fcb9a72abcc7c0f43ca88a612cf5967b34313aa628ab2",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/d409/ef68bb57f2d14a83a5fdb1af5c9f803c/APP_ICON_LARGE?versionId=.2.hD5sRbBWVE1AYzckw7JMEsUj6rwfU&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193745Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=054aad7f374bec5fe0e99c2b74bfb93670444c58bede8b20be9fcdc38b79e2bb",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1250/1da2e7af250b4234973ed6b067f5ce24/APP_ICON?versionId=ltmHg5tIypFfo.z1nZJZZws8ApKNuVlu&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171212Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e332238dcfb8974ed7d1975513bf89b959a452eddb138760354abeee0e450966",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/d409/ef68bb57f2d14a83a5fdb1af5c9f803c/APP_ICON_LARGE?versionId=.2.hD5sRbBWVE1AYzckw7JMEsUj6rwfU&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171212Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=0c4b0bffe4aba9bf2bcdb795728b5003186c01747c7e8099117a23b7c5f26579",
         "examplePhrases": [
           "This is an example phrase."
         ],

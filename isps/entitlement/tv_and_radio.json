@@ -8,8 +8,8 @@
         "name": "TV and Radio Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f1c9/dea7aa0177cb404587e8b918574bd658/APP_ICON?versionId=omRJbW1TFQrO2aPWWuFzk3YUXK.NefY9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193759Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=739153d446020146500d135630f4deb70fcefae9f2fa9097679ca8533faa0e03",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/71ba/f36b38bbab72448eb5b8f7d99ed31343/APP_ICON_LARGE?versionId=OeKy1HTAKiGl9G8W40XPzVNC2u6G4kcO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190731T193759Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190731%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=f2f26d6c153073a6f00e87920336ccfe6086f33c73e348357fa180a973298c20",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f1c9/dea7aa0177cb404587e8b918574bd658/APP_ICON?versionId=omRJbW1TFQrO2aPWWuFzk3YUXK.NefY9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171226Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5cba87b3849bac62162b13f1ed942bcab335e44fe7c8169ddb1acf2dc7e86672",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/71ba/f36b38bbab72448eb5b8f7d99ed31343/APP_ICON_LARGE?versionId=OeKy1HTAKiGl9G8W40XPzVNC2u6G4kcO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171226Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=240cd43ade542f5f34b40bde762e105435dad3699b09beb77c5515acc257395e",
         "examplePhrases": [
           "This is an example phrase."
         ],

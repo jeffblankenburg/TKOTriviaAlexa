@@ -127,13 +127,20 @@
                 "samples": [
                 "cancel {category}",
                 "cancel {category} questions",
+                "refund {category}",
+                "stop {category}"
+                ]
+            },
+            {
+                "name": "CancelSubscriptionIntent",
+                "samples": [
                 "stop subscription",
                 "end subscription",
                 "cancel subscription",
                 "cancel the subscription",
                 "cancel my subscription",
-                "refund {category}",
-                "stop {category}"
+                "refund subscription",
+                "stop subscription"
                 ]
             },
             {
