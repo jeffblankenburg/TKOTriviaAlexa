@@ -86,6 +86,20 @@
                 ]
             },
             {
+                "name": "FirstNameIntent",
+                "slots": [
+                    {
+                        "name": "firstname",
+                        "type": "AMAZON.FirstName"
+                    }
+                ],
+                "samples": [
+                    "it is {firstname}",
+                    "{firstname}",
+                    "my name is {firstname}"
+                ]
+            },
+            {
                 "name": "BuyCategoryIntent",
                 "slots": [
                     {
@@ -211,7 +225,11 @@
             {
                 "name": "Answer",
                 "values": [  
-                    {"id": "XXXXXXXXXX",  "name": {"value": "Wrong"}}
+                    {"name": {"value": "Kennedy"}},
+                    {"name": {"value": "Lincoln"}},
+                    {"name": {"value": "Washington"}},
+                    {"name": {"value": "Roosevelt"}},
+                    {"name": {"value": "Clinton"}}
                 ]
             },
             {

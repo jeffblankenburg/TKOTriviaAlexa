@@ -47,10 +47,13 @@ const LaunchRequestHandler = {
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
         if (IsFirstVisit) {
             sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
+            speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
+            /*
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
             return await askTriviaQuestion(handlerInput, category, question, 1, welcome.fields.VoiceResponse);
+            */
         }
         else
         {
@@ -64,15 +67,67 @@ const LaunchRequestHandler = {
         sessionAttributes.currentSpeak = speakText;
         sessionAttributes.currentReprompt = speakText;
 
-        const { deviceId } = handlerInput.requestEnvelope.context.System.device;
-        const deviceAddressServiceClient = handlerInput.serviceClientFactory.getDeviceAddressServiceClient();
-        const address = await deviceAddressServiceClient.getFullAddress(deviceId);
-        console.log("ADDRESS:" + JSON.stringify(address));
+        //const { deviceId } = handlerInput.requestEnvelope.context.System.device;
+        //const deviceAddressServiceClient = handlerInput.serviceClientFactory.getDeviceAddressServiceClient();
+        //const address = await deviceAddressServiceClient.getCountryAndPostalCode(deviceId);
+        //console.log("ADDRESS:" + JSON.stringify(address));
         
         return handlerInput.responseBuilder
             .speak(speakText)
             .reprompt(speakText)
-            .withAskForPermissionsConsentCard(["read::alexa:device:all:address"])
+            //.withAskForPermissionsConsentCard(["read::alexa:device:all:address:country_and_postal_code"])
+            .getResponse();
+    }
+};
+
+const FirstNameIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - FirstNameIntentHandler");
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === "FirstNameIntent";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - FirstNameIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+
+        var firstname = getSpokenValue(handlerInput, "firstname");
+        var speakText = "";
+
+        if (firstname != undefined) {
+
+            var base = new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+
+            base('User').update(sessionAttributes.user.RecordId, {"FirstName": firstname}, function(err, record) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.log(record.get('UserId'));
+            });
+
+            //TODO: SAVE USER'S NAME TO DATA TABLE.
+            if (sessionAttributes.currentState.includes("FIRSTVISIT")) {
+                var category = getRandomCategory();
+                var question = await getRandomQuestion(category);
+                sessionAttributes.currentQuestion = question.fields;
+                return await askTriviaQuestion(handlerInput, category, question, 1, "OK, " + firstname + ". ");
+            }
+            else {
+                var query = await getRandomResponse("ActionQuery", locale);
+                speakText = "OK, " + firstname + ".  Thanks for that. " + query.fields.VoiceResponse;
+            }
+        }
+        else {
+            speakText = "I'm sorry.  I didn't catch that.  What is your first name?";
+        }
+
+        sessionAttributes.currentSpeak = speakText;
+        sessionAttributes.currentReprompt = speakText;
+
+        return handlerInput.responseBuilder
+            .speak(speakText)
+            .reprompt(speakText)
             .getResponse();
     }
 };
@@ -978,8 +1033,9 @@ const RequestLog = {
     async process(handlerInput) {
       console.log("REQUEST ENVELOPE = " + JSON.stringify(handlerInput.requestEnvelope));
       var userRecord = await GetUserRecord(handlerInput.requestEnvelope.session.user.userId);
-      await console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
-      UserRecord = userRecord.fields;
+      console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
+      const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+      sessionAttributes.user = userRecord.fields;
       if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
         //await IncrementInteractionCount();
         //await IncrementSessionCount(handlerInput);
@@ -1019,6 +1075,7 @@ exports.handler = dashbot.handler(skillBuilder
         UnsuccessfulPurchaseResponseHandler,
         CancelPurchaseResponseHandler,
         ErrorPurchaseResponseHandler,
+        FirstNameIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
         ) 
