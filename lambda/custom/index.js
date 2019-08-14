@@ -200,7 +200,7 @@ const AnswerIntentHandler = {
             //TODO: RECORD ALL OF THESE INCORRECT SLOT VALUES AS POTENTIAL IMPROVEMENTS FOR OUR SAMPLE UTTERANCES.
             speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
 
-            base("UserWrong").create({
+            airtable("UserWrong").create({
                 "User": [
                     sessionAttributes.user.RecordId
                 ],
