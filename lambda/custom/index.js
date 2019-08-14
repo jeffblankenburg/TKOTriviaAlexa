@@ -47,13 +47,12 @@ const LaunchRequestHandler = {
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
         if (IsFirstVisit) {
             sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
-            speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
-            /*
+            //speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
             return await askTriviaQuestion(handlerInput, category, question, 1, welcome.fields.VoiceResponse);
-            */
+            
         }
         else
         {
@@ -79,7 +78,7 @@ const LaunchRequestHandler = {
             .getResponse();
     }
 };
-
+/*
 const FirstNameIntentHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - FirstNameIntentHandler");
@@ -131,7 +130,7 @@ const FirstNameIntentHandler = {
             .getResponse();
     }
 };
-
+*/
 const AnswerIntentHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - AnswerIntentHandler");
@@ -141,7 +140,14 @@ const AnswerIntentHandler = {
     async handle(handlerInput) {
         console.log("HANDLED - AnswerIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
         var speakText = "This is the Answer Intent.";
+        var answerSlotValue = getSpokenValue(handlerInput, "answer");
+        var wrongSlotValue = getSpokenValue(handlerInput, "wrong");
+        var IsCorrect = false;
+        var slotValue;
+        if (answerSlotValue != undefined) slotValue = answerSlotValue;
+        else if (wrongSlotValue != undefined) slotValue = wrongSlotValue;
 
 
         //TODO: DID WE ASK THE USER A QUESTION?
@@ -150,12 +156,33 @@ const AnswerIntentHandler = {
             //TODO: IF THE USER GOT THE ANSWER CORRECT.
             if (isAnswerCorrect(handlerInput)) {
                 sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo!";
+                IsCorrect = true;
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo! What would you like to do next?";
             }
             else{
                 sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  You're not a good person.";
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  Don't let it affect your self esteem.  What should we do next?";
             }
+
+            
+            await airtable("UserAnswer").create({
+                "User": [
+                  sessionAttributes.user.RecordId
+                ],
+                "Question": [
+                  sessionAttributes.currentQuestion.RecordId
+                ],
+                "IsCorrect": IsCorrect,
+                "SlotValue": slotValue
+              }, async function(err, record) {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+                console.log(record.getId());
+              });
+
+              sessionAttributes.currentQuestion = undefined;
 
                 //TODO: WAS IT A SOLO QUESTION?
 
@@ -170,7 +197,21 @@ const AnswerIntentHandler = {
         //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
         else {
             sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
-            speakText = "You just said " + handlerInput.requestEnvelope.request.intent.slots.answer.value + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
+            //TODO: RECORD ALL OF THESE INCORRECT SLOT VALUES AS POTENTIAL IMPROVEMENTS FOR OUR SAMPLE UTTERANCES.
+            speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
+
+            base("UserWrong").create({
+                "User": [
+                    sessionAttributes.user.RecordId
+                ],
+                "SlotValue": slotValue
+              }, function(err, record) {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+                console.log(record.getId());
+              });
         }
         
         sessionAttributes.currentSpeak = speakText;
@@ -824,6 +865,8 @@ const ErrorPurchaseResponseHandler = {
 async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, speech = "") {
     console.log("ASKING TRIVIA QUESTION.")
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes.currentState = "ASKING QUESTION";
+
     const locale = handlerInput.requestEnvelope.request.locale;
     var ordinalSpeech = "";
     if (ordinal > 0) ordinalSpeech = "<say-as interpret-as='ordinal'>" + ordinal + "</say-as> ";
@@ -935,10 +978,30 @@ function isEntitled(product) {
 }
 
 function isAnswerCorrect(handlerInput){
-    if (((handlerInput.requestEnvelope) && (handlerInput.requestEnvelope.session) && (handlerInput.requestEnvelope.session.attributes) && (handlerInput.requestEnvelope.session.attributes.currentQuestion) && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId))
-    && ((handlerInput.requestEnvelope.request) && (handlerInput.requestEnvelope.request.intent) && (handlerInput.requestEnvelope.request.intent.slots) && (handlerInput.requestEnvelope.request.intent.slots.answer) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0]) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0]) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value) && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.id))
-    && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId ===  handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[0].values[0].value.id)) return true;
+    if (((handlerInput.requestEnvelope)
+    && (handlerInput.requestEnvelope.session)
+    && (handlerInput.requestEnvelope.session.attributes)
+    && (handlerInput.requestEnvelope.session.attributes.currentQuestion)
+    && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId))
+    && ((handlerInput.requestEnvelope.request)
+    && (handlerInput.requestEnvelope.request.intent)
+    && (handlerInput.requestEnvelope.request.intent.slots)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1])
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0])
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value)
+    && (handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id))
+    && (handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId ===  handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id)) {
+        console.log("handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId = " + handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId);
+        console.log("handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id = " + handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id);
+        return true;
+    } 
 
+    //console.log("handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId = " + handlerInput.requestEnvelope.session.attributes.currentQuestion.RecordId);
+    //console.log("handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id = " + handlerInput.requestEnvelope.request.intent.slots.answer.resolutions.resolutionsPerAuthority[1].values[0].value.id);
     return false;
 }
 
@@ -1075,7 +1138,7 @@ exports.handler = dashbot.handler(skillBuilder
         UnsuccessfulPurchaseResponseHandler,
         CancelPurchaseResponseHandler,
         ErrorPurchaseResponseHandler,
-        FirstNameIntentHandler,
+        //FirstNameIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
         ) 
