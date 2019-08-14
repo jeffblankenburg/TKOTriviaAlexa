@@ -48,17 +48,17 @@ const LaunchRequestHandler = {
         if (IsFirstVisit) {
             sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
             //speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
+            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceReponse;
             var category = getRandomCategory();
             var question = await getRandomQuestion(category);
             sessionAttributes.currentQuestion = question.fields;
-            return await askTriviaQuestion(handlerInput, category, question, 1, welcome.fields.VoiceResponse);
-            
+            return await askTriviaQuestion(handlerInput, category, question, 1, speakText);
         }
         else
         {
             sessionAttributes.currentState = "LAUNCHREQUEST - SUBSEQUENTVISIT";
             var query = await getRandomResponse("ActionQuery", locale);
-            speakText = welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
+            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
         }
         
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
@@ -157,11 +157,15 @@ const AnswerIntentHandler = {
             if (isAnswerCorrect(handlerInput)) {
                 sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
                 IsCorrect = true;
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/> You got that one right!  Woo hoo! What would you like to do next?";
+                var correct = await getRandomResponse("AnswerCorrect", locale);
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct + " " + actionQuery;
             }
             else{
                 sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> You got that wrong.  Don't let it affect your self esteem.  What should we do next?";
+                var wrong = await getRandomResponse("AnswerWrong", locale);
+                var actionQuery = await getRandomResponse("ActionQuery", locale);
+                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong + " " + actionQuery;
             }
 
             
