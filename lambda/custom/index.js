@@ -38,10 +38,10 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         console.log("HANDLED - LaunchRequestHandler");
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var speakText = "";
 
-        const locale = handlerInput.requestEnvelope.request.locale;
+        var locale = handlerInput.requestEnvelope.request.locale;
         var welcome = await getRandomResponse("Welcome", locale);
 
         //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
@@ -64,7 +64,7 @@ const LaunchRequestHandler = {
         //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
 
         sessionAttributes.currentSpeak = speakText;
-        sessionAttributes.currentReprompt = speakText;
+        sessionAttributes.currentReprompt = query.fields.VoiceResponse;
 
         //const { deviceId } = handlerInput.requestEnvelope.context.System.device;
         //const deviceAddressServiceClient = handlerInput.serviceClientFactory.getDeviceAddressServiceClient();
@@ -73,7 +73,7 @@ const LaunchRequestHandler = {
         
         return handlerInput.responseBuilder
             .speak(speakText)
-            .reprompt(speakText)
+            .reprompt(query.fields.VoiceResponse)
             //.withAskForPermissionsConsentCard(["read::alexa:device:all:address:country_and_postal_code"])
             .getResponse();
     }
@@ -139,7 +139,8 @@ const AnswerIntentHandler = {
     },
     async handle(handlerInput) {
         console.log("HANDLED - AnswerIntentHandler");
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        var locale = handlerInput.requestEnvelope.request.locale;
         var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
         var speakText = "This is the Answer Intent.";
         var answerSlotValue = getSpokenValue(handlerInput, "answer");
@@ -149,82 +150,98 @@ const AnswerIntentHandler = {
         if (answerSlotValue != undefined) slotValue = answerSlotValue;
         else if (wrongSlotValue != undefined) slotValue = wrongSlotValue;
 
-
-        //TODO: DID WE ASK THE USER A QUESTION?
-        if (sessionAttributes.currentQuestion != undefined) {
-
-            //TODO: IF THE USER GOT THE ANSWER CORRECT.
-            if (isAnswerCorrect(handlerInput)) {
-                sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
-                IsCorrect = true;
-                var correct = await getRandomResponse("AnswerCorrect", locale);
-                var actionQuery = await getRandomResponse("ActionQuery", locale);
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct + " " + actionQuery;
-            }
-            else{
-                sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
-                var wrong = await getRandomResponse("AnswerWrong", locale);
-                var actionQuery = await getRandomResponse("ActionQuery", locale);
-                speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong + " " + actionQuery;
-            }
-
+        var answerNote = "";
+        const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+ 
+        //WE NEED TO DETERMINE IF THEY HAVE A SUBSCRIPTION.
+        return ms.getInSkillProducts(locale).then(async function(res) {
+            var subscription = res.inSkillProducts.find(record => record.referenceName == "all_categories");
+            console.log("SUBSCRIPTION = " + JSON.stringify(subscription));
             
-            await airtable("UserAnswer").create({
-                "User": [
-                  sessionAttributes.user.RecordId
-                ],
-                "Question": [
-                  sessionAttributes.currentQuestion.RecordId
-                ],
-                "IsCorrect": IsCorrect,
-                "SlotValue": slotValue
-              }, async function(err, record) {
-                if (err) {
-                  console.error(err);
-                  return;
+
+            //TODO: DID WE ASK THE USER A QUESTION?
+            if (sessionAttributes.currentQuestion != undefined) {
+
+                //TODO: IF THE USER GOT THE ANSWER CORRECT.
+                if (isAnswerCorrect(handlerInput)) {
+                    sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
+                    if (sessionAttributes.currentQuestion.VoiceAnswerNote != undefined) answerNote = sessionAttributes.currentQuestion.VoiceAnswerNote;
+                    IsCorrect = true;
+                    var correct = await getRandomResponse("AnswerCorrect", locale);
+                    var actionQuery = await getRandomResponse("ActionQuery", locale);
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + " " + answerNote;
                 }
-                console.log(record.getId());
-              });
-
-              sessionAttributes.currentQuestion = undefined;
-
-                //TODO: WAS IT A SOLO QUESTION?
-
-                //TODO: WAS IT PART OF A GAME?
-
-            //TODO: IF THE USER GOT THE ANSWER INCORRECT.
-
-                //TODO: WAS IT A SOLO QUESTION?
-
-                //TODO: WAS IT PART OF A GAME?
-        }
-        //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
-        else {
-            sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
-            //TODO: RECORD ALL OF THESE INCORRECT SLOT VALUES AS POTENTIAL IMPROVEMENTS FOR OUR SAMPLE UTTERANCES.
-            speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
-
-            airtable("UserWrong").create({
-                "User": [
-                    sessionAttributes.user.RecordId
-                ],
-                "SlotValue": slotValue
-              }, function(err, record) {
-                if (err) {
-                  console.error(err);
-                  return;
+                else{
+                    sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
+                    var wrong = await getRandomResponse("AnswerWrong", locale);
+                    var reveal = "";
+                    //IF THEY HAVE THE SUBSCRIPTION, WE TELL THEM WHAT THE RIGHT ANSWER IS WHEN THEY GET IT WRONG.
+                    if (isEntitled(subscription)) {
+                        reveal = await getRandomResponse("AnswerReveal", locale);
+                        reveal = reveal.fields.VoiceResponse.replace("XXXXXXXXXX", sessionAttributes.currentQuestion.VoiceAnswer);
+                    } 
+                    var actionQuery = await getRandomResponse("ActionQuery", locale);
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal;
                 }
-                console.log(record.getId());
-              });
-        }
-        
-        sessionAttributes.currentSpeak = speakText;
-        sessionAttributes.currentReprompt = speakText;
 
-        return handlerInput.responseBuilder
-            .speak(speakText)
-            .reprompt(speakText)
-            .getResponse();
+                //TODO: IF THE USER IS CURRENTLY PLAYING TODAY'S GAME
+                    //TODO: IF THEY QUESTION WRONG, THANK THEM FOR PLAYING, AND END THE GAME.
+                    //TODO: IF THEY GOT THE QUESTION RIGHT, CONTINUE THE GAME
+                        //TODO: IF THAT WASN'T THE LAST QUESTION
+                            //TODO: ASK THE USER THEIR NEXT QUESTION
+                        //TODO: IF IT WAS THE LAST QUESTION, CONGRATULATE THEM FOR WINNING.
+
+                await airtable("UserAnswer").create({
+                    "User": [sessionAttributes.user.RecordId],
+                    "Question": [sessionAttributes.currentQuestion.RecordId],
+                    "IsCorrect": IsCorrect,
+                    "SlotValue": slotValue
+                }, async function(err, record) {
+                    if (err) {
+                    console.error(err);
+                    return;
+                    }
+                    //console.log(record.getId());
+                });
+
+                sessionAttributes.currentQuestion = undefined;
+
+                    //TODO: WAS IT A SOLO QUESTION?
+
+                    //TODO: WAS IT PART OF A GAME?
+
+                //TODO: IF THE USER GOT THE ANSWER INCORRECT.
+
+                    //TODO: WAS IT A SOLO QUESTION?
+
+                    //TODO: WAS IT PART OF A GAME?
+            }
+            //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
+            else {
+                sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
+                //TODO: RECORD ALL OF THESE INCORRECT SLOT VALUES AS POTENTIAL IMPROVEMENTS FOR OUR SAMPLE UTTERANCES.
+                speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
+
+                airtable("UserWrong").create({
+                    "User": [sessionAttributes.user.RecordId],
+                    "SlotValue": slotValue
+                }, function(err, record) {
+                    if (err) {
+                    console.error(err);
+                    return;
+                    }
+                    //console.log(record.getId());
+                });
+            }
+            
+            sessionAttributes.currentSpeak = speakText;
+            sessionAttributes.currentReprompt = actionQuery.fields.VoiceResponse;
+
+            return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt(actionQuery.fields.VoiceResponse)
+                .getResponse();
+            });
     }
 };
 
@@ -237,17 +254,32 @@ const StartGameIntentHandler = {
     async handle(handlerInput) {
         console.log("HANDLED - StartGameIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        //TODO: IS THE USER IN A GAME?
+        //TODO: HAS THE USER ALREADY PLAYED THE GAME?
+        //TODO: IS THE USER ALREADY PLAYING THE GAME?  MAKE SURE WE KEEP THEM ON THE RIGHT QUESTION.
 
-        var speakText = "This is the Start Game Intent.";
+        var event = await getTodaysEvent();
+        sessionAttributes.currentEvent = event.fields;
+        var speakText = "Welcome to today's game, on " + event.fields.Title + "! ";
 
-        sessionAttributes.currentSpeak = speakText;
-        sessionAttributes.currentReprompt = speakText;
+        var eventQuestion = await getEventQuestion(sessionAttributes.currentEvent.EventQuestion[0]);
+        var question = await getSpecificQuestion(eventQuestion.fields.Question);
+        var category = getSpecificCategory(question.fields.Category[0]);
+        sessionAttributes.currentQuestion = question.fields;
 
-        return handlerInput.responseBuilder
-            .speak(speakText)
-            .reprompt(speakText)
-            .getResponse();
+        var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+        airtable('UserEvent').create({
+            "User": [sessionAttributes.user.RecordId],
+            "Event": [sessionAttributes.currentEvent.RecordId]
+          }, function(err, record) {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            //console.log(record.getId());
+          });
+
+
+        return await askTriviaQuestion(handlerInput, category, question, eventQuestion.fields.Order, speakText);
     }
 };
 
@@ -285,15 +317,15 @@ const QuestionIntentHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const locale = handlerInput.requestEnvelope.request.locale;
         //TODO: IS THE USER IN A GAME?
-        var category = getSpecificCategory(handlerInput);
+        var category = getSpecificCategoryFromSlot(handlerInput);
         
         if (category != undefined) {
             const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
             return await ms.getInSkillProducts(locale).then(async function checkForProductAccess(result) {
-                const subscription = result.inSkillProducts.filter(record => record.referenceName === "all_categories");
-                const entitlement = result.inSkillProducts.filter(record => record.referenceName === category.referenceName);
+                const subscription = result.inSkillProducts.find(record => record.referenceName === "all_categories");
+                const entitlement = result.inSkillProducts.find(record => record.referenceName === category.referenceName);
                 //IF THE USER IS NOT ENTITLED TO THIS CATEGORY, OFFER THEM AN UPSELL.
-                if (!isEntitled(subscription, handlerInput) && !isEntitled(entitlement, handlerInput)) {    
+                if (!isEntitled(subscription) && !isEntitled(entitlement)) {    
                     var upsellMessage = await getRandomResponse("Upsell", locale);
                     upsellMessage = upsellMessage.fields.VoiceResponse.replace("XXXXXXXXXX", category.speechName);
 
@@ -326,6 +358,29 @@ const QuestionIntentHandler = {
             sessionAttributes.currentQuestion = question.fields;
             return await askTriviaQuestion(handlerInput, category, question);
         }
+    }
+};
+
+const SpecificQuestionIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - SpecificQuestionIntentHandler");
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === "SpecificQuestionIntent";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - SpecificQuestionIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        //TODO: IS THE USER IN A GAME?
+        var category = getSpecificCategoryFromSlot(handlerInput);
+        var number = handlerInput.requestEnvelope.request.intent.slots.number.value;
+        console.log("CATEGORY = " + JSON.stringify(category));
+        console.log("NUMBER = " + JSON.stringify(number));
+        
+        sessionAttributes.currentState = "SPECIFICQUESTIONINTENT - SPECIFIC";
+        var question = await getVerySpecificQuestion(category, number);
+        sessionAttributes.currentQuestion = question.fields;
+        return await askTriviaQuestion(handlerInput, category, question);
     }
 };
 
@@ -392,7 +447,7 @@ const BuyProductHandler = {
         const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
  
         return ms.getInSkillProducts(locale).then(async function(res) {
-            var category = getSpecificCategory(handlerInput);
+            var category = getSpecificCategoryFromSlot(handlerInput);
 
             if (category != undefined) {
                 var product = res.inSkillProducts.find(record => record.referenceName == category.referenceName);
@@ -459,7 +514,7 @@ const CancelProductHandler = {
         const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
  
         return ms.getInSkillProducts(locale).then(async function(res) {
-            var category = getSpecificCategory(handlerInput);
+            var category = getSpecificCategoryFromSlot(handlerInput);
 
             if (category != undefined) {
                 var product = res.inSkillProducts.find(record => record.referenceName == category.referenceName);
@@ -636,6 +691,7 @@ const SessionEndedRequestHandler = {
     handle(handlerInput) {
         console.log("HANDLED - SessionEndedRequestHandler");
         // Any cleanup logic goes here.
+        //TODO: IF I ASKED THE USER A QUESTION, BUT THEY EXIT, MARK THEIR RESPONSE AS INCORRECT.
         return handlerInput.responseBuilder.getResponse();
     }
 };
@@ -695,7 +751,7 @@ const SuccessfulPurchaseResponseHandler = {
         console.log("CANHANDLE - SuccessfulPurchaseResponseHandler");
         return handlerInput.requestEnvelope.request.type === "Connections.Response"
             && (handlerInput.requestEnvelope.request.name === "Buy" || handlerInput.requestEnvelope.request.name === "Upsell")
-            && handlerInput.requestEnvelope.request.payload.purchaseResult == 'ACCEPTED';
+            && (handlerInput.requestEnvelope.request.payload.purchaseResult == "ACCEPTED" || handlerInput.requestEnvelope.request.payload.purchaseResult == "ALREADY_PURCHASED");
     },
     async handle(handlerInput) {
         console.log("HANDLE - SuccessfulPurchaseResponseHandler");
@@ -874,8 +930,8 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
     const locale = handlerInput.requestEnvelope.request.locale;
     var ordinalSpeech = "";
     if (ordinal > 0) ordinalSpeech = "<say-as interpret-as='ordinal'>" + ordinal + "</say-as> ";
-
-    var speakText = speech + "<break time='.5s'/>Here's your " + ordinalSpeech + "question, from the " + category.speechName + " category.<audio src='https://s3.amazonaws.com/tko-trivia/audio/" + category.referenceName + ".mp3' /><break time='.25s'/>" + question.fields.VoiceQuestion;
+    var answerPrompt = await getRandomResponse("AnswerPrompt", locale);
+    var speakText = speech + "<break time='.5s'/>Here's your " + ordinalSpeech + "question, from the " + category.speechName + " category.<audio src='https://s3.amazonaws.com/tko-trivia/audio/" + category.referenceName + ".mp3' /><break time='.25s'/>" + question.fields.VoiceQuestion + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_waiting_loop_30s_01'/>" + answerPrompt.fields.VoiceResponse;
 
     sessionAttributes.currentSpeak = speakText;
     sessionAttributes.currentReprompt = question.fields.VoiceQuestion;
@@ -922,11 +978,37 @@ async function getRandomQuestion(category) {
     return question;
 }
 
+async function getVerySpecificQuestion(category, number) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,Number%3D" + number + ")", "Question");
+    const question = response.records[0];
+    console.log("SPECIFIC QUESTION = " + JSON.stringify(question));
+    return question;
+}
+
+async function getTodaysEvent() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy + "-" + mm + "-" + dd;//mm + '/' + dd + '/' + yyyy;
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(EventDate)%3D%22" + encodeURIComponent(today) + "%22)", "Event");
+    var event = response.records[0];
+    console.log("TODAY'S EVENT = " + JSON.stringify(event));
+    return event;
+}
+
 async function getSpecificQuestion(recordId) {
     const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),RecordId%3D%22" + encodeURIComponent(recordId) + "%22)", "Question");
     const question = getRandomItem(response.records);
     console.log("SPECIFIC QUESTION = " + JSON.stringify(question));
     return question;
+}
+
+async function getEventQuestion(recordId) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),RecordId%3D%22" + encodeURIComponent(recordId) + "%22)", "EventQuestion");
+    const eventQuestion = getRandomItem(response.records);
+    console.log("EVENT QUESTION = " + JSON.stringify(eventQuestion));
+    return eventQuestion;
 }
 
 async function getRandomResponse(type, locale) {
@@ -937,7 +1019,11 @@ async function getRandomResponse(type, locale) {
     return response;
 }
 
-function getSpecificCategory(handlerInput)
+function getSpecificCategory(record) {
+    return categories.find(o => o.id === record);
+}
+
+function getSpecificCategoryFromSlot(handlerInput)
 {
     console.log("GETTING SPECIFIC CATEGORY")
     if (handlerInput.requestEnvelope
@@ -974,11 +1060,11 @@ function getRandom(min, max){
 }
 
 function isProduct(product) {
-    return product && product.length > 0;
+    return product && Object.keys(product).length > 0;
 }
 
 function isEntitled(product) {
-    return isProduct(product) && product[0].entitled === 'ENTITLED';
+    return isProduct(product) && product.entitled === "ENTITLED";
 }
 
 function isAnswerCorrect(handlerInput){
@@ -1142,6 +1228,7 @@ exports.handler = dashbot.handler(skillBuilder
         UnsuccessfulPurchaseResponseHandler,
         CancelPurchaseResponseHandler,
         ErrorPurchaseResponseHandler,
+        SpecificQuestionIntentHandler,
         //FirstNameIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers

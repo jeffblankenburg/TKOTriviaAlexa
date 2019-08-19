@@ -70,6 +70,23 @@
                   "samples": []
               },
               {
+                "name": "SpecificQuestionIntent",
+                "slots": [
+                    {
+                        "name": "category",
+                        "type": "Category"
+                    },
+                    {
+                        "name": "number",
+                        "type": "AMAZON.NUMBER"
+                    }
+                ],
+                "samples": [
+                    "give me {category} {number}",
+                    "{category} {number}"
+                ]
+            },
+              {
                 "name": "QuestionIntent",
                 "slots": [
                     {
@@ -79,8 +96,11 @@
                 ],
                 "samples": [
                     "question",
+                    "{category} question",
                     "ask me a question",
+                    "ask me a trivia question",
                     "give me a question",
+                    "give me a trivia question",
                     "give me a random question",
                     "Give me a {category} question",
                     "Give me a question from {category}",
