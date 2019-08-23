@@ -1,5 +1,6 @@
 //TODO: MAKE SURE EVERY SPEECH OBJECT IS SAVED TO THE SESSION, SO THAT THE REPEAT FUNCTION WORKS PROPERLY.
-//MAKE SURE TO CONSOLE.LOG EVERY INTENT HANDLER FUNCTION.
+//TODO: MAKE SURE TO CONSOLE.LOG EVERY INTENT HANDLER FUNCTION.
+//TODO: MAKE SURE ALL CONTENT REQUESTS INCLUDE A LOCALE.
 
 const Alexa = require("ask-sdk-core");
 const https = require("https");
@@ -44,13 +45,12 @@ const LaunchRequestHandler = {
         var locale = handlerInput.requestEnvelope.request.locale;
         var welcome = await getRandomResponse("Welcome", locale);
 
-        //IF THIS IS THEIR FIRST TIME USING THE SKILL, START THEM WITH A QUESTION.
         if (IsFirstVisit) {
             sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
             //speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
             speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceReponse;
             var category = getRandomCategory();
-            var question = await getRandomQuestion(category);
+            var question = await getRandomQuestion(category, locale);
             sessionAttributes.currentQuestion = question.fields;
             return await askTriviaQuestion(handlerInput, category, question, 1, speakText);
         }
@@ -60,8 +60,6 @@ const LaunchRequestHandler = {
             var query = await getRandomResponse("ActionQuery", locale);
             speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
         }
-        
-        //TODO: IF THEY WERE IN THE MIDDLE OF A GAME, RESUME THE GAME.
 
         sessionAttributes.currentSpeak = speakText;
         sessionAttributes.currentReprompt = query.fields.VoiceResponse;
@@ -146,6 +144,7 @@ const AnswerIntentHandler = {
         var answerSlotValue = getSpokenValue(handlerInput, "answer");
         var wrongSlotValue = getSpokenValue(handlerInput, "wrong");
         var IsCorrect = false;
+        var points = 10;
         var slotValue;
         if (answerSlotValue != undefined) slotValue = answerSlotValue;
         else if (wrongSlotValue != undefined) slotValue = wrongSlotValue;
@@ -153,83 +152,107 @@ const AnswerIntentHandler = {
         var answerNote = "";
         const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
  
-        //WE NEED TO DETERMINE IF THEY HAVE A SUBSCRIPTION.
         return ms.getInSkillProducts(locale).then(async function(res) {
             var subscription = res.inSkillProducts.find(record => record.referenceName == "all_categories");
             console.log("SUBSCRIPTION = " + JSON.stringify(subscription));
+            var actionQuery = await getRandomResponse("ActionQuery", locale);
             
-
-            //TODO: DID WE ASK THE USER A QUESTION?
             if (sessionAttributes.currentQuestion != undefined) {
-
-                //TODO: IF THE USER GOT THE ANSWER CORRECT.
                 if (isAnswerCorrect(handlerInput)) {
                     sessionAttributes.currentState = "ANSWERINTENT - CORRECTANSWER";
                     if (sessionAttributes.currentQuestion.VoiceAnswerNote != undefined) answerNote = sessionAttributes.currentQuestion.VoiceAnswerNote;
                     IsCorrect = true;
+                    if (sessionAttributes.currentEvent != undefined) points = 100;
                     var correct = await getRandomResponse("AnswerCorrect", locale);
-                    var actionQuery = await getRandomResponse("ActionQuery", locale);
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + " " + answerNote;
+                    var scoredPoints = await getRandomResponse("ScoredPoints", locale);
+                    scoredPoints = scoredPoints.fields.VoiceResponse.replace("XXXXXXXXXX", points);
+                    var levelUp = "";
+                    var nextLevel = (parseInt(sessionAttributes.user.CurrentLevel)+1) * 1000;
+                    var userPoints = await getUserPoints(sessionAttributes.user.RecordId);
+                    console.log("USER POINTS = " + (parseInt(userPoints) + parseInt(points)));
+                    console.log("NEXT LEVEL = " + nextLevel);
+                    if ((parseInt(userPoints) + parseInt(points)) >= nextLevel) {
+                        levelUp = "Congratulations!  You are now Level " + (sessionAttributes.user.CurrentLevel+1) + " ";
+
+                        await airtable('User').update(sessionAttributes.user.RecordId, {
+                            "CurrentLevel": parseInt(sessionAttributes.user.CurrentLevel)+1,
+                          }, function(err, record) {
+                            if (err) {
+                              console.error(err);
+                              return;
+                            }
+                            //console.log(record.get('UserId'));
+                          });
+                    }
+
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + " " + levelUp + " " + answerNote;
                 }
                 else{
+                    //TODO: IF THE USER'S LEVEL IS GREATER THAN OR EQUAL TO THE QUESTION, THEY AUTOMATICALLY GET IT CORRECT.
+                    //TODO: WE NEED TO SOMEHOW DISAMBIGUATE BETWEEN GETTING IT CORRECT, AND GETTING A PASS FOR IT BECAUSE OF LEVEL.
                     sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
                     var wrong = await getRandomResponse("AnswerWrong", locale);
                     var reveal = "";
-                    //IF THEY HAVE THE SUBSCRIPTION, WE TELL THEM WHAT THE RIGHT ANSWER IS WHEN THEY GET IT WRONG.
                     if (isEntitled(subscription)) {
                         reveal = await getRandomResponse("AnswerReveal", locale);
                         reveal = reveal.fields.VoiceResponse.replace("XXXXXXXXXX", sessionAttributes.currentQuestion.VoiceAnswer);
                     } 
-                    var actionQuery = await getRandomResponse("ActionQuery", locale);
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal;
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal + " ";
                 }
 
-                //TODO: IF THE USER IS CURRENTLY PLAYING TODAY'S GAME
-                    //TODO: IF THEY QUESTION WRONG, THANK THEM FOR PLAYING, AND END THE GAME.
-                    //TODO: IF THEY GOT THE QUESTION RIGHT, CONTINUE THE GAME
-                        //TODO: IF THAT WASN'T THE LAST QUESTION
-                            //TODO: ASK THE USER THEIR NEXT QUESTION
-                        //TODO: IF IT WAS THE LAST QUESTION, CONGRATULATE THEM FOR WINNING.
-
+                if (!IsCorrect) points = 0;
+                    
                 await airtable("UserAnswer").create({
                     "User": [sessionAttributes.user.RecordId],
                     "Question": [sessionAttributes.currentQuestion.RecordId],
                     "IsCorrect": IsCorrect,
-                    "SlotValue": slotValue
-                }, async function(err, record) {
-                    if (err) {
-                    console.error(err);
-                    return;
-                    }
-                    //console.log(record.getId());
-                });
+                    "SlotValue": slotValue,
+                    "Points": points
+                }, async function(err, record) {if (err) {console.error(err);return;}//console.log(record.getId());
+            });
 
                 sessionAttributes.currentQuestion = undefined;
 
-                    //TODO: WAS IT A SOLO QUESTION?
+                if (sessionAttributes.currentEvent != undefined) {
+                    if (IsCorrect) {
+                        sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].IsCorrect = true;
+                        //sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Points = 100;
+                        sessionAttributes.currentEvent.CurrentQuestion++;
 
-                    //TODO: WAS IT PART OF A GAME?
-
-                //TODO: IF THE USER GOT THE ANSWER INCORRECT.
-
-                    //TODO: WAS IT A SOLO QUESTION?
-
-                    //TODO: WAS IT PART OF A GAME?
+                        if (sessionAttributes.currentEvent.CurrentQuestion < sessionAttributes.currentEvent.EventQuestion.length) {
+                            console.log("CORRECT GAME ANSWER!  TIME FOR NEXT QUESTION!");
+                            var question = await getSpecificQuestion(sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Question, locale);
+                            var category = getSpecificCategory(question.fields.Category[0]);
+                            var order = sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Order;
+                            sessionAttributes.currentQuestion = question.fields;
+                            return await askTriviaQuestion(handlerInput, category, question, order, speakText);
+                        }
+                        else {
+                            //TODO: IF IT WAS THE LAST QUESTION, CONGRATULATE THEM FOR WINNING.
+                            console.log("LAST QUESTION.  CELEBRATE!");
+                        }
+                    }
+                    else {
+                        sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].IsCorrect = false;
+                        sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Points = 0;
+                        //TODO: IF THEY QUESTION WRONG, THANK THEM FOR PLAYING, AND END THE GAME.
+                        //TODO: SHOULD SUMMARIZE THEIR GAME.  YOU GOT 4 QUESTIONS THIS TIME!  NEW RECORD!
+                        console.log("WRONG ANSWER IN GAME.  GOODBYE!");
+                    }   
+                }
+                else {
+                    speakText = speakText + actionQuery.fields.VoiceResponse;
+                }
             }
-            //TODO: WE DIDN'T ASK THE USER A QUESTION.  WE SHOULD BE CONFUSED.
             else {
                 sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
-                //TODO: RECORD ALL OF THESE INCORRECT SLOT VALUES AS POTENTIAL IMPROVEMENTS FOR OUR SAMPLE UTTERANCES.
                 speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
 
-                airtable("UserWrong").create({
+                await airtable("UserWrong").create({
                     "User": [sessionAttributes.user.RecordId],
                     "SlotValue": slotValue
                 }, function(err, record) {
-                    if (err) {
-                    console.error(err);
-                    return;
-                    }
+                    if (err) { console.error(err); return;}
                     //console.log(record.getId());
                 });
             }
@@ -254,20 +277,25 @@ const StartGameIntentHandler = {
     async handle(handlerInput) {
         console.log("HANDLED - StartGameIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        var locale = handlerInput.requestEnvelope.request.locale;
         //TODO: HAS THE USER ALREADY PLAYED THE GAME?
         //TODO: IS THE USER ALREADY PLAYING THE GAME?  MAKE SURE WE KEEP THEM ON THE RIGHT QUESTION.
 
         var event = await getTodaysEvent();
+        
         sessionAttributes.currentEvent = event.fields;
         var speakText = "Welcome to today's game, on " + event.fields.Title + "! ";
 
-        var eventQuestion = await getEventQuestion(sessionAttributes.currentEvent.EventQuestion[0]);
-        var question = await getSpecificQuestion(eventQuestion.fields.Question);
+        console.log("SESSION ATTRIBUTES = " + JSON.stringify(sessionAttributes));
+        //var eventQuestion = await getEventQuestion(sessionAttributes.currentEvent.EventQuestion[0].Question);
+        var question = await getSpecificQuestion(sessionAttributes.currentEvent.EventQuestion[0].Question, locale);
         var category = getSpecificCategory(question.fields.Category[0]);
+        var order = sessionAttributes.currentEvent.EventQuestion[0].Order;
+        sessionAttributes.currentEvent.CurrentQuestion = 0;
         sessionAttributes.currentQuestion = question.fields;
 
         var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
-        airtable('UserEvent').create({
+        await airtable('UserEvent').create({
             "User": [sessionAttributes.user.RecordId],
             "Event": [sessionAttributes.currentEvent.RecordId]
           }, function(err, record) {
@@ -278,8 +306,7 @@ const StartGameIntentHandler = {
             //console.log(record.getId());
           });
 
-
-        return await askTriviaQuestion(handlerInput, category, question, eventQuestion.fields.Order, speakText);
+        return await askTriviaQuestion(handlerInput, category, question, order, speakText);
     }
 };
 
@@ -345,7 +372,7 @@ const QuestionIntentHandler = {
                 }
                 else {
                     sessionAttributes.currentState = "QUESTIONINTENT - CATEGORY - ENTITLED";
-                    var question = await getRandomQuestion(category);
+                    var question = await getRandomQuestion(category, locale);
                     sessionAttributes.currentQuestion = question.fields;
                     return await askTriviaQuestion(handlerInput, category, question);
                 }
@@ -354,7 +381,7 @@ const QuestionIntentHandler = {
         else {
             sessionAttributes.currentState = "QUESTIONINTENT - RANDOM";
             category = getRandomCategory();
-            var question = await getRandomQuestion(category);
+            var question = await getRandomQuestion(category, locale);
             sessionAttributes.currentQuestion = question.fields;
             return await askTriviaQuestion(handlerInput, category, question);
         }
@@ -378,7 +405,7 @@ const SpecificQuestionIntentHandler = {
         console.log("NUMBER = " + JSON.stringify(number));
         
         sessionAttributes.currentState = "SPECIFICQUESTIONINTENT - SPECIFIC";
-        var question = await getVerySpecificQuestion(category, number);
+        var question = await getVerySpecificQuestion(category, number, locale);
         sessionAttributes.currentQuestion = question.fields;
         return await askTriviaQuestion(handlerInput, category, question);
     }
@@ -783,7 +810,7 @@ const SuccessfulPurchaseResponseHandler = {
                     sessionAttributes.currentState = "CONNECTIONS.RESPONSE - " + handlerInput.requestEnvelope.request.name.toUpperCase() + " - CATEGORY - ACCEPTED";
                     var category = categories.find(o => o.productId === productId);
                     var speakText = "You can now say things like, ask me a " + category.speechName + " question, any time!";
-                    var question = await getRandomQuestion(category);
+                    var question = await getRandomQuestion(category, locale);
                     sessionAttributes.currentQuestion = question.fields;
                     return await askTriviaQuestion(handlerInput, category, question, 0, speakText);
                 }
@@ -971,15 +998,15 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
         .getResponse();
 }
 
-async function getRandomQuestion(category) {
-    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22)", "Question");
+async function getRandomQuestion(category, locale) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,FIND(%22" + locale + "%22%2C+Locale)!%3D0)", "Question");
     const question = getRandomItem(response.records);
     console.log("RANDOM QUESTION = " + JSON.stringify(question));
     return question;
 }
 
-async function getVerySpecificQuestion(category, number) {
-    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,Number%3D" + number + ")", "Question");
+async function getVerySpecificQuestion(category, number, locale) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,Number%3D" + number + ",FIND(%22" + locale + "%22%2C+Locale)!%3D0)", "Question");
     const question = response.records[0];
     console.log("SPECIFIC QUESTION = " + JSON.stringify(question));
     return question;
@@ -990,15 +1017,23 @@ async function getTodaysEvent() {
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    today = yyyy + "-" + mm + "-" + dd;//mm + '/' + dd + '/' + yyyy;
-    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(EventDate)%3D%22" + encodeURIComponent(today) + "%22)", "Event");
+    today = yyyy + "-" + mm + "-" + dd;
+    var response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(EventDate)%3D%22" + encodeURIComponent(today) + "%22)", "Event");
     var event = response.records[0];
+    //TODO: YOU ALSO NEED TO GET THE RECORDS FROM EVENT_QUESTION, BECAUSE OTHERWISE YOU WON'T KNOW WHAT THE ORDER OF THE QUESTIONS IS, JACKASS.
+    response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(Event)%3D%22" + encodeURIComponent(today) + "%22)&sort%5B0%5D%5Bfield%5D=Order&sort%5B0%5D%5Bdirection%5D=asc", "EventQuestion");
+    event.fields.EventQuestion.length = 0;
+    response.records.forEach(function(q) {
+        var eventQuestion = {"Question": q.fields.Question[0], "Order": q.fields.Order};
+        event.fields.EventQuestion.push(eventQuestion);
+    });
+    //event.fields.EventQuestion = response.records;
     console.log("TODAY'S EVENT = " + JSON.stringify(event));
     return event;
 }
 
-async function getSpecificQuestion(recordId) {
-    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),RecordId%3D%22" + encodeURIComponent(recordId) + "%22)", "Question");
+async function getSpecificQuestion(recordId, locale) {
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),RecordId%3D%22" + encodeURIComponent(recordId) + "%22,FIND(%22" + locale + "%22%2C+Locale)!%3D0)", "Question");
     const question = getRandomItem(response.records);
     console.log("SPECIFIC QUESTION = " + JSON.stringify(question));
     return question;
@@ -1019,8 +1054,29 @@ async function getRandomResponse(type, locale) {
     return response;
 }
 
+async function getUserPoints(recordId) {
+    console.log("GETTING USER POINT TOTAL FOR USER ID = " + recordId);
+    var firstOfThisMonth = getFirstOfThisMonth();
+    console.log("GETTING USER POINT TOTAL FOR SCORES AFTER = " + firstOfThisMonth);
+    const result = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(recordId) + "%22,IS_AFTER(Timestamp,%22" + encodeURIComponent(firstOfThisMonth) + "%22))", "UserAnswer");
+    var pointTotal = 0;
+    result.records.forEach(function(q) {
+        pointTotal += q.fields.Points;
+    });
+    console.log("POINT TOTAL = " + pointTotal);
+    return pointTotal;
+}
+
 function getSpecificCategory(record) {
     return categories.find(o => o.id === record);
+}
+
+function getFirstOfThisMonth() {
+    var today = new Date();
+    var dd = 1;
+    var mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
 }
 
 function getSpecificCategoryFromSlot(handlerInput)
@@ -1118,6 +1174,12 @@ function getResolvedValues(handlerInput, slotName) {
     return undefined;
 }
 
+async function recordUserSession(userId){
+    var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+    await airtable('UserSession').create({"User": [userId]}, function(err, record) {if (err) {console.error(err);}});
+    return;
+}
+
 async function GetUserRecord(userId) {
   console.log("GETTING USER RECORD")
   var filter = "&filterByFormula=%7BUserId%7D%3D%22" + encodeURIComponent(userId) + "%22";
@@ -1154,16 +1216,19 @@ function httpGet(base, filter, table = "Data"){
         path: "/v0/" + base + "/" + table + "?api_key=" + process.env.airtable_key + filter,
         method: "GET",
     };
+
+    console.log("FULL PATH = http://" + options.host + options.path);
     
     return new Promise(((resolve, reject) => {
       const request = https.request(options, (response) => {
         response.setEncoding("utf8");
         let returnData = "";
+
   
         if (response.statusCode < 200 || response.statusCode >= 300) {
           return reject(new Error(`${response.statusCode}: ${response.req.getHeader("host")} ${response.req.path}`));
         }
-        console.log("FULL PATH = http://" + options.host + options.path);
+        
         //console.log("HTTPS REQUEST OPTIONS = " + JSON.stringify(options));
   
         response.on("data", (chunk) => {
@@ -1184,17 +1249,21 @@ function httpGet(base, filter, table = "Data"){
 
 const RequestLog = {
     async process(handlerInput) {
-      console.log("REQUEST ENVELOPE = " + JSON.stringify(handlerInput.requestEnvelope));
-      var userRecord = await GetUserRecord(handlerInput.requestEnvelope.session.user.userId);
-      console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
-      const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-      sessionAttributes.user = userRecord.fields;
-      if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
+        console.log("REQUEST ENVELOPE = " + JSON.stringify(handlerInput.requestEnvelope));
+        var userRecord = await GetUserRecord(handlerInput.requestEnvelope.session.user.userId);
+        console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.user = userRecord.fields;
+
+        if (handlerInput.requestEnvelope.session.new === true) await recordUserSession(sessionAttributes.user.RecordId);
+
+
+        if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
         //await IncrementInteractionCount();
         //await IncrementSessionCount(handlerInput);
         //CheckForAchievements(handlerInput);
-      }
-      return;
+        }
+        return;
     }
   };
   
