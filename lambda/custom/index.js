@@ -68,12 +68,13 @@ const LaunchRequestHandler = {
         //const deviceAddressServiceClient = handlerInput.serviceClientFactory.getDeviceAddressServiceClient();
         //const address = await deviceAddressServiceClient.getCountryAndPostalCode(deviceId);
         //console.log("ADDRESS:" + JSON.stringify(address));
-        
-        return handlerInput.responseBuilder
-            .speak(speakText)
-            .reprompt(query.fields.VoiceResponse)
-            //.withAskForPermissionsConsentCard(["read::alexa:device:all:address:country_and_postal_code"])
-            .getResponse();
+
+
+
+        var rb = handlerInput.responseBuilder;
+        rb.speak(speakText);
+        rb.reprompt(query.fields.VoiceResponse)
+        return rb.getResponse();
     }
 };
 /*
@@ -185,23 +186,28 @@ const AnswerIntentHandler = {
                           });
                     }
 
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + " " + levelUp + " " + answerNote;
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + " " + levelUp + " " + answerNote + " ";
                 }
                 else{
-                    //TODO: IF THE USER'S LEVEL IS GREATER THAN OR EQUAL TO THE QUESTION, THEY AUTOMATICALLY GET IT CORRECT.
-                    //TODO: WE NEED TO SOMEHOW DISAMBIGUATE BETWEEN GETTING IT CORRECT, AND GETTING A PASS FOR IT BECAUSE OF LEVEL.
+                    var levelContinuation = "";
+                    if (sessionAttributes.currentEvent != undefined) {
+                        if (parseInt(sessionAttributes.user.CurrentLevel) >= parseInt(sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Order)) {
+                            IsCorrect = true;
+                            var savedMessage = await getRandomResponse("LevelSaved", locale);
+                            levelContinuation = savedMessage.fields.VoiceResponse.replace("XXXXXXXXXX", sessionAttributes.user.CurrentLevel);
+                        }
+                    }
                     sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
                     var wrong = await getRandomResponse("AnswerWrong", locale);
                     var reveal = "";
                     if (isEntitled(subscription)) {
                         reveal = await getRandomResponse("AnswerReveal", locale);
                         reveal = reveal.fields.VoiceResponse.replace("XXXXXXXXXX", sessionAttributes.currentQuestion.VoiceAnswer);
-                    } 
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal + " ";
+                    }
+                    points = 0;
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal + " " + levelContinuation + " ";
                 }
 
-                if (!IsCorrect) points = 0;
-                    
                 await airtable("UserAnswer").create({
                     "User": [sessionAttributes.user.RecordId],
                     "Question": [sessionAttributes.currentQuestion.RecordId],
@@ -210,8 +216,6 @@ const AnswerIntentHandler = {
                     "Points": points
                 }, async function(err, record) {if (err) {console.error(err);return;}//console.log(record.getId());
             });
-
-                sessionAttributes.currentQuestion = undefined;
 
                 if (sessionAttributes.currentEvent != undefined) {
                     if (IsCorrect) {
@@ -235,6 +239,8 @@ const AnswerIntentHandler = {
                     else {
                         sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].IsCorrect = false;
                         sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Points = 0;
+                        speakText = speakText + " Well, that's the end of today's game for you, but check back tomorrow for a brand new event! " + actionQuery.fields.VoiceResponse
+                        sessionAttributes.currentEvent = undefined;
                         //TODO: IF THEY QUESTION WRONG, THANK THEM FOR PLAYING, AND END THE GAME.
                         //TODO: SHOULD SUMMARIZE THEIR GAME.  YOU GOT 4 QUESTIONS THIS TIME!  NEW RECORD!
                         console.log("WRONG ANSWER IN GAME.  GOODBYE!");
@@ -260,10 +266,15 @@ const AnswerIntentHandler = {
             sessionAttributes.currentSpeak = speakText;
             sessionAttributes.currentReprompt = actionQuery.fields.VoiceResponse;
 
-            return handlerInput.responseBuilder
-                .speak(speakText)
-                .reprompt(actionQuery.fields.VoiceResponse)
-                .getResponse();
+            var rb = handlerInput.responseBuilder;
+            rb.speak(speakText);
+            rb.reprompt(actionQuery.fields.VoiceResponse)
+            if (IsCorrect || isEntitled(subscription)) {
+                rb.withStandardCard(sessionAttributes.currentQuestion.CardAnswer, sessionAttributes.currentQuestion.CardAnswer, sessionAttributes.currentQuestion.Image[0].thumbnails.full.url, sessionAttributes.currentQuestion.Image[0].thumbnails.full.url);
+            }
+            rb = addAPL(rb, handlerInput, "answer");
+            sessionAttributes.currentQuestion = undefined;
+            return rb.getResponse();
             });
     }
 };
@@ -279,8 +290,20 @@ const StartGameIntentHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var locale = handlerInput.requestEnvelope.request.locale;
         //TODO: HAS THE USER ALREADY PLAYED THE GAME?
-        //TODO: IS THE USER ALREADY PLAYING THE GAME?  MAKE SURE WE KEEP THEM ON THE RIGHT QUESTION.
+        var userAlreadyPlayed = await didUserAlreadyPlay(sessionAttributes.user.RecordId);
+        if (userAlreadyPlayed) {
+            var actionQuery = await getRandomResponse("ActionQuery", locale);
+            var alreadyPlayed = await getRandomResponse("AlreadyPlayed", locale);
+            var speakText = alreadyPlayed.fields.VoiceResponse + " " + actionQuery.fields.VoiceResponse;
+            
+            sessionAttributes.currentSpeak = speakText;
+            sessionAttributes.currentReprompt = actionQuery.fields.VoiceResponse;
 
+            return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt(actionQuery.fields.VoiceResponse)
+                .getResponse();
+        }
         var event = await getTodaysEvent();
         
         sessionAttributes.currentEvent = event.fields;
@@ -345,6 +368,7 @@ const QuestionIntentHandler = {
         const locale = handlerInput.requestEnvelope.request.locale;
         //TODO: IS THE USER IN A GAME?
         var category = getSpecificCategoryFromSlot(handlerInput);
+        sessionAttributes.currentEvent = undefined;
         
         if (category != undefined) {
             const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
@@ -1013,11 +1037,7 @@ async function getVerySpecificQuestion(category, number, locale) {
 }
 
 async function getTodaysEvent() {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    today = yyyy + "-" + mm + "-" + dd;
+    var today = getToday();
     var response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(EventDate)%3D%22" + encodeURIComponent(today) + "%22)", "Event");
     var event = response.records[0];
     //TODO: YOU ALSO NEED TO GET THE RECORDS FROM EVENT_QUESTION, BECAUSE OTHERWISE YOU WON'T KNOW WHAT THE ORDER OF THE QUESTIONS IS, JACKASS.
@@ -1030,6 +1050,21 @@ async function getTodaysEvent() {
     //event.fields.EventQuestion = response.records;
     console.log("TODAY'S EVENT = " + JSON.stringify(event));
     return event;
+}
+
+async function didUserAlreadyPlay(userId) {
+    var today = getToday();
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(userId) + "%22,DATESTR(Event)%3D%22" + encodeURIComponent(today) + "%22)", "UserEvent");
+    if (response.records.length > 0) return true;
+    else return false;
+}
+
+function getToday() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
 }
 
 async function getSpecificQuestion(recordId, locale) {
@@ -1172,6 +1207,71 @@ function getResolvedValues(handlerInput, slotName) {
         (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0]) &&
         (handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0].values)) return handlerInput.requestEnvelope.request.intent.slots[slotName].resolutions.resolutionsPerAuthority[0].values;
     return undefined;
+}
+
+function addSplashScreen(rb, handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    
+    if (supportsDisplay(handlerInput)) {
+        const image = new Alexa.ImageHelper().addImageInstance("https://tko-trivia.s3.amazonaws.com/art/large_logo.png").getImage();
+        const background = new Alexa.ImageHelper().addImageInstance("https://tko-trivia.s3.amazonaws.com/art/background.png").getImage();
+        const title = "TKO Trivia";
+        
+        rb.addRenderTemplateDirective({
+            type: "BodyTemplate7",
+            backButton: "HIDDEN",
+            backgroundImage: background,
+            image,
+            title: ""
+        }).addHintDirective("play today's game");
+        return rb;
+    }
+    else return rb;
+}
+
+function supportsDisplay(handlerInput) {
+    var hasDisplay =
+      handlerInput.requestEnvelope.context &&
+      handlerInput.requestEnvelope.context.Viewport &&
+      handlerInput.requestEnvelope.context.Viewport.mode &&
+      handlerInput.requestEnvelope.context.Viewport.mode === "HUB"
+    return hasDisplay;
+}
+
+function addAPL(rb, handlerInput, type) {
+    if (handlerInput.requestEnvelope.context.System.device.supportedInterfaces["Alexa.Presentation.APL"] != undefined) {
+        var apl;
+        switch(type) {
+            case "splash":
+
+            break;
+            case "cheese":
+                
+            break;
+            case "answer":
+                apl = getAnswerAPL(handlerInput);
+            break;
+            case "question":
+
+            break;
+        }
+        //apl.mainTemplate.items[0].text = "Jeff Blankenburg";
+        rb.addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            token: '[SkillProvidedToken]',
+            version: '1.0',
+            document: apl,
+            datasources: {}
+        })
+    }
+    return rb;
+}
+
+function getAnswerAPL(handlerInput) {
+    var apl = require("apl/answer.json");
+    var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
+    return apl;
 }
 
 async function recordUserSession(userId){

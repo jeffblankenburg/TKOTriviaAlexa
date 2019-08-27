@@ -23,7 +23,12 @@
         "endpoint": {
           "sourceDir": "lambda/custom",
           "uri": "TKOTriviaAlexa"
-        }
+        },
+        "interfaces": [
+          {
+            "type":"ALEXA_PRESENTATION_APL"
+          } 
+        ]
       }
     },
     "manifestVersion": "1.0"

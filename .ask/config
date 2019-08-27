@@ -6,11 +6,11 @@
       "merge": {},
       "resources": {
         "manifest": {
-          "eTag": "f98425d1b2b725bcbd49881b30c35c49"
+          "eTag": "f69e5341375695fd00e3d4926b089d93"
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "7eda35b9a0f267312e9d6daabb4270ed"
+            "eTag": "f5f9315d0b90d2ea6c675e66d9bb03ca"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "0b2feac0-e45c-4b8c-bf6f-5efa22cea6ac",
+            "revisionId": "e21fbb86-0b3f-47b9-ac0a-033b2e2674cc",
             "runtime": "nodejs8.10"
           }
         ]
