@@ -62,7 +62,8 @@
                     "{thisthatthey} can all be {answer}",
                     "{thisthatthey} all can be {answer}",
                     "{thisthatthey} all can {answer}",
-                    "what is {answer}"
+                    "what is {answer}",
+                    "who is {answer}"
                 ]
             },
               {

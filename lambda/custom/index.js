@@ -5,7 +5,8 @@
 const Alexa = require("ask-sdk-core");
 const https = require("https");
 const Airtable = require("airtable");
-const dashbot = require("dashbot")(process.env.dashbot_key).alexa;
+const Dashbot = require("dashbot")(process.env.dashbot_key).alexa;
+const utils = require("utils");
 
 var IsFirstVisit = true;
 
@@ -74,9 +75,25 @@ const LaunchRequestHandler = {
         var rb = handlerInput.responseBuilder;
         rb.speak(speakText);
         rb.reprompt(query.fields.VoiceResponse)
+        //rb = showDisplayTemplate();
         return rb.getResponse();
     }
 };
+
+function showDisplayTemplate(rb, handlerInput) {
+    if (supportsDisplay(handlerInput)) {
+        const background = new Alexa.ImageHelper().addImageInstance("https://s3.amazonaws.com/tko-trivia/art/background.png").getImage();
+        const image = new Alexa.ImageHelper().addImageInstance("https://tko-trivia.s3.amazonaws.com/art/tko-logo.png").getImage();
+        
+        rb.addRenderTemplateDirective({
+        type: "BodyTemplate1",
+        backButton: "HIDDEN",
+        backgroundImage: background,
+        image});
+    }
+
+    return rb;
+}
 /*
 const FirstNameIntentHandler = {
     canHandle(handlerInput) {
@@ -138,6 +155,12 @@ const AnswerIntentHandler = {
     },
     async handle(handlerInput) {
         console.log("HANDLED - AnswerIntentHandler");
+        console.log("TRYING SDK getSlotValue FUNCTION.");
+        const slotValue2 = Alexa.getSlotValue(handlerInput.requestEnvelope, 'answer');
+        console.log("FINISHED TRYING SDK getSlotValue FUNCTION.  SLOTVALUE = " + slotValue2);
+
+
+
         var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var locale = handlerInput.requestEnvelope.request.locale;
         var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
@@ -185,7 +208,7 @@ const AnswerIntentHandler = {
                             //console.log(record.get('UserId'));
                           });
                     }
-
+                    //TODO: TELL THE USER HOW MANY POINTS THEY CURRENTLY HAVE.
                     speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + " " + levelUp + " " + answerNote + " ";
                 }
                 else{
@@ -1013,13 +1036,14 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
         ]
       };
         
-    //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS
-    return handlerInput.responseBuilder
-        .speak(speakText)
-        .reprompt(question.fields.VoiceQuestion)
-        .withStandardCard(category.name, question.fields.CardQuestion, "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_108.png", "https://tko-trivia.s3.amazonaws.com/art/ISPs/" + category.referenceName + "_512.png")
-        .addDirective(entityDirective)
-        .getResponse();
+    //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS    
+    var rb = handlerInput.responseBuilder;
+    rb.speak(speakText);
+    rb.reprompt(question.fields.VoiceQuestion);
+    rb.withStandardCard(category.name, question.fields.CardQuestion, utils.getSmallCategoryImage(category.referenceName), utils.getLargeCategoryImage(category.referenceName));
+    rb.addDirective(entityDirective)
+    rb = addAPL(rb, handlerInput, "question")
+    return rb.getResponse();
 }
 
 async function getRandomQuestion(category, locale) {
@@ -1209,26 +1233,6 @@ function getResolvedValues(handlerInput, slotName) {
     return undefined;
 }
 
-function addSplashScreen(rb, handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    
-    if (supportsDisplay(handlerInput)) {
-        const image = new Alexa.ImageHelper().addImageInstance("https://tko-trivia.s3.amazonaws.com/art/large_logo.png").getImage();
-        const background = new Alexa.ImageHelper().addImageInstance("https://tko-trivia.s3.amazonaws.com/art/background.png").getImage();
-        const title = "TKO Trivia";
-        
-        rb.addRenderTemplateDirective({
-            type: "BodyTemplate7",
-            backButton: "HIDDEN",
-            backgroundImage: background,
-            image,
-            title: ""
-        }).addHintDirective("play today's game");
-        return rb;
-    }
-    else return rb;
-}
-
 function supportsDisplay(handlerInput) {
     var hasDisplay =
       handlerInput.requestEnvelope.context &&
@@ -1243,7 +1247,7 @@ function addAPL(rb, handlerInput, type) {
         var apl;
         switch(type) {
             case "splash":
-
+                apl = require("apl/splash.json");
             break;
             case "cheese":
                 
@@ -1252,7 +1256,7 @@ function addAPL(rb, handlerInput, type) {
                 apl = getAnswerAPL(handlerInput);
             break;
             case "question":
-
+                apl = getQuestionAPL(handlerInput);
             break;
         }
         //apl.mainTemplate.items[0].text = "Jeff Blankenburg";
@@ -1260,8 +1264,8 @@ function addAPL(rb, handlerInput, type) {
             type: 'Alexa.Presentation.APL.RenderDocument',
             token: '[SkillProvidedToken]',
             version: '1.0',
-            document: apl,
-            datasources: {}
+            document: apl.document,
+            datasources: apl.datasources
         })
     }
     return rb;
@@ -1270,7 +1274,21 @@ function addAPL(rb, handlerInput, type) {
 function getAnswerAPL(handlerInput) {
     var apl = require("apl/answer.json");
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
+    //apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
+    return apl;
+}
+
+function getQuestionAPL(handlerInput) {
+    var apl = require("apl/question.json");
+    var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    var category = getSpecificCategory(sessionAttributes.currentQuestion.Category[0]);
+    apl.datasources.bodyTemplate2Data.title = category.name;
+    apl.datasources.bodyTemplate2Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate2Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate2Data.image.sources[0].url = utils.getSmallCategoryImage(category.referenceName);
+    apl.datasources.bodyTemplate2Data.image.sources[1].url = utils.getLargeCategoryImage(category.referenceName);
+    //
+    //apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
     return apl;
 }
 
@@ -1379,7 +1397,7 @@ const RequestLog = {
 
 const skillBuilder = Alexa.SkillBuilders.custom();
 
-exports.handler = dashbot.handler(skillBuilder
+exports.handler = Dashbot.handler(skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
         AnswerIntentHandler,
