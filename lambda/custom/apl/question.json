@@ -28,7 +28,7 @@
                 "description": "Standard font sizes",
                 "dimensions": {
                     "textSizeBody": 48,
-                    "textSizePrimary": 27,
+                    "textSizePrimary": 44,
                     "textSizeSecondary": 23,
                     "textSizeSecondaryHint": 25
                 }
@@ -226,26 +226,9 @@
                                             "items": [
                                                 {
                                                     "type": "Text",
-                                                    "text": "<b>Food pairings</b> | <b>Wine pairings</b>",
-                                                    "style": "textStylePrimary",
-                                                    "color": "#4dd2ff"
-                                                },
-                                                {
-                                                    "type": "Text",
-                                                    "text": "<b>${payload.bodyTemplate2Data.textContent.title.text}</b>",
-                                                    "style": "textStyleBody"
-                                                },
-                                                {
-                                                    "type": "Text",
-                                                    "text": "${payload.bodyTemplate2Data.textContent.subtitle.text}",
-                                                    "style": "textStylePrimary"
-                                                },
-                                                {
-                                                    "type": "Text",
                                                     "text": "${payload.bodyTemplate2Data.textContent.primaryText.text}",
                                                     "spacing": "@spacingSmall",
-                                                    "paddingTop": "40dp",
-                                                    "paddingRight": "70dp",
+                                                    "paddingRight": "30dp",
                                                     "style": "textStylePrimary"
                                                 }
                                             ]
@@ -255,8 +238,8 @@
                                 {
                                     "type": "Image",
                                     "source": "${payload.bodyTemplate2Data.image.sources[0].url}",
-                                    "width": 340,
-                                    "height": 384,
+                                    "width": 512,
+                                    "height": 512,
                                     "scale": "best-fit",
                                     "align": "center"
                                 }
@@ -328,8 +311,8 @@
                     "text": "Parmesan cheese is made from unpasteurized milk. It has a hard, gritty texture, and is fruity and nutty in taste."
                 }
             },
-            "logoUrl": "https://d2o906d8ln7ui1.cloudfront.net/images/cheeseskillicon.png",
+            "logoUrl": "https://tko-trivia.s3.amazonaws.com/art/large_logo.png",
             "hintText": "Try, \"Alexa, give me a fact about cheese\""
         }
     }
-  }
+}

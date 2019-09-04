@@ -178,6 +178,18 @@
                 ]
             },
             {
+                "name": "StatusIntent",
+                "samples": [
+                "how many points do I have",
+                "what level am i",
+                "what is my level",
+                "which level am i",
+                "what is my point total",
+                "what are my points",
+                "how many points"
+                ]
+            },
+            {
                 "name": "StartGameIntent",
                 "samples": [
                     "start today's game",
@@ -193,14 +205,6 @@
                     "another game",
                     "replay today's game",
                     "play the game"
-                ]
-            },
-            {
-                "name": "ContinueGameIntent",
-                "samples": [
-                    "continue game",
-                    "continue current game",
-                    "continue my current game"
                 ]
             },
             {

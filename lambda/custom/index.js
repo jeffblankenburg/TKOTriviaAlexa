@@ -75,7 +75,7 @@ const LaunchRequestHandler = {
         var rb = handlerInput.responseBuilder;
         rb.speak(speakText);
         rb.reprompt(query.fields.VoiceResponse)
-        //rb = showDisplayTemplate();
+        rb = await addAPL(rb, handlerInput, "splash");
         return rb.getResponse();
     }
 };
@@ -193,9 +193,8 @@ const AnswerIntentHandler = {
                     var levelUp = "";
                     var nextLevel = (parseInt(sessionAttributes.user.CurrentLevel)+1) * 1000;
                     var userPoints = await getUserPoints(sessionAttributes.user.RecordId);
-                    console.log("USER POINTS = " + (parseInt(userPoints) + parseInt(points)));
-                    console.log("NEXT LEVEL = " + nextLevel);
-                    if ((parseInt(userPoints) + parseInt(points)) >= nextLevel) {
+                    userPoints += parseInt(points);
+                    if ((userPoints) >= nextLevel) {
                         levelUp = "Congratulations!  You are now Level " + (sessionAttributes.user.CurrentLevel+1) + " ";
 
                         await airtable('User').update(sessionAttributes.user.RecordId, {
@@ -209,7 +208,7 @@ const AnswerIntentHandler = {
                           });
                     }
                     //TODO: TELL THE USER HOW MANY POINTS THEY CURRENTLY HAVE.
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + " " + levelUp + " " + answerNote + " ";
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + answerNote + " ";
                 }
                 else{
                     var levelContinuation = "";
@@ -292,10 +291,10 @@ const AnswerIntentHandler = {
             var rb = handlerInput.responseBuilder;
             rb.speak(speakText);
             rb.reprompt(actionQuery.fields.VoiceResponse)
-            if (IsCorrect || isEntitled(subscription)) {
+            if ((IsCorrect || isEntitled(subscription) && (sessionAttributes.currentQuestion != undefined))) {
                 rb.withStandardCard(sessionAttributes.currentQuestion.CardAnswer, sessionAttributes.currentQuestion.CardAnswer, sessionAttributes.currentQuestion.Image[0].thumbnails.full.url, sessionAttributes.currentQuestion.Image[0].thumbnails.full.url);
             }
-            rb = addAPL(rb, handlerInput, "answer");
+            rb = await addAPL(rb, handlerInput, "answer");
             sessionAttributes.currentQuestion = undefined;
             return rb.getResponse();
             });
@@ -312,7 +311,6 @@ const StartGameIntentHandler = {
         console.log("HANDLED - StartGameIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var locale = handlerInput.requestEnvelope.request.locale;
-        //TODO: HAS THE USER ALREADY PLAYED THE GAME?
         var userAlreadyPlayed = await didUserAlreadyPlay(sessionAttributes.user.RecordId);
         if (userAlreadyPlayed) {
             var actionQuery = await getRandomResponse("ActionQuery", locale);
@@ -353,29 +351,6 @@ const StartGameIntentHandler = {
           });
 
         return await askTriviaQuestion(handlerInput, category, question, order, speakText);
-    }
-};
-
-const ContinueGameIntentHandler = {
-    canHandle(handlerInput) {
-        console.log("CANHANDLE - ContinueGameIntentHandler");
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === "ContinueGameIntent";
-    },
-    async handle(handlerInput) {
-        console.log("HANDLED - ContinueGameIntentHandler");
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        //TODO: IS THE USER IN A GAME?
-
-        var speakText = "This is the Continue Game Intent.";
-
-        sessionAttributes.currentSpeak = speakText;
-        sessionAttributes.currentReprompt = speakText;
-
-        return handlerInput.responseBuilder
-            .speak(speakText)
-            .reprompt(speakText)
-            .getResponse();
     }
 };
 
@@ -757,6 +732,29 @@ const RepeatIntentHandler = {
     },
 };
 
+const StatusIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - StatusIntentHandler");
+        return handlerInput.requestEnvelope.request.type === "IntentRequest"
+            && handlerInput.requestEnvelope.request.intent.name === "StatusIntent";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - StatusIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+
+        var userPoints = await getUserPoints(sessionAttributes.user.RecordId);
+        var response = await getRandomResponse("Status", locale);
+        var query = await getRandomResponse("ActionQuery", locale);
+        var speakText = response.fields.VoiceResponse.replace("XXXPOINTSXXX", userPoints).replace("XXXLEVELXXX", sessionAttributes.user.CurrentLevel).replace("XXXLEVELXXX", sessionAttributes.user.CurrentLevel) + " " + query.fields.VoiceResponse;
+
+        return handlerInput.responseBuilder
+               .speak(speakText)
+               .reprompt(query.fields.VoiceResponse)
+               .getResponse();
+    },
+};
+
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - SessionEndedRequestHandler");
@@ -1042,7 +1040,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
     rb.reprompt(question.fields.VoiceQuestion);
     rb.withStandardCard(category.name, question.fields.CardQuestion, utils.getSmallCategoryImage(category.referenceName), utils.getLargeCategoryImage(category.referenceName));
     rb.addDirective(entityDirective)
-    rb = addAPL(rb, handlerInput, "question")
+    rb = await addAPL(rb, handlerInput, "question")
     return rb.getResponse();
 }
 
@@ -1242,21 +1240,18 @@ function supportsDisplay(handlerInput) {
     return hasDisplay;
 }
 
-function addAPL(rb, handlerInput, type) {
+async function addAPL(rb, handlerInput, type) {
     if (handlerInput.requestEnvelope.context.System.device.supportedInterfaces["Alexa.Presentation.APL"] != undefined) {
         var apl;
         switch(type) {
             case "splash":
                 apl = require("apl/splash.json");
             break;
-            case "cheese":
-                
-            break;
             case "answer":
                 apl = getAnswerAPL(handlerInput);
             break;
             case "question":
-                apl = getQuestionAPL(handlerInput);
+                apl = await getQuestionAPL(handlerInput);
             break;
         }
         //apl.mainTemplate.items[0].text = "Jeff Blankenburg";
@@ -1274,21 +1269,32 @@ function addAPL(rb, handlerInput, type) {
 function getAnswerAPL(handlerInput) {
     var apl = require("apl/answer.json");
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    //apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
+    var locale = handlerInput.requestEnvelope.request.locale;
+    apl.datasources.bodyTemplate2Data.title = sessionAttributes.currentQuestion.ScreenAnswer;
+    apl.datasources.bodyTemplate2Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate2Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate2Data.image.sources[0].url = sessionAttributes.currentQuestion.Image[0].url;
+    apl.datasources.bodyTemplate2Data.image.sources[1].url = sessionAttributes.currentQuestion.Image[0].url;
+    apl.datasources.bodyTemplate2Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenAnswerNote;
+    var hintText = await getRandomResponse("Hint", locale);
+    apl.datasources.bodyTemplate2Data.hintText = hintText.fields.VoiceResponse;
     return apl;
 }
 
-function getQuestionAPL(handlerInput) {
+async function getQuestionAPL(handlerInput) {
     var apl = require("apl/question.json");
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    var locale = handlerInput.requestEnvelope.request.locale;
     var category = getSpecificCategory(sessionAttributes.currentQuestion.Category[0]);
     apl.datasources.bodyTemplate2Data.title = category.name;
     apl.datasources.bodyTemplate2Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
     apl.datasources.bodyTemplate2Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
-    apl.datasources.bodyTemplate2Data.image.sources[0].url = utils.getSmallCategoryImage(category.referenceName);
+    apl.datasources.bodyTemplate2Data.image.sources[0].url = utils.getLargeCategoryImage(category.referenceName);
     apl.datasources.bodyTemplate2Data.image.sources[1].url = utils.getLargeCategoryImage(category.referenceName);
-    //
-    //apl.mainTemplate.items[0].text = sessionAttributes.currentQuestion.ScreenAnswer;
+    apl.datasources.bodyTemplate2Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenQuestion;
+    
+    var hintText = await getRandomResponse("Hint", locale);
+    apl.datasources.bodyTemplate2Data.hintText = hintText.fields.VoiceResponse;
     return apl;
 }
 
@@ -1402,7 +1408,7 @@ exports.handler = Dashbot.handler(skillBuilder
         LaunchRequestHandler,
         AnswerIntentHandler,
         StartGameIntentHandler,
-        ContinueGameIntentHandler,
+        StatusIntentHandler,
         QuestionIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
