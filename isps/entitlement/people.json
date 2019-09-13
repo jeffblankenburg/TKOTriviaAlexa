@@ -8,8 +8,8 @@
         "name": "People Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4a52/0ece55d4b5064401925f086af30a2324/APP_ICON?versionId=wUPvFt2RWWb199ksYg0AkDVlS29loOSR&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171217Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=04cf98ed297323fb5c15e3288d25df8d98879ba008e962ab57144a8874c759fc",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/5e06/2fd5cb14499b48a1b5213086038374d8/APP_ICON_LARGE?versionId=PqZBS9yRXOGGq6JvRbHaDr7PIUEhQmTq&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171217Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=6f31d6d3d016092d9894670a6666334bb8a20353c31c8c2d1ed833bab407b893",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/people_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/people_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

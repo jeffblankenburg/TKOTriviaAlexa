@@ -8,8 +8,8 @@
         "name": "Music Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/997c/f7620d1c38e74471a46b88783f25675c/APP_ICON?versionId=P0UQ0njD35PRpAN1wUpf9sdhwaHi6od3&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171214Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=69ae3c76329ea65588f1d888323bf8dc27fa71068908c4c7c32bbc488e1e86f5",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/9643/db452e9d69624b29b32ef69889435c54/APP_ICON_LARGE?versionId=iaz_HhQ.6l1mym3a4woaNf0QZM1cbzRB&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171214Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=ef5bf73a97f5814a393157b8b3425067c840f7bb3b5d1e7e352c626bd883fc48",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/music_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/music_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

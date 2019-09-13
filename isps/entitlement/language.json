@@ -8,8 +8,8 @@
         "name": "Language Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/d492/cc02ead2302c4801beafcd0b92431489/APP_ICON?versionId=bDURumR73DWRiJzJ1d8EK1GfhXObS6oV&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171211Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=29b02aa4f8ad348d30020ebd71dc27b8f8cadbe4eb2e225f980492893c1cf71d",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/3ed4/9a60cc4ff3a94c5b9dd432ce802fb4e5/APP_ICON_LARGE?versionId=1FFYz3Fbnl6wI_tHd_AIjg0rk1YJ8gth&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171211Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5c2a1f1a01cde1a8f11329ad6f875fdf947fa432b19cf2ade5d3cb35cab047e4",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/language_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/language_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

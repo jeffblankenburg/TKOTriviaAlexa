@@ -8,8 +8,8 @@
         "name": "Food and Drink Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e599/27985f2d4e16473185ea5d4d4e213ff0/APP_ICON?versionId=AC9tdy7O58epyQQoMJPfV.OtQTNXr45v&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171207Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5107c3cd45485202174eec06c3244056db2a7510d5c7c49b89e1738bba8ac03a",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/9255/40c1d638fcb14bdd963811201aca6e35/APP_ICON_LARGE?versionId=LcS9Ur9AO4wQCZq_pW2pFmJzES4bEBHt&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190801T171207Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5c8dd07470ac53175f856c68f6271d28863e7ca1020ab0c3baea66a06853d418",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/food_and_drink_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/food_and_drink_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

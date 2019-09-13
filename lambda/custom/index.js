@@ -1,6 +1,7 @@
 //TODO: MAKE SURE EVERY SPEECH OBJECT IS SAVED TO THE SESSION, SO THAT THE REPEAT FUNCTION WORKS PROPERLY.
 //TODO: MAKE SURE TO CONSOLE.LOG EVERY INTENT HANDLER FUNCTION.
 //TODO: MAKE SURE ALL CONTENT REQUESTS INCLUDE A LOCALE.
+//TODO: MAKE SURE RANDOM QUESTIONS ONLY PULL FROM PREVIOUS DAILY GAME QUESTIONS.
 
 const Alexa = require("ask-sdk-core");
 const https = require("https");
@@ -199,6 +200,7 @@ const AnswerIntentHandler = {
 
                         await airtable('User').update(sessionAttributes.user.RecordId, {
                             "CurrentLevel": parseInt(sessionAttributes.user.CurrentLevel)+1,
+                            "PointTotal": userPoints
                           }, function(err, record) {
                             if (err) {
                               console.error(err);
@@ -207,7 +209,6 @@ const AnswerIntentHandler = {
                             //console.log(record.get('UserId'));
                           });
                     }
-                    //TODO: TELL THE USER HOW MANY POINTS THEY CURRENTLY HAVE.
                     speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + answerNote + " ";
                 }
                 else{
@@ -420,7 +421,7 @@ const SpecificQuestionIntentHandler = {
         console.log("HANDLED - SpecificQuestionIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const locale = handlerInput.requestEnvelope.request.locale;
-        //TODO: IS THE USER IN A GAME?
+
         var category = getSpecificCategoryFromSlot(handlerInput);
         var number = handlerInput.requestEnvelope.request.intent.slots.number.value;
         console.log("CATEGORY = " + JSON.stringify(category));
@@ -1033,8 +1034,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
           }
         ]
       };
-        
-    //TODO: ADD SCREEN DESIGN ELEMENTS FOR DEVICES WITH DISPLAYS    
+           
     var rb = handlerInput.responseBuilder;
     rb.speak(speakText);
     rb.reprompt(question.fields.VoiceQuestion);
@@ -1062,14 +1062,14 @@ async function getTodaysEvent() {
     var today = getToday();
     var response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(EventDate)%3D%22" + encodeURIComponent(today) + "%22)", "Event");
     var event = response.records[0];
-    //TODO: YOU ALSO NEED TO GET THE RECORDS FROM EVENT_QUESTION, BECAUSE OTHERWISE YOU WON'T KNOW WHAT THE ORDER OF THE QUESTIONS IS, JACKASS.
+    
     response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),DATESTR(Event)%3D%22" + encodeURIComponent(today) + "%22)&sort%5B0%5D%5Bfield%5D=Order&sort%5B0%5D%5Bdirection%5D=asc", "EventQuestion");
     event.fields.EventQuestion.length = 0;
     response.records.forEach(function(q) {
         var eventQuestion = {"Question": q.fields.Question[0], "Order": q.fields.Order};
         event.fields.EventQuestion.push(eventQuestion);
     });
-    //event.fields.EventQuestion = response.records;
+    
     console.log("TODAY'S EVENT = " + JSON.stringify(event));
     return event;
 }
@@ -1248,13 +1248,13 @@ async function addAPL(rb, handlerInput, type) {
                 apl = require("apl/splash.json");
             break;
             case "answer":
-                apl = getAnswerAPL(handlerInput);
+                apl = await getAnswerAPL(handlerInput);
             break;
             case "question":
                 apl = await getQuestionAPL(handlerInput);
             break;
         }
-        //apl.mainTemplate.items[0].text = "Jeff Blankenburg";
+    
         rb.addDirective({
             type: 'Alexa.Presentation.APL.RenderDocument',
             token: '[SkillProvidedToken]',
@@ -1266,7 +1266,7 @@ async function addAPL(rb, handlerInput, type) {
     return rb;
 }
 
-function getAnswerAPL(handlerInput) {
+async function getAnswerAPL(handlerInput) {
     var apl = require("apl/answer.json");
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     var locale = handlerInput.requestEnvelope.request.locale;
@@ -1298,9 +1298,9 @@ async function getQuestionAPL(handlerInput) {
     return apl;
 }
 
-async function recordUserSession(userId){
+async function recordUserSession(userId, handlerInput){
     var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
-    await airtable('UserSession').create({"User": [userId]}, function(err, record) {if (err) {console.error(err);}});
+    await airtable('UserSession').create({"User": [userId], "APLVersion": utils.getAPLVersion(handlerInput), "ViewportShape": utils.getDisplayShape(handlerInput), "PixelHeight": utils.getPixelHeight(handlerInput), "PixelWidth": utils.getPixelWidth(handlerInput), "DeviceID": utils.getDeviceId(handlerInput)}, function(err, record) {if (err) {console.error(err);}});
     return;
 }
 
@@ -1379,7 +1379,7 @@ const RequestLog = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.user = userRecord.fields;
 
-        if (handlerInput.requestEnvelope.session.new === true) await recordUserSession(sessionAttributes.user.RecordId);
+        if (handlerInput.requestEnvelope.session.new === true) await recordUserSession(sessionAttributes.user.RecordId, handlerInput);
 
 
         if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {

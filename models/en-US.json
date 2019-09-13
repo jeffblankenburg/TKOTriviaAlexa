@@ -134,7 +134,8 @@
                     "buy {category} questions",
                     "unlock {category} questions",
                     "I want to unlock {category}",
-                    "unlock {category}"
+                    "unlock {category}",
+                    "buy the {category} category"
                 ]
             },
             {
