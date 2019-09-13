@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "c6e7f55b-18f5-4725-98a2-7b6d580c5e80",
+            "revisionId": "e3d52af3-19a3-4fb8-9aba-9ec50b793962",
             "runtime": "nodejs8.10"
           }
         ]
@@ -81,19 +81,19 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/literature.json",
           "productId": "amzn1.adg.product.c31651fb-c855-4221-93f6-6c48798708af",
-          "eTag": "bb54c9f207df22f05a3c2f59d2dd3790"
+          "eTag": "c3d826f73969b7ef8ed05eef4df0bcfc"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/miscellaneous.json",
           "productId": "amzn1.adg.product.a51c00b6-ddd5-4905-995c-0b55d1d10a79",
-          "eTag": "66f5145d517b3559b1f683c06d82c72a"
+          "eTag": "4c29fcf4a7bb387ac96cfe10c50da7d7"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/music.json",
           "productId": "amzn1.adg.product.6e6a8f5d-1230-4cb5-8757-86b987f2b1a6",
-          "eTag": "6201559d52186722ad38ae7393ef50d4"
+          "eTag": "afc5c9dd5ec1e863373176474414b74c"
         },
         {
           "deploy_status": "Update",
@@ -117,7 +117,7 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/sports_and_games.json",
           "productId": "amzn1.adg.product.d486d675-e562-494d-b6a1-e373aa6d974f",
-          "eTag": "cce6b83a586998928788e0fcd0afe5f9"
+          "eTag": "47e2e312e7c5bcc6a9b6fe36b2932d4c"
         },
         {
           "deploy_status": "Update",
@@ -135,13 +135,13 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/united_states.json",
           "productId": "amzn1.adg.product.2c40e45f-9525-45ba-bcac-9d004ee39bd2",
-          "eTag": "70f38a46f146ada331001db95c6d35ff"
+          "eTag": "39cdf08b1a844beb802bfcff33ba206e"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/tradition_and_beliefs.json",
           "productId": "amzn1.adg.product.c701e08e-e54e-412b-bdc9-63a38731315d",
-          "eTag": "40b4cca51cbe500d9c3fe3e1a9e69769"
+          "eTag": "2884441ac20b099f84e8c8547164bea5"
         },
         {
           "deploy_status": "Update",

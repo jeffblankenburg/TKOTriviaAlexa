@@ -50,7 +50,7 @@ const LaunchRequestHandler = {
         if (IsFirstVisit) {
             sessionAttributes.currentState = "LAUNCHREQUEST - FIRSTVISIT";
             //speakText = welcome.fields.VoiceResponse + " Before we get started, what is your first name?";
-            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceReponse;
+            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceResponse;
             var category = getRandomCategory();
             var question = await getRandomQuestion(category, locale);
             sessionAttributes.currentQuestion = question.fields;
@@ -196,19 +196,22 @@ const AnswerIntentHandler = {
                     var userPoints = await getUserPoints(sessionAttributes.user.RecordId);
                     userPoints += parseInt(points);
                     if ((userPoints) >= nextLevel) {
-                        levelUp = "Congratulations!  You are now Level " + (sessionAttributes.user.CurrentLevel+1) + " ";
-
-                        await airtable('User').update(sessionAttributes.user.RecordId, {
-                            "CurrentLevel": parseInt(sessionAttributes.user.CurrentLevel)+1,
-                            "PointTotal": userPoints
-                          }, function(err, record) {
-                            if (err) {
-                              console.error(err);
-                              return;
-                            }
-                            //console.log(record.get('UserId'));
-                          });
+                        sessionAttributes.user.CurrentLevel ++;
+                        levelUp = "Congratulations!  You are now Level " + sessionAttributes.user.CurrentLevel + " ";
                     }
+
+                    await airtable('User').update(sessionAttributes.user.RecordId, {
+                        "CurrentLevel": parseInt(sessionAttributes.user.CurrentLevel),
+                        "PointTotal": userPoints
+                      }, function(err, record) {
+                        if (err) {
+                          console.error(err);
+                          return;
+                        }
+                        //console.log(record.get('UserId'));
+                      });
+
+
                     speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + answerNote + " ";
                 }
                 else{
@@ -1314,7 +1317,7 @@ async function GetUserRecord(userId) {
     IsFirstVisit = true;
     var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
     return new Promise((resolve, reject) => {
-        airtable("User").create({"UserId": userId}, 
+        airtable("User").create({"UserId": userId, "CurrentLevel": 0, "PointTotal": 0}, 
                     function(err, record) {
                             console.log("NEW USER RECORD = " + JSON.stringify(record));
                             if (err) { console.error(err); return; }

@@ -8,8 +8,8 @@
         "name": "TV and Radio Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tv_and_radio_108.png",
-        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tv_and_radio_512.png",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f1c9/dea7aa0177cb404587e8b918574bd658/APP_ICON?versionId=omRJbW1TFQrO2aPWWuFzk3YUXK.NefY9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131409Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9993b86ec3b8d9be018b457127237a02090727127d42f9f5c55d8d7e2ad37596",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/71ba/f36b38bbab72448eb5b8f7d99ed31343/APP_ICON_LARGE?versionId=OeKy1HTAKiGl9G8W40XPzVNC2u6G4kcO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131409Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=c96dbbe9340899d848dc5fb3a3573b6d9e6e91a6606923c9cd730216fbb7d88a",
         "examplePhrases": [
           "This is an example phrase."
         ],

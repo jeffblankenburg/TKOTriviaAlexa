@@ -8,8 +8,8 @@
         "name": "Art & Stage Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/art_and_stage_108.png",
-        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/art_and_stage_512.png",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/cb3c/9b01d352c32b4c858d3a95d29334b9cc/APP_ICON?versionId=d8l_vVvDCwDxi2sBkrGW2ThmfxNPS4XB&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131345Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d337a0467fe9bd3b1549d36850206b6fdfc4b343a720a64099008bf2fdfec6cd",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/d2ac/0284b37834684329ab655d8983d38b16/APP_ICON_LARGE?versionId=BCvN8fUY1201reDpvAcpR0nfLaC3FhL3&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131345Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=6b97db7caa6de1e193c4a0a842de5d39efae08958d2c2f6fb0d07c166daf24d7",
         "examplePhrases": [
           "This is an example phrase."
         ],

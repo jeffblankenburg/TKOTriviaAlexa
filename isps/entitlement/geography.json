@@ -8,8 +8,8 @@
         "name": "Geography Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/geography_108.png",
-        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/geography_512.png",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a9ce/e7542436450f4211950978c6ba592b07/APP_ICON?versionId=ZZDs.qN88j9kzZywyqrfnmKvx_idx7Eh&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131351Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e1a93225b92e1e278a3e145a35d06ebff3ca7a5fbac94639bf2de702e5f1397c",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f32a/b01e42672a8f4055aa7526721efdbba4/APP_ICON_LARGE?versionId=HCL5fuyaZ1yDYMFEQzg5lXpUgSrJ46QD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131351Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=478500659cbacdbe8fa676416a2ab943898587bd033e30076f6d36c1d1986d24",
         "examplePhrases": [
           "This is an example phrase."
         ],

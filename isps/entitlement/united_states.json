@@ -8,8 +8,8 @@
         "name": "United States Questions",
         "summary": "This is the summary.",
         "description": "This is the description.",
-        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/united_states_108.png",
-        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/united_states_512.png",
+        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/bc71/7fc6063a251148b2873ac3b1170023c5/APP_ICON?versionId=PuOj6RvyR5U6kS4V_M0eyHOa1fjEeIQ0&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131406Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2af818b84204397e3871c088a20878155db0d63c2687cfa140dac7ba46072fa3",
+        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/da4d/86e983b32ce1441c9be318bf0d458793/APP_ICON_LARGE?versionId=soK.qbdFvi_Lo7tQRAfBTeAso3TodaIR&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190913T131406Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20190913%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=60bdd8f2ff2511b17c6118c17aff80dc7a71dd86d1023ad9208c7c456a174ab2",
         "examplePhrases": [
           "This is an example phrase."
         ],
