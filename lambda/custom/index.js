@@ -7,6 +7,7 @@ const Alexa = require("ask-sdk-core");
 const https = require("https");
 const Airtable = require("airtable");
 const Dashbot = require("dashbot")(process.env.dashbot_key).alexa;
+const achievements = require("achievements");
 const utils = require("utils");
 
 var IsFirstVisit = true;
@@ -157,11 +158,6 @@ const AnswerIntentHandler = {
     async handle(handlerInput) {
         console.log("HANDLED - AnswerIntentHandler");
         console.log("TRYING SDK getSlotValue FUNCTION.");
-        const slotValue2 = Alexa.getSlotValue(handlerInput.requestEnvelope, 'answer');
-        console.log("FINISHED TRYING SDK getSlotValue FUNCTION.  SLOTVALUE = " + slotValue2);
-
-
-
         var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var locale = handlerInput.requestEnvelope.request.locale;
         var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
@@ -267,7 +263,6 @@ const AnswerIntentHandler = {
                         sessionAttributes.currentEvent.EventQuestion[sessionAttributes.currentEvent.CurrentQuestion].Points = 0;
                         speakText = speakText + " Well, that's the end of today's game for you, but check back tomorrow for a brand new event! " + actionQuery.fields.VoiceResponse
                         sessionAttributes.currentEvent = undefined;
-                        //TODO: IF THEY QUESTION WRONG, THANK THEM FOR PLAYING, AND END THE GAME.
                         //TODO: SHOULD SUMMARIZE THEIR GAME.  YOU GOT 4 QUESTIONS THIS TIME!  NEW RECORD!
                         console.log("WRONG ANSWER IN GAME.  GOODBYE!");
                     }   
@@ -1315,7 +1310,7 @@ async function GetUserRecord(userId) {
   if (userRecord.records.length === 0){
     console.log("CREATING NEW USER RECORD");
     IsFirstVisit = true;
-    var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+    var airtable = new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
     return new Promise((resolve, reject) => {
         airtable("User").create({"UserId": userId, "CurrentLevel": 0, "PointTotal": 0}, 
                     function(err, record) {
@@ -1328,6 +1323,13 @@ async function GetUserRecord(userId) {
   else{
     console.log("RETURNING FOUND USER RECORD = " + JSON.stringify(userRecord.records[0]));
     IsFirstVisit = false;
+    //TODO: GET THE LIST OF THE EXISTING USER'S ACHIEVEMENTS, AND ADD THEM TO THE USER RECORD.
+    const result = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(userRecord.records[0].fields.RecordId) + "%22)", "UserAchievement");
+    userRecord.records[0].fields.UserAchievement = [];
+    console.log("ACHIEVEMENT RESULTS = " + JSON.stringify(result.records));
+    result.records.forEach(function(a) {
+        userRecord.records[0].fields.UserAchievement.push(a.fields);
+    });
     return await userRecord.records[0];
   }
 }
@@ -1381,14 +1383,11 @@ const RequestLog = {
         console.log("USER RECORD = " + JSON.stringify(userRecord.fields));
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.user = userRecord.fields;
-
         if (handlerInput.requestEnvelope.session.new === true) await recordUserSession(sessionAttributes.user.RecordId, handlerInput);
-
-
         if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
         //await IncrementInteractionCount();
         //await IncrementSessionCount(handlerInput);
-        //CheckForAchievements(handlerInput);
+            await achievements.check(handlerInput);
         }
         return;
     }
