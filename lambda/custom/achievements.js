@@ -1,4 +1,5 @@
 const https = require("https");
+const Airtable = require("airtable");
 const AchievementSound = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/>"
 var AchievementSpeech = "";
 var AchievementCardText = "";  //TODO: WRITE A CARD WHEN THEY GET ANY ACHIEVEMENTS.
@@ -31,55 +32,92 @@ async function check(handlerInput) {
     console.log("CHECKING FOR ACHIEVEMENTS");
     AchievementSpeech = "";
     AchievementCount = 0;
-    CheckSessionAchievements(handlerInput);
-    CheckRequestAchievements(handlerInput);
-    CheckDeviceAchievements(handlerInput);
-    CheckIntentAchievements(handlerInput);
-    await CheckCategoryAchievements(handlerInput);
-    if (AchievementCount > 5) ReplaceSounds(handlerInput);
+    await CheckSessionAchievements(handlerInput);
+    await CheckRequestAchievements(handlerInput);
+    await CheckDeviceAchievements(handlerInput);
+    await CheckIntentAchievements(handlerInput);
+    await CheckAnswerAchievements(handlerInput);
+    if (AchievementCount > 3) ReplaceSounds();
+    console.log("ACHIEVEMENT SPEECH = " + AchievementSpeech);
+    return AchievementSpeech;
 }
 
-function CheckSessionAchievements(handlerInput) {
+function ReplaceSounds() {
+  console.log("REMOVING SOUNDS BECAUSE THERE ARE MORE THAN THREE ACHIEVEMENTS.  SSML CAN'T HAVE MORE THAN 5 SOUND EFFECTS IN ONE RESPONSE.  ADDING ONE BACK AT THE BEGINNING ONLY.")
+  RemoveSounds();
+  AchievementSpeech = AchievementSound + AchievementSpeech;
+}
+
+function RemoveSounds() {
+  console.log("REMOVING SOUNDS BECAUSE THERE ARE MORE THAN THREE ACHIEVEMENTS.  SSML CAN'T HAVE MORE THAN 5 SOUND EFFECTS IN ONE RESPONSE.")
+  AchievementSpeech = AchievementSpeech.split(AchievementSound).join("");
+}
+
+async function CheckSessionAchievements(handlerInput) {
     console.log("CHECKING SESSION ACHIEVEMENTS");
 }
 
-function CheckRequestAchievements(handlerInput) {
+async function CheckRequestAchievements(handlerInput) {
     console.log("CHECKING REQUEST ACHIEVEMENTS");
 }
 
-function CheckDeviceAchievements(handlerInput) {
+async function CheckDeviceAchievements(handlerInput) {
     console.log("CHECKING DEVICE ACHIEVEMENTS");
 }
 
-function CheckIntentAchievements(handlerInput) {
-    console.log("CHECKING INTENT ACHIEVEMENTS")
+async function CheckIntentAchievements(handlerInput) {
+    console.log("CHECKING INTENT ACHIEVEMENTS");
 }
 
-async function CheckCategoryAchievements(handlerInput) {
+async function CheckAnswerAchievements(handlerInput) {
+    console.log("CHECKING CATEGORY ACHIEVEMENTS")
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    const answers = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(sessionAttributes.user.RecordId) + "%22)", "UserAnswer");
-    console.log("ANSWERS = " + JSON.stringify(answers));
+    const answers = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(sessionAttributes.user.RecordId) + "%22,IsCorrect%3DTRUE())&sort%5B0%5D%5Bfield%5D=Category", "UserAnswer");
     var categoryTotals = [];
+    var totalCorrectCounter = 0;
     var currentCategory = "";
     var currentCategoryCounter = 0;
     answers.records.forEach(function(a) {
-        console.log("CHECKING ANSWER " + JSON.stringify(a));
         if (a.fields.Category[0] != currentCategory) {
             if (currentCategory != "") categoryTotals.push({"categoryId": currentCategory, "categoryName": getCategoryName(currentCategory), "count": currentCategoryCounter});
             currentCategoryCounter = 0;
             currentCategory = a.fields.Category[0];
         }
         currentCategoryCounter++;
+        totalCorrectCounter++;
     });
     if (currentCategoryCounter > 0) categoryTotals.push({"categoryId": currentCategory, "categoryName": getCategoryName(currentCategory), "count": currentCategoryCounter});
 
-    categoryTotals.forEach(function(c) {
-        if (c.count >= 10) CreateAchievement(handlerInput, c.categoryName + "10");
-        else if (c.count >= 5) CreateAchievement(handlerInput, c.categoryName + "5");
+    //TOTAL NUMBER OF CORRECT ANSWERS PER CATEGORY
+    categoryTotals.forEach(async function(c) {
+        if (c.count >= 100) await CreateAchievement(handlerInput, c.categoryName + "100");
+        else if (c.count >= 50) await CreateAchievement(handlerInput, c.categoryName + "50");
+        else if (c.count >= 25) await CreateAchievement(handlerInput, c.categoryName + "25");
+        else if (c.count >= 10) await CreateAchievement(handlerInput, c.categoryName + "10");
+        else if (c.count >= 5) await CreateAchievement(handlerInput, c.categoryName + "5");
     });
 
+    //TOTAL NUMBER OF CORRECT ANSWERS
+    if (totalCorrectCounter >= 1000) await CreateAchievement(handlerInput, "QUESTION1000");
+    else if (totalCorrectCounter >= 500) await CreateAchievement(handlerInput, "QUESTION500");
+    else if (totalCorrectCounter >= 250) await CreateAchievement(handlerInput, "QUESTION250");
+    else if (totalCorrectCounter >= 100) await CreateAchievement(handlerInput, "QUESTION100");
+    else if (totalCorrectCounter >= 50) await CreateAchievement(handlerInput, "QUESTION50");
+    else if (totalCorrectCounter >= 25) await CreateAchievement(handlerInput, "QUESTION25");
+    else if (totalCorrectCounter >= 10) await CreateAchievement(handlerInput, "QUESTION10");
+    else if (totalCorrectCounter >= 5) await CreateAchievement(handlerInput, "QUESTION5");
 
-    console.log("CATEGORY COUNT = " + JSON.stringify(categoryTotals));
+    //THIS IS A HACK.  I CAN'T FIGURE OUT WHY WE AREN'T AWAITING MY CALL TO GET SPECIFIC ACHIEVEMENT DATA, SO WE'RE JUST WAITING.
+    console.log("SLEEP STARTED.");
+    await sleep(100).then(() => {
+        console.log("SLEEP ENDED.");
+    })
+
+    console.log("END CHECKING CATEGORY ACHIEVEMENTS");
+}
+
+async function sleep (time) {
+    return await new Promise((resolve) => setTimeout(resolve, time));
 }
 
 function getCategoryName(categoryId) {
@@ -88,22 +126,44 @@ function getCategoryName(categoryId) {
 }
 
 async function CreateAchievement(handlerInput, achievementId) {
+    console.log("CREATING ACHIEVEMENT");
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    const locale = handlerInput.requestEnvelope.request.locale;
     if (IsAchievementIncomplete(handlerInput, achievementId)) {
         console.log("USER COMPLETED ACHIEVEMENT " + achievementId);
-        //TODO: IF THE USER HASN'T PREVIOUSLY COMPLETED THE ACHIEVEMENT, AWARD THEM, AND RETURN THE SPEECH THAT SHOULD BE SPOKEN.
+        var achievement = await getSpecificAchievement(achievementId, locale);
+        AchievementSpeech = AchievementSpeech + AchievementSound + "Achievement Unlocked! You " + achievement.fields.VoiceDescription + " ";
+        console.log("NEW ACHIEVEMENT SPEECH = " + AchievementSpeech);
+        //TODO: THE LINE ABOVE THIS ONE ISN"T HAPPENING AT THE RIGHT TIME.  WE HAVE SOME ASYNCHRONOUS MYSTERIES AFOOT.
+        var airtable = new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+        console.log("CREATING NEW ACHIEVEMENT. USER = " + sessionAttributes.user.RecordId + " ACHIEVEMENT = " + achievement.fields.RecordId);
+        await airtable('UserAchievement').create({"User": [sessionAttributes.user.RecordId], "Achievement": [achievement.fields.RecordId]}, function(err, record) {if (err) {console.error(err);}});
     }
-    else console.log("USER HAS ALREADY COMPLETED ACHIEVEMENT " + achievementId + ".");
+    else {
+        console.log("USER HAS ALREADY COMPLETED ACHIEVEMENT " + achievementId + ".");
+    }
+    console.log("END CREATING ACHIEVEMENT");
 }
 
 function IsAchievementIncomplete(handlerInput, achievementId) {
+    console.log("CHECKING TO SEE IF ACHIEVEMENT IS INCOMPLETE");
+    var isIncomplete = true;
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    if (sessionAttributes.user.userAchievement != undefined) {
-        sessionAttributes.user.userAchievement.forEach(function (a) {
-            if (a.AchievementId === achievementId) return false;
+    if (sessionAttributes.user.UserAchievement != undefined) {
+        sessionAttributes.user.UserAchievement.forEach(function (a) {
+            if (a.AchievementId[0].toString() === achievementId.toString()) {isIncomplete = false;console.log("ACHIEVEMENT IS COMPLETE");}
         });
     }
-    return true;
+    console.log("ACHIEVEMENT IS INCOMPLETE");
+    return isIncomplete;
+}
+
+async function getSpecificAchievement(achievementId, locale) {
+    console.log("GETTING SPECIFIC ACHIEVEMENT = " + JSON.stringify(achievementId));
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(Id%3D%22" + encodeURIComponent(achievementId) + "%22)", "Achievement");
+    const achievement = response.records[0];
+    console.log("GOT SPECIFIC ACHIEVEMENT = " + JSON.stringify(achievement));
+    return achievement;
 }
 
 module.exports = {

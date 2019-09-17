@@ -9,6 +9,7 @@ const Airtable = require("airtable");
 const Dashbot = require("dashbot")(process.env.dashbot_key).alexa;
 const achievements = require("achievements");
 const utils = require("utils");
+var AchievementSpeech = "";
 
 var IsFirstVisit = true;
 
@@ -61,7 +62,7 @@ const LaunchRequestHandler = {
         {
             sessionAttributes.currentState = "LAUNCHREQUEST - SUBSEQUENTVISIT";
             var query = await getRandomResponse("ActionQuery", locale);
-            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceResponse + "<break time='.5s'/>" + query.fields.VoiceResponse;
+            speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_bridge_02'/>" + welcome.fields.VoiceResponse + " " + AchievementSpeech + "<break time='.5s'/>" + query.fields.VoiceResponse;
         }
 
         sessionAttributes.currentSpeak = speakText;
@@ -208,7 +209,7 @@ const AnswerIntentHandler = {
                       });
 
 
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + answerNote + " ";
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + AchievementSpeech + " " + answerNote + " ";
                 }
                 else{
                     var levelContinuation = "";
@@ -1043,7 +1044,7 @@ async function askTriviaQuestion(handlerInput, category, question, ordinal = 0, 
 }
 
 async function getRandomQuestion(category, locale) {
-    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,FIND(%22" + locale + "%22%2C+Locale)!%3D0)", "Question");
+    const response = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(IS_BEFORE(%7BEventDate%7D%2C+TODAY()),IsDisabled%3DFALSE(),Category%3D%22" + encodeURIComponent(category.name) + "%22,FIND(%22" + locale + "%22%2C+Locale)!%3D0)", "Question");
     const question = getRandomItem(response.records);
     console.log("RANDOM QUESTION = " + JSON.stringify(question));
     return question;
@@ -1387,7 +1388,7 @@ const RequestLog = {
         if (handlerInput.requestEnvelope.request.type != "SessionEndedRequest") {
         //await IncrementInteractionCount();
         //await IncrementSessionCount(handlerInput);
-            await achievements.check(handlerInput);
+            AchievementSpeech = await achievements.check(handlerInput);
         }
         return;
     }

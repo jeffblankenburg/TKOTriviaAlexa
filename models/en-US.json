@@ -105,6 +105,8 @@
                     "give me a question",
                     "give me a trivia question",
                     "give me a random question",
+                    "another question",
+                    "give me another question",
                     "Give me a {category} question",
                     "Give me a question from {category}",
                     "Ask me a {category} question",
@@ -116,7 +118,13 @@
                     "for a question about {category}",
                     "ask me a question about {category}",
                     "play a question",
-                    "play random question"
+                    "play random question",
+                    "{category}",
+                    "more {category}",
+                    "give me a random {category} question",
+                    "give me a random {category}",
+                    "yes {category} question",
+                    "yes {category}"
                 ]
             },
             {
