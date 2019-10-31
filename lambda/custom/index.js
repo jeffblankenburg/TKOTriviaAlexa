@@ -1269,14 +1269,16 @@ async function getAnswerAPL(handlerInput) {
     var apl = require("apl/answer.json");
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     var locale = handlerInput.requestEnvelope.request.locale;
-    apl.datasources.bodyTemplate2Data.title = sessionAttributes.currentQuestion.ScreenAnswer;
-    apl.datasources.bodyTemplate2Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
-    apl.datasources.bodyTemplate2Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
-    apl.datasources.bodyTemplate2Data.image.sources[0].url = sessionAttributes.currentQuestion.Image[0].url;
-    apl.datasources.bodyTemplate2Data.image.sources[1].url = sessionAttributes.currentQuestion.Image[0].url;
-    apl.datasources.bodyTemplate2Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenAnswerNote;
+    var category = getSpecificCategory(sessionAttributes.currentQuestion.Category[0]);
+    apl.datasources.bodyTemplate7Data.title = sessionAttributes.currentQuestion.ScreenAnswer;
+    apl.datasources.bodyTemplate7Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate7Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate7Data.image.sources[0].url = sessionAttributes.currentQuestion.Image[0].url;
+    apl.datasources.bodyTemplate7Data.image.sources[1].url = sessionAttributes.currentQuestion.Image[0].url;
+    apl.datasources.bodyTemplate7Data.logoUrl = utils.getLargeCategoryImage(category.referenceName);
+    //∂apl.datasources.bodyTemplate2Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenAnswerNote;
     var hintText = await getRandomResponse("Hint", locale);
-    apl.datasources.bodyTemplate2Data.hintText = hintText.fields.VoiceResponse;
+    apl.datasources.bodyTemplate7Data.hintText = hintText.fields.VoiceResponse;
     return apl;
 }
 
@@ -1285,15 +1287,14 @@ async function getQuestionAPL(handlerInput) {
     var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     var locale = handlerInput.requestEnvelope.request.locale;
     var category = getSpecificCategory(sessionAttributes.currentQuestion.Category[0]);
-    apl.datasources.bodyTemplate2Data.title = category.name;
-    apl.datasources.bodyTemplate2Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
-    apl.datasources.bodyTemplate2Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
-    apl.datasources.bodyTemplate2Data.image.sources[0].url = utils.getLargeCategoryImage(category.referenceName);
-    apl.datasources.bodyTemplate2Data.image.sources[1].url = utils.getLargeCategoryImage(category.referenceName);
-    apl.datasources.bodyTemplate2Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenQuestion;
+    apl.datasources.bodyTemplate1Data.title = category.name;
+    apl.datasources.bodyTemplate1Data.backgroundImage.sources[0].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate1Data.backgroundImage.sources[1].url = "https://tko-trivia.s3.amazonaws.com/art/background.png";
+    apl.datasources.bodyTemplate1Data.logoUrl = utils.getLargeCategoryImage(category.referenceName);
+    apl.datasources.bodyTemplate1Data.textContent.primaryText.text = sessionAttributes.currentQuestion.ScreenQuestion;
     
     var hintText = await getRandomResponse("Hint", locale);
-    apl.datasources.bodyTemplate2Data.hintText = hintText.fields.VoiceResponse;
+    apl.datasources.bodyTemplate1Data.hintText = hintText.fields.VoiceResponse;
     return apl;
 }
 

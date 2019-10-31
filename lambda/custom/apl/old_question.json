@@ -28,7 +28,7 @@
                 "description": "Standard font sizes",
                 "dimensions": {
                     "textSizeBody": 48,
-                    "textSizePrimary": 27,
+                    "textSizePrimary": 44,
                     "textSizeSecondary": 23,
                     "textSizeSecondaryHint": 25
                 }
@@ -131,33 +131,58 @@
                     "when": "${viewport.shape == 'round'}",
                     "type": "Container",
                     "direction": "column",
+                    "width": "100vw",
+                    "height": "100vh",
                     "items": [
                         {
                             "type": "Image",
-                            "source": "${payload.bodyTemplate7Data.backgroundImage.sources[0].url}",
+                            "source": "${payload.bodyTemplate2Data.image.sources[0].url}",
                             "scale": "best-fill",
-                            "position": "absolute",
                             "width": "100vw",
-                            "height": "100vh"
+                            "height": "100vh",
+                            "position": "absolute",
+                            "overlayColor": "rgba(0, 0, 0, 0.6)"
                         },
                         {
-                            "type": "AlexaHeader",
-                            "headerTitle": "${payload.bodyTemplate7Data.title}",
-                            "headerAttributionImage": "${payload.bodyTemplate7Data.logoUrl}"
-                        },
-                        {
-                            "type": "Container",
-                            "grow": 1,
-                            "alignItems": "center",
-                            "justifyContent": "center",
-                            "items": [
+                            "type": "ScrollView",
+                            "width": "100vw",
+                            "height": "100vh",
+                            "item": [
                                 {
-                                    "type": "Image",
-                                    "source": "${payload.bodyTemplate7Data.image.sources[0].url}",
-                                    "scale": "best-fill",
-                                    "width": "100vh",
-                                    "height": "70vw",
-                                    "align": "center"
+                                    "type": "Container",
+                                    "direction": "column",
+                                    "alignItems": "center",
+                                    "paddingLeft": "70dp",
+                                    "paddingRight": "70dp",
+                                    "items": [
+                                        {
+                                            "type": "AlexaHeader",
+                                            "headerAttributionImage": "${payload.bodyTemplate2Data.logoUrl}",
+                                            "headerTitle": "${payload.bodyTemplate2Data.title}"
+                                        },
+                                        {
+                                            "type": "Text",
+                                            "text": "<b>${payload.bodyTemplate2Data.textContent.title.text}</b>",
+                                            "style": "textStyleBody",
+                                            "width": "70vw",
+                                            "textAlign": "center"
+                                        },
+                                        {
+                                            "type": "Text",
+                                            "text": "${payload.bodyTemplate2Data.textContent.subtitle.text}",
+                                            "style": "textStylePrimary",
+                                            "width": "70vw",
+                                            "textAlign": "center"
+                                        },
+                                        {
+                                            "type": "Text",
+                                            "text": "${payload.bodyTemplate2Data.textContent.primaryText.text}",
+                                            "paddingTop": 20,
+                                            "style": "textStylePrimary",
+                                            "width": "70vw",
+                                            "textAlign": "center"
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -165,36 +190,56 @@
                 },
                 {
                     "type": "Container",
-                    "height": "100vh",
                     "width": "100vw",
+                    "height": "100vh",
                     "items": [
                         {
                             "type": "Image",
-                            "source": "${payload.bodyTemplate7Data.backgroundImage.sources[0].url}",
-                            "scale": "best-fit",
-                            "position": "absolute",
+                            "source": "${payload.bodyTemplate2Data.backgroundImage.sources[0].url}",
+                            "scale": "best-fill",
                             "width": "100vw",
-                            "height": "100vh"
+                            "height": "100vh",
+                            "position": "absolute"
                         },
                         {
                             "type": "AlexaHeader",
-                            "headerTitle": "${payload.bodyTemplate7Data.title}",
-                            "headerAttributionImage": "${payload.bodyTemplate7Data.logoUrl}"
+                            "headerTitle": "${payload.bodyTemplate2Data.title}",
+                            "headerAttributionImage": "${payload.bodyTemplate2Data.logoUrl}"
                         },
                         {
                             "type": "Container",
                             "direction": "row",
-                            "paddingLeft": "5vw",
-                            "paddingRight": "5vw",
-                            "paddingBottom": "2vh",
-                            "alignItems": "center",
-                            "justifyContent": "center",
+                            "paddingLeft": "60dp",
+                            "paddingRight": "72dp",
+                            "grow": 1,
+                            "shrink": 1,
+                            "height": "100vh",
                             "items": [
                                 {
+                                    "type": "ScrollView",
+                                    "height": "100%",
+                                    "grow": 1,
+                                    "shrink": 1,
+                                    "item": [
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                                {
+                                                    "type": "Text",
+                                                    "text": "${payload.bodyTemplate2Data.textContent.primaryText.text}",
+                                                    "spacing": "@spacingSmall",
+                                                    "paddingRight": "30dp",
+                                                    "style": "textStylePrimary"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
                                     "type": "Image",
-                                    "height": "70vh",
-                                    "width": "90vw",
-                                    "source": "${payload.bodyTemplate7Data.image.sources[0].url}",
+                                    "source": "${payload.bodyTemplate2Data.image.sources[0].url}",
+                                    "width": 512,
+                                    "height": 512,
                                     "scale": "best-fit",
                                     "align": "center"
                                 }
@@ -202,7 +247,7 @@
                         },
                         {
                             "type": "AlexaFooter",
-                            "footerHint": "${payload.bodyTemplate7Data.hintText}"
+                            "footerHint": "${payload.bodyTemplate2Data.hintText}"
                         }
                     ]
                 }
@@ -210,50 +255,64 @@
         }
     },
     "datasources": {
-        "bodyTemplate7Data": {
+        "bodyTemplate2Data": {
             "type": "object",
-            "objectId": "bt7Sample",
-            "title": "Today's Daily Photo of Cheese",
+            "objectId": "bt2Sample",
             "backgroundImage": {
                 "contentDescription": null,
                 "smallSourceUrl": null,
                 "largeSourceUrl": null,
                 "sources": [
                     {
-                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png",
+                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/BT2_Background.png",
                         "size": "small",
                         "widthPixels": 0,
                         "heightPixels": 0
                     },
                     {
-                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/BT7_Background.png",
+                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/BT2_Background.png",
                         "size": "large",
                         "widthPixels": 0,
                         "heightPixels": 0
                     }
                 ]
             },
+            "title": "Parmigiano Reggiano",
             "image": {
                 "contentDescription": null,
                 "smallSourceUrl": null,
                 "largeSourceUrl": null,
                 "sources": [
                     {
-                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/MollyforBT7.png",
+                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/details_01.png",
                         "size": "small",
                         "widthPixels": 0,
                         "heightPixels": 0
                     },
                     {
-                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/MollyforBT7.png",
+                        "url": "https://d2o906d8ln7ui1.cloudfront.net/images/details_01.png",
                         "size": "large",
                         "widthPixels": 0,
                         "heightPixels": 0
                     }
                 ]
             },
-            "logoUrl": "https://d2o906d8ln7ui1.cloudfront.net/images/cheeseskillicon.png",
-            "hintText": "Try, \"Alexa, search for blue cheese\""
+            "textContent": {
+                "title": {
+                    "type": "PlainText",
+                    "text": "Parmigiano Reggiano"
+                },
+                "subtitle": {
+                    "type": "PlainText",
+                    "text": "Country of origin: Italy"
+                },
+                "primaryText": {
+                    "type": "PlainText",
+                    "text": "Parmesan cheese is made from unpasteurized milk. It has a hard, gritty texture, and is fruity and nutty in taste."
+                }
+            },
+            "logoUrl": "https://tko-trivia.s3.amazonaws.com/art/large_logo.png",
+            "hintText": "Try, \"Alexa, give me a fact about cheese\""
         }
     }
 }

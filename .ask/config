@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "0c0b6933-b146-40c7-a724-dac92661a171",
+            "revisionId": "279af9f9-15c2-41fe-91b4-3ea75a30e945",
             "runtime": "nodejs8.10"
           }
         ]
