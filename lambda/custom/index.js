@@ -384,7 +384,7 @@ const QuestionIntentHandler = {
                             name: 'Upsell',
                             payload: {
                             InSkillProduct: {
-                                productId: entitlement[0].productId,
+                                productId: entitlement.productId,
                             },
                             upsellMessage,
                             },
