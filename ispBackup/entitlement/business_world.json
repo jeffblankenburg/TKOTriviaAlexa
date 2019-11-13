@@ -8,8 +8,8 @@
         "name": "Business World Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Business World questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e090/3f008a98692e43babed8cd628ba7a0c5/APP_ICON?versionId=UzLO4xtXJfKf20IYYuUQ39wGIEp0xw3F&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214812Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=0613e95fde221ad39ebab748400191cf4eb6fbf43c78b48c0fb048b6cf4f9280",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/7f6c/e0eb3c354376413eaab9182bd42bf12d/APP_ICON_LARGE?versionId=olu3F0bFM9Cmx6SYoHVM7TKJlIPmydsm&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214812Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=54bc86c4af78aafe28d5be331b4e589c726359cb46f9a502aa268fb485a1bbcf",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/business_world_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/business_world_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

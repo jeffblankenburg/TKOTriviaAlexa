@@ -8,8 +8,8 @@
         "name": "Nature Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Nature questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/18bc/880b64edd47f4ab7b2c931da0eb48f25/APP_ICON?versionId=KK5q_NdvB35K0m3CQd0t1CYFjekPEfrK&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214825Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=832bd98f6108185b36ce942e8ed9852aef00d29b0578879cfed784c2bfcfc953",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/5560/934b432c635149c7925e268cbe8db9e0/APP_ICON_LARGE?versionId=azG9qrnpKR0V5cWmfbgEWwyKt4LqXdn7&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214825Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=29fb2a4f6e9332a21cff7a2cbd8f4c0c56db264eb439d6e3c982bceea2102132",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/nature_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/nature_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

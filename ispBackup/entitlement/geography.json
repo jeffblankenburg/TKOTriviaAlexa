@@ -8,8 +8,8 @@
         "name": "Geography Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Geography questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a9ce/e7542436450f4211950978c6ba592b07/APP_ICON?versionId=ZZDs.qN88j9kzZywyqrfnmKvx_idx7Eh&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214817Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d65d9e87a0538e7b1dc5f9237f2857dd63c466afebf1d82c0fcab7d438b211dd",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f32a/b01e42672a8f4055aa7526721efdbba4/APP_ICON_LARGE?versionId=HCL5fuyaZ1yDYMFEQzg5lXpUgSrJ46QD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214817Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=bccbc2de5246a6211b09320031197dca3b2166467de163347c17e60227e83ac2",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/geography_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/geography_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

@@ -8,8 +8,8 @@
         "name": "Film Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Film questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a8e9/db9b71d36f4849f7a65d97909e455b9c/APP_ICON?versionId=6lHbzh4F0vTsX9qEwRCIHKiq0.k2jnF7&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214815Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=4271f9947ef82f2e5b2aede8f57b3727828222b75a3f13f396dce150811f50a8",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/bad4/cbaef699455146c881314ddb11572574/APP_ICON_LARGE?versionId=coAxwak_LFPZ1q3JgKq8X9fbcn03rR_I&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214815Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=69d51627a6bcc1f5e2fa951352d76211896f680d355af6d053d0266033749f79",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/film_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/film_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

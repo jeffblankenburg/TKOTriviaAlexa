@@ -8,8 +8,8 @@
         "name": "Tradition and Beliefs Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Tradition & Beliefs questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/6634/b46b5082900745d489415e1a8f359605/APP_ICON?versionId=hjBBa.OprjNZRIQS0a2Tj9NLOAvKwcR9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214834Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1adf27abfe1ccff344ca40b4011b848562e72269953315b9d1003fec92ac2938",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/4c10/7be332e12fe54e8ab8ae878ffb1a9e96/APP_ICON_LARGE?versionId=Qu4aJc31O3XuUFU8vsU3Wo6mcFgeHICy&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214834Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=ffddb14d633f258d638a48d30b0af62d6950e614e264dde37a4bd9aafa5f80ae",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tradition_and_beliefs_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tradition_and_beliefs_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

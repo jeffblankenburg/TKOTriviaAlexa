@@ -8,8 +8,8 @@
         "name": "Politics Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Politics questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/a980/0271da00920c408cbd1b4ce8d1602753/APP_ICON?versionId=8eYeYS3JkATxWQ2OyshU8872Cym_zC6Q&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214828Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3c390340add7af86468d26e1b1a3cceeaa15898b1c65c0a3673b50fe41bbb29c",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1c08/ce43df87b735482aab68172dc706c60a/APP_ICON_LARGE?versionId=WGXmGE7AsHS5GoZhnrTceNMYrILK.F1g&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214828Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2fd34c68892a0a6a0ac7bfdaf878053b0f45d6b05284c0e74580740377ea34a5",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/politics_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/politics_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

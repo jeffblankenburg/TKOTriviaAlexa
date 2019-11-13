@@ -8,8 +8,8 @@
         "name": "TV and Radio Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the TV & Radio questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f1c9/dea7aa0177cb404587e8b918574bd658/APP_ICON?versionId=omRJbW1TFQrO2aPWWuFzk3YUXK.NefY9&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214836Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2ce3e7797111d4f981545f050dc5d4422ce4c50f6358f45862193e3e2a657752",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/71ba/f36b38bbab72448eb5b8f7d99ed31343/APP_ICON_LARGE?versionId=OeKy1HTAKiGl9G8W40XPzVNC2u6G4kcO&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214836Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=f026e5e3ac0248c3f8161183662f4da5b6324790ee3f7926a123008bf121c9c2",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tv_and_radio_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/tv_and_radio_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

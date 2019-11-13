@@ -8,8 +8,8 @@
         "name": "Sports and Games Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Sports and Games questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/72a9/c1654863b3554e2ca4f2d9463dd6b0fa/APP_ICON?versionId=xUJZBC6SjJ8FxtgEUZp0Qe3TFIoFmiER&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=be09c46d040abac370ba07752f9d71ea380741f7c5998855cc3378c2187f1f5b",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/1263/eed6e63d6694459e8056db8d139e23bf/APP_ICON_LARGE?versionId=Et5RWXz33sGbSHIKKXKg4.NfjSVrM7BA&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=21076ed4180f6738edfd2e41592354ae15bcf4a7dd7e2e2c8eac9dd0e7addff8",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/sports_and_games_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/sports_and_games_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

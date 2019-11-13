@@ -8,8 +8,8 @@
         "name": "United States Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the United States questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/bc71/7fc6063a251148b2873ac3b1170023c5/APP_ICON?versionId=PuOj6RvyR5U6kS4V_M0eyHOa1fjEeIQ0&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214833Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=8ad78e6e3dda48c538c9b6ebac5726b4e8d9369ca36c841864441fa92bbcdb47",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/da4d/86e983b32ce1441c9be318bf0d458793/APP_ICON_LARGE?versionId=soK.qbdFvi_Lo7tQRAfBTeAso3TodaIR&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214833Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1e568c63e607ebfb04b9255042b17947656f0db50221ef4926a712ce9631784e",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/united_states_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/united_states_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

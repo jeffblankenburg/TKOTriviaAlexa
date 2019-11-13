@@ -8,8 +8,8 @@
         "name": "Science Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Science questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/8969/667f8ccc53c54c89b7a99d44d699d9d9/APP_ICON?versionId=SIFC8GfW5Vdk_bf4mvMGqDAtqnZ9ChmK&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214830Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=564443f00221ca560675bc49101e3522065002ff4a8982cb6c77b0d57fd99397",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/2c63/f428e3412306472fa981e5ce66d2302e/APP_ICON_LARGE?versionId=CIDYQqphi9wrdQlyaVBs6BYoHaTYc5QA&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214830Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=06f96d604cc94914c62d584083670b016666a7b5038f63ae947a71fce223c231",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/science_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/science_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "573e420b782f5074102a14c4a1590fda"
+            "eTag": "3a3301fd63320b75b63373b1e71ce9da"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "TKOTriviaAlexa",
             "handler": "index.handler",
-            "revisionId": "279af9f9-15c2-41fe-91b4-3ea75a30e945",
+            "revisionId": "290ba8b0-f598-45f8-b5cd-edf58fded91b",
             "runtime": "nodejs8.10"
           }
         ]
@@ -33,127 +33,127 @@
           "deploy_status": "Update",
           "filePath": "isps/entitlement/art_and_stage.json",
           "productId": "amzn1.adg.product.4d4d4968-1e9f-40a3-a371-fcf2c92332f2",
-          "eTag": "9b41bc9934213e99e88ae36176e07d8c"
+          "eTag": "dc4346be0c0e702dfc675cf26715a161"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/business_world.json",
           "productId": "amzn1.adg.product.45090e66-6867-4108-8984-f609e332377d",
-          "eTag": "141b7f9ded5d1a985ef3ba0776e70614"
+          "eTag": "1e25c9476a63620c610b7003f5a94948"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/design.json",
           "productId": "amzn1.adg.product.47c9a153-bb17-4534-870a-bf9b3ad76057",
-          "eTag": "bdf920afdaf3218b152d4381fb05712e"
+          "eTag": "996d63d9f578114516bb4a7754b97c5f"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/film.json",
           "productId": "amzn1.adg.product.d795f7b6-375f-4842-a70f-65df1e459b7e",
-          "eTag": "582dd05a7023e76e63a8b231df7aed8c"
+          "eTag": "4a81890ad873a0c5655d43dc5eaece92"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/food_and_drink.json",
           "productId": "amzn1.adg.product.5d14e49d-8739-4d82-8a65-fa5056b6ff95",
-          "eTag": "f16d869e3400c6bd9370cd9398cbd1fa"
+          "eTag": "f31048be036f1949590f8c708805842f"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/geography.json",
           "productId": "amzn1.adg.product.a24f1fea-5459-4d6c-bf9a-675e090e8707",
-          "eTag": "e692488b5942cb901f9030bea8f0f4e8"
+          "eTag": "c2311490867233f580c2372de126f5b8"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/history.json",
           "productId": "amzn1.adg.product.22492ac4-d912-465d-84ac-d9561622cc1f",
-          "eTag": "e703d36317608ecc1a73f30b5358d8ec"
+          "eTag": "4485833e533d69e2aa3ba9144a7b1618"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/language.json",
           "productId": "amzn1.adg.product.46448efa-4023-4c35-a765-d9e3e6697a9a",
-          "eTag": "2a62399fb0bde8dbfc48481c02756ef8"
+          "eTag": "eae05bb1811a19c8e910882cdfbe9f67"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/literature.json",
           "productId": "amzn1.adg.product.c31651fb-c855-4221-93f6-6c48798708af",
-          "eTag": "c3d826f73969b7ef8ed05eef4df0bcfc"
+          "eTag": "d94384745d3fd6e21771675e0da64570"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/miscellaneous.json",
           "productId": "amzn1.adg.product.a51c00b6-ddd5-4905-995c-0b55d1d10a79",
-          "eTag": "4c29fcf4a7bb387ac96cfe10c50da7d7"
+          "eTag": "d9e5b75315c889936bd5d78c5d9edc4a"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/music.json",
           "productId": "amzn1.adg.product.6e6a8f5d-1230-4cb5-8757-86b987f2b1a6",
-          "eTag": "afc5c9dd5ec1e863373176474414b74c"
+          "eTag": "c3afd72e8399e19831135de486fe3f27"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/nature.json",
           "productId": "amzn1.adg.product.f458868c-9fdb-428b-8820-4ce09367d375",
-          "eTag": "36d6cc364a98aa6ec3c4d641a16ccfd6"
+          "eTag": "db855f15a5d09b0da98221d34ebd8cc7"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/people.json",
           "productId": "amzn1.adg.product.1835f3db-ddbf-445f-b713-a5a075e6afe3",
-          "eTag": "f8b3874d643f66c62d2bd7ffaf5ac584"
+          "eTag": "97aac1b2138833534742156fe376817b"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/politics.json",
           "productId": "amzn1.adg.product.004b5d30-8b05-4bd9-b26f-bc8e782897dc",
-          "eTag": "d556a67491c86b1c2f48b9a091032b00"
+          "eTag": "40404fe2e9ad57f834fa9be4f5de5229"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/sports_and_games.json",
           "productId": "amzn1.adg.product.d486d675-e562-494d-b6a1-e373aa6d974f",
-          "eTag": "47e2e312e7c5bcc6a9b6fe36b2932d4c"
+          "eTag": "efe4d6f5d37352b86617276a1603a116"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/science.json",
           "productId": "amzn1.adg.product.2213f263-9e0d-401c-ae40-c34924f900fd",
-          "eTag": "74ec7492b010c1ba943df0a51862e4d1"
+          "eTag": "934ab4c5760345d60d3d3a8b4a4f8af2"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/technology.json",
           "productId": "amzn1.adg.product.d1743574-c4fe-4ec6-a968-c89ecc38a37e",
-          "eTag": "888916bb7a83496159b536f5858102a1"
+          "eTag": "e5453de5033235530d6e72ce6db1b09c"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/united_states.json",
           "productId": "amzn1.adg.product.2c40e45f-9525-45ba-bcac-9d004ee39bd2",
-          "eTag": "39cdf08b1a844beb802bfcff33ba206e"
+          "eTag": "422990b3a179c040f1fd307abe0b9c5e"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/tradition_and_beliefs.json",
           "productId": "amzn1.adg.product.c701e08e-e54e-412b-bdc9-63a38731315d",
-          "eTag": "2884441ac20b099f84e8c8547164bea5"
+          "eTag": "e013e95f59685061283173e428b0e81e"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/entitlement/tv_and_radio.json",
           "productId": "amzn1.adg.product.76cd6f01-c886-4415-8411-7343a9ea091d",
-          "eTag": "d5e8e342b8eff8390821b7a7998ff248"
+          "eTag": "14bd44ca02b19c50d1fb2f02036abf0b"
         },
         {
           "deploy_status": "Update",
           "filePath": "isps/subscription/all_categories.json",
           "productId": "amzn1.adg.product.f6a25e4f-de02-403e-b848-642ab5ce66a4",
-          "eTag": "b6adf2bbf6ae40ac3ca6bf6e6a4d8c8b"
+          "eTag": "547f80a347561ead5cdf0fde236a285c"
         }
       ]
     }

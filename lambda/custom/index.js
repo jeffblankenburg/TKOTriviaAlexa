@@ -45,7 +45,6 @@ const LaunchRequestHandler = {
         console.log("HANDLED - LaunchRequestHandler");
         var sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         var speakText = "";
-
         var locale = handlerInput.requestEnvelope.request.locale;
         var welcome = await getRandomResponse("Welcome", locale);
 
@@ -187,6 +186,8 @@ const AnswerIntentHandler = {
                     if (sessionAttributes.currentEvent != undefined) points = 100;
                     var correct = await getRandomResponse("AnswerCorrect", locale);
                     var scoredPoints = await getRandomResponse("ScoredPoints", locale);
+                    var speechcon = await getRandomResponse("SpeechconCorrect", locale);
+                    speechcon = "<say-as interpret-as='interjection'>" + speechcon.fields.VoiceResponse + "!</say-as>";
                     scoredPoints = scoredPoints.fields.VoiceResponse.replace("XXXXXXXXXX", points);
                     var levelUp = "";
                     var nextLevel = (parseInt(sessionAttributes.user.CurrentLevel)+1) * 1000;
@@ -209,7 +210,7 @@ const AnswerIntentHandler = {
                       });
 
 
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + AchievementSpeech + " " + answerNote + " ";
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/> " + speechcon + " " + correct.fields.VoiceResponse + "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_tally_positive_01'/>" + scoredPoints + ", which gives you a total of " + userPoints + ". " + levelUp + " " + AchievementSpeech + " " + answerNote + " ";
                 }
                 else{
                     var levelContinuation = "";
@@ -222,13 +223,15 @@ const AnswerIntentHandler = {
                     }
                     sessionAttributes.currentState = "ANSWERINTENT - WRONGANSWER";
                     var wrong = await getRandomResponse("AnswerWrong", locale);
+                    var speechcon = await getRandomResponse("SpeechconWrong", locale);
+                    speechcon = "<say-as interpret-as='interjection'>" + speechcon.fields.VoiceResponse + "!</say-as>";
                     var reveal = "";
                     if (isEntitled(subscription)) {
                         reveal = await getRandomResponse("AnswerReveal", locale);
                         reveal = reveal.fields.VoiceResponse.replace("XXXXXXXXXX", sessionAttributes.currentQuestion.VoiceAnswer);
                     }
                     points = 0;
-                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + wrong.fields.VoiceResponse + " " + reveal + " " + levelContinuation + " ";
+                    speakText = "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/> " + speechcon + " " + wrong.fields.VoiceResponse + " " + reveal + " " + levelContinuation + " ";
                 }
 
                 await airtable("UserAnswer").create({
@@ -255,7 +258,7 @@ const AnswerIntentHandler = {
                             return await askTriviaQuestion(handlerInput, category, question, order, speakText);
                         }
                         else {
-                            //TODO: IF IT WAS THE LAST QUESTION, CONGRATULATE THEM FOR WINNING.
+                            speakText = speakText + "Wow!  You got all of today's questions correct!  Amazing! " + actionQuery;
                             console.log("LAST QUESTION.  CELEBRATE!");
                         }
                     }
@@ -274,7 +277,7 @@ const AnswerIntentHandler = {
             }
             else {
                 sessionAttributes.currentState = "ANSWERINTENT - NOQUESTION";
-                speakText = "You just said " + slotValue + " to me.  I think you're fishing for the answers to questions, and that's not allowed.  Stop breaking the rules.";
+                speakText = "You just said " + slotValue + " but Jeff didn't anticipate that.  I'll let him know so he can fix it.  What would you like to try instead?";
 
                 await airtable("UserWrong").create({
                     "User": [sessionAttributes.user.RecordId],
@@ -364,7 +367,7 @@ const QuestionIntentHandler = {
         console.log("HANDLED - QuestionIntentHandler");
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const locale = handlerInput.requestEnvelope.request.locale;
-        //TODO: IS THE USER IN A GAME?
+
         var category = getSpecificCategoryFromSlot(handlerInput);
         sessionAttributes.currentEvent = undefined;
         
@@ -430,6 +433,27 @@ const SpecificQuestionIntentHandler = {
         var question = await getVerySpecificQuestion(category, number, locale);
         sessionAttributes.currentQuestion = question.fields;
         return await askTriviaQuestion(handlerInput, category, question);
+    }
+};
+
+const CategoryListIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - CategoryListIntentHandler");
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === "IntentRequest"
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === "CategoryListIntent";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - CategoryListIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        var categoryList = await getRandomResponse("CategoryList", locale);
+
+        var speakText = categoryList.fields.VoiceResponse;
+        
+        return handlerInput.responseBuilder
+                .speak(speakText)
+                .reprompt("Which category do you want to try?")
+                .getResponse();
     }
 };
 
@@ -755,6 +779,27 @@ const StatusIntentHandler = {
     },
 };
 
+const WhatCanIBuyIntentHandler = {
+    canHandle(handlerInput) {
+        console.log("CANHANDLE - WhatCanIBuyIntentHandler");
+        return handlerInput.requestEnvelope.request.type === "IntentRequest"
+            && handlerInput.requestEnvelope.request.intent.name === "WhatCanIBuyIntent";
+    },
+    async handle(handlerInput) {
+        console.log("HANDLED - WhatCanIBuyIntentHandler");
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const locale = handlerInput.requestEnvelope.request.locale;
+        var actionQuery = await getRandomResponse("ActionQuery", locale);
+
+        var speakText = "There are twenty different categories of questions in TKO Trivia.  You can buy any of them individually by saying something like... buy the sports category.  You can also unlock all of the categories by asking for the subscription, which will also give you the correct answer every time you get a question wrong. " + actionQuery.fields.VoiceResponse;
+
+        return handlerInput.responseBuilder
+               .speak(speakText)
+               .reprompt(actionQuery.fields.VoiceResponse)
+               .getResponse();
+    },
+};
+
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         console.log("CANHANDLE - SessionEndedRequestHandler");
@@ -804,6 +849,22 @@ const ErrorHandler = {
         console.log(`~~~~ Error handled: ${error.stack}`);
         const locale = handlerInput.requestEnvelope.request.locale;
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        var airtable = await new Airtable({apiKey: process.env.airtable_key}).base(process.env.airtable_base_data);
+        airtable('Errors').create([
+        {
+            "fields": {
+            "Stack": error.stack
+            }
+        }
+        ], function(err, records) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        });
+
+
         
         var error = await getRandomResponse("Error", locale);
         var speakText = error.fields.VoiceResponse;
@@ -979,6 +1040,7 @@ const ErrorPurchaseResponseHandler = {
     },
     async handle(handlerInput) {
         console.log("HANDLE - ErrorPurchaseResponseHandler");
+        const locale = handlerInput.requestEnvelope.request.locale;
         var actionQuery = await getRandomResponse("ActionQuery", locale);
         var repromptText = actionQuery.fields.VoiceResponse;
         var speakText = "Something went wrong with your purchase request.  You might want to try using a different device." + repromptText;
@@ -1325,7 +1387,6 @@ async function GetUserRecord(userId) {
   else{
     console.log("RETURNING FOUND USER RECORD = " + JSON.stringify(userRecord.records[0]));
     IsFirstVisit = false;
-    //TODO: GET THE LIST OF THE EXISTING USER'S ACHIEVEMENTS, AND ADD THEM TO THE USER RECORD.
     const result = await httpGet(process.env.airtable_base_data, "&filterByFormula=AND(User%3D%22" + encodeURIComponent(userRecord.records[0].fields.RecordId) + "%22)", "UserAchievement");
     userRecord.records[0].fields.UserAchievement = [];
     console.log("ACHIEVEMENT RESULTS = " + JSON.stringify(result.records));
@@ -1421,9 +1482,11 @@ exports.handler = Dashbot.handler(skillBuilder
         BuySubscriptionHandler,
         CancelProductHandler,
         CancelSubscriptionHandler,
+        CategoryListIntentHandler,
         SuccessfulPurchaseResponseHandler,
         UnsuccessfulPurchaseResponseHandler,
         CancelPurchaseResponseHandler,
+        WhatCanIBuyIntentHandler,
         ErrorPurchaseResponseHandler,
         SpecificQuestionIntentHandler,
         //FirstNameIntentHandler,

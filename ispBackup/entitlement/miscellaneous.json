@@ -8,8 +8,8 @@
         "name": "Miscellaneous Questions",
         "summary": "This is the summary.",
         "description": "Unlock all of the Miscellaneous questions in TKO Trivia!",
-        "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/e6a3/ef36d768701b41e580af6c3295a89f57/APP_ICON?versionId=OrDfVht03hP9Z94pI0qMVT28q7RMp.bG&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214823Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b0a4bbc095ac1a120fcfb55c4e6da402b095e6b0a20a46fa089e562dec8db9b7",
-        "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/b02c/c8dc6fce59df49688a05fa29029b2e32/APP_ICON_LARGE?versionId=UNrsFb11ynGsKMshF8Npg3MGdXBQyibg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20191113T214823Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=AKIAJFEYRBGIHK2BBYKA%2F20191113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=8e5483815d94a044306ac6381133b18c8670c4edcf551fb1f71aea1d03585b5f",
+        "smallIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/miscellaneous_108.png",
+        "largeIconUri": "https://tko-trivia.s3.amazonaws.com/art/ISPs/miscellaneous_512.png",
         "examplePhrases": [
           "This is an example phrase."
         ],

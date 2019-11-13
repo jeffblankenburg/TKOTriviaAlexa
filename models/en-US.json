@@ -217,13 +217,13 @@
                 ]
             },
             {
-                "name": "GameRulesIntent",
+                "name": "CategoryListIntent",
                 "samples": [
-                    "what are the rules",
-                    "tell me the rules",
-                    "tell us the rules",
-                    "give me the rules",
-                    "rules"
+                    "what are the categories",
+                    "give me the categories",
+                    "which category",
+                    "list the categories",
+                    "a list of the categories"
                 ]
             }
           ],
