@@ -2,6 +2,9 @@
  
 This is a full working sample of an advanced trivia skill for Amazon's Alexa.  It has a dependency on a data source, which is not included here, so you are free to review the design and code for this skill, but don't have access to the data structure or contents.
 
+[You can view the Data tables here.](https://airtable.com/shrijc4aBxL8Z9TUq)
+[You can view the Speech tables here.](https://airtable.com/shrKRlq5XcZiLiplO)
+
 Here are list of the features it includes:
 
 * Ask for random trivia questions, across 20 different categories.
