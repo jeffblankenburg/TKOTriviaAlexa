@@ -24,3 +24,12 @@ Here are list of the features it includes:
 * Stores all wrong answers, and any unhandled phrases to a database for future improvement and review.
 * Randomizes all speech across hundreds of responses to keep the conversation fresh.
 * Can repeat the previous statement at any point in the game.
+
+
+The creation of this game has also provided a large amount of content in other regards.
+* It is regularly referenced during weekly Alexa Office Hours.
+* It is the reference code that I use for discussing Dynamic Entities.
+* It demonstrates best practices for upselling and offering ISPs.
+* It illustrates how randomization of speech can make a skill more conversational.
+* It uses several mechanisms for retention, including personalization, leaderboards, and daily activities.
+
