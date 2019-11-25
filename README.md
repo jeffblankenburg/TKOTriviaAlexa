@@ -29,7 +29,13 @@ Here are list of the features it includes:
 The creation of this game has also provided a large amount of content in other regards.
 * It is regularly referenced during weekly Alexa Office Hours.
 * It is the reference code that I use for discussing Dynamic Entities.
+* It leans heavily on Entity Resolution.
 * It demonstrates best practices for upselling and offering ISPs.
 * It illustrates how randomization of speech can make a skill more conversational.
 * It uses several mechanisms for retention, including personalization, leaderboards, and daily activities.
+* It leans heavily on calling 3rd party APIs for data.
+* It has a large number of node.js helper functions which simplify future development.
+* It effectively uses RequestInterceptor and ResponseInterceptors.
 
+
+Let's think about a PRFAQ format for "presenting the project."
