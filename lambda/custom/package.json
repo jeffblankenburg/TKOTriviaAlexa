@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "airtable": "^0.7.0",
+    "airtable": "^0.7.2",
     "ask-sdk": "^2.0.1",
     "dashbot": "^10.4.1"
   }
